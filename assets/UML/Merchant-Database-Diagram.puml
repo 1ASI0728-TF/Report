@@ -1,0 +1,135 @@
+@startuml Merchant-Domain-Layer-DataBase-Diagram
+!theme plain
+
+entity Merchant {
+  * merchant_id : BIGINT <<PK>>
+  --
+  name : VARCHAR(120)
+  tax_id : VARCHAR(30)
+  email : VARCHAR(120)
+  status : VARCHAR(20) -- ACTIVE, SUSPENDED
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity MerchantLocation {
+  * location_id : BIGINT <<PK>>
+  --
+  merchant_id : BIGINT <<FK>>
+  name : VARCHAR(120)
+  address_line1 : VARCHAR(160)
+  address_line2 : VARCHAR(160)
+  city : VARCHAR(80)
+  region : VARCHAR(80)
+  country : VARCHAR(2) -- ISO-3166-1 alpha-2
+  postal_code : VARCHAR(16)
+  latitude : DOUBLE
+  longitude : DOUBLE
+}
+
+entity MerchantContact {
+  * contact_id : BIGINT <<PK>>
+  --
+  merchant_id : BIGINT <<FK>>
+  full_name : VARCHAR(120)
+  email : VARCHAR(120)
+  phone : VARCHAR(32)
+  role : VARCHAR(40) -- ADMIN, BILLING, OPERATIONS
+  is_primary : BOOLEAN
+}
+
+entity PaymentMethod {
+  * payment_method_id : BIGINT <<PK>>
+  --
+  merchant_id : BIGINT <<FK>>
+  type : VARCHAR(20) -- CARD, BANK
+  brand : VARCHAR(20) -- VISA, MASTERCARD, ...
+  last4 : VARCHAR(4)
+  exp_month : INT
+  exp_year : INT
+  external_id : VARCHAR(80) -- id del proveedor (p.ej., Stripe)
+  is_default : BOOLEAN
+}
+
+entity Plan {
+  * plan_id : BIGINT <<PK>>
+  --
+  name : VARCHAR(80)
+  price_amount : NUMERIC(10,2)
+  price_currency : VARCHAR(3) -- ISO-4217
+  billing_period : VARCHAR(10) -- MONTHLY, YEARLY
+  features : TEXT
+  is_active : BOOLEAN
+}
+
+entity Contract {
+  * contract_id : BIGINT <<PK>>
+  --
+  merchant_id : BIGINT <<FK>>
+  start_date : DATE
+  end_date : DATE
+  status : VARCHAR(20) -- DRAFT, ACTIVE, TERMINATED
+  notes : TEXT
+}
+
+entity Subscription {
+  * subscription_id : BIGINT <<PK>>
+  --
+  merchant_id : BIGINT <<FK>>
+  plan_id : BIGINT <<FK>>
+  status : VARCHAR(20) -- TRIALING, ACTIVE, PAST_DUE, CANCELED
+  current_period_start : TIMESTAMP
+  current_period_end : TIMESTAMP
+  cancel_at : TIMESTAMP
+  external_id : VARCHAR(80) -- id del proveedor (p.ej., Stripe)
+}
+
+entity Invoice {
+  * invoice_id : BIGINT <<PK>>
+  --
+  merchant_id : BIGINT <<FK>>
+  subscription_id : BIGINT <<FK>>
+  amount_total : NUMERIC(10,2)
+  currency : VARCHAR(3) -- ISO-4217
+  status : VARCHAR(20) -- DRAFT, OPEN, PAID, VOID
+  issued_at : TIMESTAMP
+  due_at : TIMESTAMP
+  paid_at : TIMESTAMP
+  external_id : VARCHAR(80) -- id del proveedor
+  pdf_url : VARCHAR(255)
+}
+
+entity WebhookEvent {
+  * webhook_event_id : BIGINT <<PK>>
+  --
+  provider : VARCHAR(30) -- STRIPE, OTHER
+  event_type : VARCHAR(60) -- invoice.paid, subscription.updated, etc.
+  payload : TEXT
+  received_at : TIMESTAMP
+  processed_at : TIMESTAMP
+  status : VARCHAR(20) -- RECEIVED, PROCESSED, ERROR
+  merchant_id : BIGINT <<FK>>
+  subscription_id : BIGINT <<FK>>
+  invoice_id : BIGINT <<FK>>
+}
+
+' ========================
+' Relationships with cardinalities
+' ========================
+Merchant ||--o{ MerchantLocation : "1 : N"
+Merchant ||--o{ MerchantContact  : "1 : N"
+Merchant ||--o{ PaymentMethod    : "1 : N"
+Merchant ||--o{ Contract         : "1 : N"
+Merchant ||--o{ Subscription     : "1 : N"
+Merchant ||--o{ Invoice          : "1 : N"
+
+Plan ||--o{ Subscription : "1 : N"
+
+Subscription ||--o{ Invoice : "1 : N"
+
+' Webhooks relacionados (opcionales según evento del proveedor)
+Merchant ||--o{ WebhookEvent : "1 : N"
+Subscription ||--o{ WebhookEvent : "1 : N"
+Invoice ||--o{ WebhookEvent : "1 : N"
+
+@enduml

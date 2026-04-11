@@ -1,0 +1,30 @@
+@startuml
+class Alert {
+  +int alertId
+  +String type
+  +String status
+  +String sensorType
+  +DateTime createdAt
+  +DateTime? acknowledgedAt
+  +DateTime? closedAt
+}
+
+class Notification {
+  +int notificationId
+  +int alertId
+  +String channel
+  +String message
+  +DateTime sentAt
+}
+
+class Incident {
+  +int incidentId
+  +int alertId
+  +int tripId
+  +String description
+  +DateTime createdAt
+}
+
+Alert "1" -- "*" Notification
+Alert "1" -- "*" Incident
+@enduml

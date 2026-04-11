@@ -1,0 +1,63 @@
+@startuml
+title Fleet Management - Mobile Components (BLoC/ViewModel)
+
+@startuml Fleet-Management-Mobile-Domain-Classes
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Enum>> Wheat
+}
+
+' ========================
+' Entities (Mobile / Dart-like)
+' ========================
+class Vehicle <<Entity>> {
+  - id: String
+  - plate: Plate
+  - make: String
+  - model: String
+  - active: bool
+  - tenantId: String
+  - createdAt: DateTime
+  - updatedAt: DateTime
+}
+
+class Device <<Entity>> {
+  - id: String
+  - type: String        ' temp|gps|humidity|door...
+  - serial: String
+  - lastCalibrationAt: DateTime
+  - active: bool
+  - vehicleId: String
+  - tenantId: String
+  - createdAt: DateTime
+}
+
+' ========================
+' Value Objects
+' ========================
+class Plate <<ValueObject>> {
+  - value: String
+}
+
+' ========================
+' Enums
+' ========================
+enum DeviceType <<Enum>> {
+  TEMPERATURE
+  HUMIDITY
+  VIBRATION
+  TILT
+  GPS
+  BATTERY
+}
+
+' ========================
+' Relationships
+' ========================
+Vehicle *-- "0..*" Device : devices
+Device --> DeviceType
+@enduml

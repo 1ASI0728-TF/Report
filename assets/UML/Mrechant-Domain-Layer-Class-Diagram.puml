@@ -1,0 +1,255 @@
+@startuml Merchant-Domain-Layer-Class-Diagram
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<AggregateRoot>> Wheat
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Factory>> LightBlue
+    BackgroundColor<<DomainService>> LightCyan
+    BackgroundColor<<DomainEvent>> #F9F2F4
+}
+
+' ========================
+' Enums
+' ========================
+enum MerchantStatus <<ValueObject>> {
+  ACTIVE
+  SUSPENDED
+}
+
+enum SubscriptionStatus <<ValueObject>> {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+enum InvoiceStatus <<ValueObject>> {
+  DRAFT
+  OPEN
+  PAID
+  VOID
+}
+
+enum PaymentMethodType <<ValueObject>> {
+  CARD
+  BANK
+}
+
+enum CurrencyCode <<ValueObject>> {
+  USD
+  EUR
+  PEN
+}
+
+enum BillingPeriod <<ValueObject>> {
+  MONTHLY
+  YEARLY
+}
+
+' ========================
+' Value Objects
+' ========================
+class TaxId <<ValueObject>> {
+  - value: String
+  + isValid(): boolean
+}
+
+class Email <<ValueObject>> {
+  - value: String
+  + isValid(): boolean
+}
+
+class Phone <<ValueObject>> {
+  - value: String
+  + normalized(): String
+}
+
+class Address <<ValueObject>> {
+  - line1: String
+  - line2: String
+  - city: String
+  - region: String
+  - countryCode: String
+  - postalCode: String
+  + isComplete(): boolean
+}
+
+class Money <<ValueObject>> {
+  - amount: double
+  - currency: CurrencyCode
+  + add(other: Money): Money
+  + negate(): Money
+}
+
+class Period <<ValueObject>> {
+  - startAt: DateTime
+  - endAt: DateTime
+  + contains(at: DateTime): boolean
+  + durationDays(): int
+}
+
+class PaymentCard <<ValueObject>> {
+  - brand: String
+  - last4: String
+  - expMonth: int
+  - expYear: int
+  + isExpired(at: DateTime): boolean
+}
+
+' ========================
+' Entities and Aggregates
+' ========================
+class Merchant <<AggregateRoot>> {
+  - merchantId: long
+  - name: String
+  - taxId: TaxId
+  - email: Email
+  - status: MerchantStatus
+  - primaryAddress: Address
+  - createdAt: DateTime
+  - updatedAt: DateTime
+
+  + activate()
+  + suspend(reason: String)
+  + updateProfile(name: String, email: Email, taxId: TaxId)
+  + changePrimaryAddress(address: Address)
+  + setPrimaryContact(contact: Contact)
+}
+
+class Contact <<Entity>> {
+  - contactId: long
+  - fullName: String
+  - email: Email
+  - phone: Phone
+  - role: String  ' ADMIN, BILLING, OPERATIONS
+  - isPrimary: boolean
+
+  + markAsPrimary()
+}
+
+class Location <<Entity>> {
+  - locationId: long
+  - name: String
+  - address: Address
+  - latitude: double
+  - longitude: double
+}
+
+class PaymentMethod <<Entity>> {
+  - paymentMethodId: long
+  - type: PaymentMethodType
+  - card: PaymentCard
+  - externalId: String  ' prov. de pagos (p.ej., Stripe)
+  - isDefault: boolean
+
+  + makeDefault()
+}
+
+class Plan <<Entity>> {
+  - planId: long
+  - name: String
+  - price: Money
+  - billingPeriod: BillingPeriod
+  - features: String
+  - active: boolean
+}
+
+class Subscription <<AggregateRoot>> {
+  - subscriptionId: long
+  - merchantId: long
+  - plan: Plan
+  - status: SubscriptionStatus
+  - currentPeriod: Period
+  - cancelAt: DateTime
+  - externalId: String  ' prov. de pagos
+
+  + startTrial(days: int)
+  + activate(plan: Plan)
+  + markPastDue()
+  + cancel(at: DateTime)
+  + renew(nextPeriod: Period)
+}
+
+class Invoice <<Entity>> {
+  - invoiceId: long
+  - subscriptionId: long
+  - amountTotal: Money
+  - status: InvoiceStatus
+  - issuedAt: DateTime
+  - dueAt: DateTime
+  - paidAt: DateTime
+  - externalId: String
+  - pdfUrl: String
+
+  + markPaid(at: DateTime)
+  + voidInvoice(reason: String)
+}
+
+' ========================
+' Factory
+' ========================
+class MerchantFactory <<Factory>> {
+  + createMerchant(name: String, email: Email, taxId: TaxId, address: Address): Merchant
+}
+
+' ========================
+' Domain Services
+' ========================
+class MerchantOnboardingService <<DomainService>> {
+  + provisionDefaults(merchant: Merchant): void
+  + assignPrimaryContact(merchant: Merchant, contact: Contact): void
+}
+
+class BillingService <<DomainService>> {
+  + createSubscription(merchant: Merchant, plan: Plan): Subscription
+  + generateInvoice(subscription: Subscription): Invoice
+  + applyPayment(invoice: Invoice, amount: Money, at: DateTime): void
+}
+
+' ========================
+' Domain Events (opcionales)
+' ========================
+class MerchantCreated <<DomainEvent>> {
+  + merchantId: long
+  + occurredAt: DateTime
+}
+
+class SubscriptionActivated <<DomainEvent>> {
+  + subscriptionId: long
+  + merchantId: long
+  + occurredAt: DateTime
+}
+
+class InvoicePaid <<DomainEvent>> {
+  + invoiceId: long
+  + subscriptionId: long
+  + occurredAt: DateTime
+}
+
+' ========================
+' Main Relationships
+' ========================
+Merchant o-- "0..*" Contact : contacts
+Merchant o-- "0..*" Location : locations
+Merchant o-- "0..*" PaymentMethod : paymentMethods
+
+Subscription o-- "0..*" Invoice : invoices
+
+' (Separación de agregados): Merchant y Subscription son raíces distintas
+Merchant ..> Subscription : "references by merchantId"
+
+' Servicios/Factory
+MerchantFactory ..> Merchant : creates
+MerchantOnboardingService ..> Merchant : provisions
+BillingService ..> Subscription
+BillingService ..> Invoice
+
+' Eventos publicados
+Merchant ..> MerchantCreated : publishes
+Subscription ..> SubscriptionActivated : publishes
+Invoice ..> InvoicePaid : publishes
+
+@enduml

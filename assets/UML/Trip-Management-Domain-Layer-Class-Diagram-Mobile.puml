@@ -1,0 +1,87 @@
+@startuml Trip-Management-Mobile-Domain-Classes
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Enum>> Wheat
+}
+
+' ========================
+' Entities
+' ========================
+class Trip <<Entity>> {
+  - id: int
+  - clientId: int
+  - driverId: int
+  - vehicleId: int
+  - requestedAt: DateTime
+  - status: TripStatus
+  - route: Route
+}
+
+class Route <<Entity>> {
+  - id: int
+  - origin: GeoCoordinate
+  - destination: GeoCoordinate
+  - totalDistance: Distance
+  - totalDuration: DurationValue
+  - segments: List<RouteSegment>
+  - polyline: Polyline
+}
+
+' ========================
+' Value Objects
+' ========================
+class GeoCoordinate <<ValueObject>> {
+  - latitude: double
+  - longitude: double
+}
+
+class RouteSegment <<ValueObject>> {
+  - coordinates: List<GeoCoordinate>
+  - distance: Distance
+  - duration: DurationValue
+  - polyline: Polyline
+}
+
+class Distance <<ValueObject>> {
+  - value: double
+  - unit: String
+}
+
+class DurationValue <<ValueObject>> {
+  - value: double
+  - unit: String
+}
+
+class Polyline <<ValueObject>> {
+  - encodedPath: String
+}
+
+enum TripStatus <<Enum>> {
+  pending
+  inProgress
+  completed
+  cancelled
+}
+
+' ========================
+' Relationships
+' ========================
+Trip *-- "1" Route
+Trip --> TripStatus
+
+Route *-- "1..*" RouteSegment
+Route --> "1" GeoCoordinate : origin
+Route --> "1" GeoCoordinate : destination
+Route --> "1" Distance : totalDistance
+Route --> "1" DurationValue : totalDuration
+Route --> "0..1" Polyline : polyline
+
+RouteSegment *-- GeoCoordinate
+RouteSegment --> Distance
+RouteSegment --> DurationValue
+RouteSegment --> "0..1" Polyline : polyline
+@enduml

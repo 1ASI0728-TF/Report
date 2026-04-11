@@ -1,0 +1,150 @@
+@startuml
+skinparam class {
+  BackgroundColor<<Entity>> Wheat
+  BackgroundColor<<AggregateRoot>> LightYellow
+  BackgroundColor<<Factory>> LightBlue
+  BackgroundColor<<ValueObject>> LightGreen
+  BackgroundColor<<DomainService>> LightCyan
+}
+
+' ========================
+' Entities / Aggregate Root
+' ========================
+class Alert <<AggregateRoot>> {
+  - alertId: long
+  - type: AlertType
+  - status: AlertStatus
+  - sensorType: SensorType
+  - createdAt: DateTime
+  - acknowledgedAt: DateTime
+  - closedAt: DateTime
+  --
+  + acknowledge()
+  + close()
+  + escalate()
+}
+
+class Notification <<Entity>> {
+  - notificationId: long
+  - alertId: long
+  - channel: NotificationChannel
+  - message: String
+  - sentAt: DateTime
+  --
+  + markAsSent()
+}
+
+class Incident <<Entity>> {
+  - incidentId: long
+  - alertId: long
+  - tripId: long
+  - description: String
+  - createdAt: DateTime
+  --
+  + resolve(description: String)
+}
+
+' ========================
+' Value Objects
+' ========================
+class AlertType <<ValueObject>> {
+  {enum} OutOfRange
+  {enum} Offline
+  {enum} RouteDeviation
+}
+
+class AlertStatus <<ValueObject>> {
+  {enum} OPEN
+  {enum} ACKNOWLEDGED
+  {enum} CLOSED
+}
+
+class NotificationChannel <<ValueObject>> {
+  {enum} EMAIL
+  {enum} SMS
+  {enum} FCM
+}
+
+class PersistenceWindow <<ValueObject>> {
+  - duration: int
+}
+
+class SensorType <<ValueObject>> {
+  {enum} TEMPERATURE
+  {enum} HUMIDITY
+  {enum} VIBRATION
+  {enum} TILT
+  {enum} LOCATION
+  {enum} BATTERY
+}
+
+' ========================
+' Factories
+' ========================
+class AlertFactory <<Factory>> {
+  + createAlert(type, sensorType, createdAt): Alert
+}
+
+class IncidentFactory <<Factory>> {
+  + createIncident(alertId, tripId, description): Incident
+}
+
+' ========================
+' Domain/Application Services
+' ========================
+class AlertCommandService <<DomainService>> {
+  + createAlert()
+  + acknowledgeAlert()
+  + closeAlert()
+  + escalateAlert()
+  + createIncidentFromAlert()
+  + sendNotification()
+}
+
+class AlertQueryService <<DomainService>> {
+  + getAlertById()
+  + getAlertsByStatus()
+  + getAlertsByType()
+  + getNotificationsByAlertId()
+  + getIncidentsByAlertId()
+}
+
+class AlertEventService <<DomainService>> {
+  + handleOutOfRangeDetected()
+  + handleDeviceOfflineDetected()
+  + handleRouteDeviationDetected()
+  + handleAlertAcknowledged()
+  + handleAlertClosed()
+  + handleTemperatureOutOfRange()
+  + handleHumidityOutOfRange()
+  + handleVibrationDetected()
+  + handleTiltOrDumpDetected()
+  + handleLowBatteryDetected()
+}
+
+' ========================
+' Relationships
+' ========================
+Alert "1" o-- "*" Notification
+Alert "1" o-- "*" Incident
+
+Alert --> AlertType
+Alert --> AlertStatus
+Alert --> SensorType
+Notification --> NotificationChannel
+
+AlertFactory --> Alert
+IncidentFactory --> Incident
+
+AlertCommandService --> Alert
+AlertCommandService --> Incident
+AlertCommandService --> Notification
+
+AlertQueryService --> Alert
+AlertQueryService --> Notification
+AlertQueryService --> Incident
+
+AlertCommandService --> AlertEventService
+AlertEventService --> Alert
+AlertEventService --> Notification
+AlertEventService --> Incident

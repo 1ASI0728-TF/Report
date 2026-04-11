@@ -1,0 +1,58 @@
+@startuml
+!theme plain
+
+entity "Alert" as Alert {
+  * alert_id : bigint <<PK>>
+  --
+  type_id : int <<FK>>
+  status_id : int <<FK>>
+  sensor_type : varchar
+  created_at : timestamp
+  acknowledged_at : timestamp
+  closed_at : timestamp
+}
+
+entity "Notification" as Notification {
+  * notification_id : bigint <<PK>>
+  --
+  alert_id : bigint <<FK>>
+  user_id : bigint
+  channel_id : int <<FK>>
+  message : text
+  sent_at : timestamp
+}
+
+entity "Incident" as Incident {
+  * incident_id : bigint <<PK>>
+  --
+  alert_id : bigint <<FK>>
+  trip_id : bigint
+  description : text
+  created_at : timestamp
+}
+
+entity "AlertType" as AlertType {
+  * type_id : int <<PK>>
+  --
+  name : varchar
+}
+
+entity "AlertStatus" as AlertStatus {
+  * status_id : int <<PK>>
+  --
+  name : varchar
+}
+
+entity "NotificationChannel" as NotificationChannel {
+  * channel_id : int <<PK>>
+  --
+  name : varchar
+}
+
+' Relaciones
+Alert ||--o{ Notification : "1:N"
+Alert ||--o{ Incident : "1:N"
+AlertType ||--|| Alert : "1:1"
+AlertStatus ||--|| Alert : "1:1"
+NotificationChannel ||--|| Notification : "1:1"
+@enduml

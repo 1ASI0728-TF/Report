@@ -1,0 +1,887 @@
+@startuml Analytics_Mobile_Class_Diagram
+
+
+title Visualization/Analytics - Mobile Models Class Diagram
+
+package "Models" {
+    
+    class TripModel {
+        +id: int
+        +vehicleId: String
+        +driverId: int
+        +startLocation: LocationModel
+        +endLocation: LocationModel
+        +startTime: DateTime
+        +endTime: DateTime
+        +distance: double
+        +status: String
+        +temperatureReadings: List<TemperatureReadingModel>
+        +incidents: List<IncidentModel>
+        
+        +TripModel({required this.id, required this.vehicleId, required this.driverId, required this.startLocation, required this.endLocation, required this.startTime, required this.endTime, required this.distance, required this.status, required this.temperatureReadings, required this.incidents})
+        +calculateDuration(): Duration
+        +getAverageTemperature(): double
+        +hasTemperatureViolations(): bool
+        +getIncidentCount(): int
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): TripModel
+    }
+    
+    class DriverModel {
+        +id: int
+        +employeeId: String
+        +firstName: String
+        +lastName: String
+        +licenseNumber: String
+        +phoneNumber: String
+        +email: String
+        +hireDate: DateTime
+        +performanceMetrics: PerformanceMetricsModel
+        
+        +DriverModel({required this.id, required this.employeeId, required this.firstName, required this.lastName, required this.licenseNumber, required this.phoneNumber, required this.email, required this.hireDate, required this.performanceMetrics})
+        +getFullName(): String
+        +getTotalTrips(): int
+        +getAverageRating(): double
+        +getIncidentRate(): double
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): DriverModel
+    }
+    
+    class IncidentModel {
+        +id: int
+        +tripId: int
+        +driverId: int
+        +type: String
+        +severity: String
+        +description: String
+        +location: LocationModel
+        +timestamp: DateTime
+        +resolved: bool
+        
+        +IncidentModel({required this.id, required this.tripId, required this.driverId, required this.type, required this.severity, required this.description, required this.location, required this.timestamp, required this.resolved})
+        +isTemperatureRelated(): bool
+        +getCriticalityLevel(): int
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): IncidentModel
+    }
+    
+    class TemperatureReadingModel {
+        +id: int
+        +tripId: int
+        +temperature: double
+        +timestamp: DateTime
+        +sensorId: String
+        +isAlert: bool
+        
+        +TemperatureReadingModel({required this.id, required this.tripId, required this.temperature, required this.timestamp, required this.sensorId, required this.isAlert})
+        +isWithinThreshold(double min, double max): bool
+        +getTemperatureCelsius(): double
+        +getTemperatureFahrenheit(): double
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): TemperatureReadingModel
+    }
+    
+    class LocationModel {
+        +latitude: double
+        +longitude: double
+        +address: String
+        
+        +LocationModel({required this.latitude, required this.longitude, required this.address})
+        +calculateDistance(LocationModel other): double
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): LocationModel
+    }
+    
+    class PerformanceMetricsModel {
+        +totalTrips: int
+        +averageRating: double
+        +onTimeDeliveryRate: double
+        +safetyScore: double
+        +fuelEfficiency: double
+        
+        +PerformanceMetricsModel({required this.totalTrips, required this.averageRating, required this.onTimeDeliveryRate, required this.safetyScore, required this.fuelEfficiency})
+        +calculateOverallScore(): double
+        +isExcellentPerformance(): bool
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): PerformanceMetricsModel
+    }
+    
+    class ChartDataModel {
+        +labels: List<String>
+        +datasets: List<ChartDatasetModel>
+        +options: ChartOptionsModel
+        
+        +ChartDataModel({required this.labels, required this.datasets, required this.options})
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): ChartDataModel
+    }
+    
+    class ChartDatasetModel {
+        +label: String
+        +data: List<double>
+        +backgroundColor: List<String>
+        +borderColor: List<String>
+        +borderWidth: int
+        
+        +ChartDatasetModel({required this.label, required this.data, required this.backgroundColor, required this.borderColor, required this.borderWidth})
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): ChartDatasetModel
+    }
+    
+    class ChartOptionsModel {
+        +responsive: bool
+        +plugins: Map<String, dynamic>
+        +scales: Map<String, dynamic>
+        +interaction: Map<String, dynamic>
+        
+        +ChartOptionsModel({required this.responsive, required this.plugins, required this.scales, required this.interaction})
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): ChartOptionsModel
+    }
+    
+    class DashboardSummaryModel {
+        +totalTrips: int
+        +totalIncidents: int
+        +averageTemperature: double
+        +topDrivers: List<DriverModel>
+        +recentIncidents: List<IncidentModel>
+        +temperatureTrends: List<TemperatureReadingModel>
+        
+        +DashboardSummaryModel({required this.totalTrips, required this.totalIncidents, required this.averageTemperature, required this.topDrivers, required this.recentIncidents, required this.temperatureTrends})
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): DashboardSummaryModel
+    }
+    
+    class DateRangeModel {
+        +startDate: DateTime
+        +endDate: DateTime
+        
+        +DateRangeModel({required this.startDate, required this.endDate})
+        +getDurationInDays(): int
+        +isValid(): bool
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): DateRangeModel
+    }
+    
+    class FilterOptionsModel {
+        +dateRange: DateRangeModel
+        +driverIds: List<int>
+        +vehicleIds: List<String>
+        +incidentTypes: List<String>
+        +temperatureThresholds: TemperatureThresholdModel
+        
+        +FilterOptionsModel({required this.dateRange, required this.driverIds, required this.vehicleIds, required this.incidentTypes, required this.temperatureThresholds})
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): FilterOptionsModel
+    }
+    
+    class TemperatureThresholdModel {
+        +minTemperature: double
+        +maxTemperature: double
+        +productType: String
+        
+        +TemperatureThresholdModel({required this.minTemperature, required this.maxTemperature, required this.productType})
+        +isWithinThreshold(double temperature): bool
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): TemperatureThresholdModel
+    }
+}
+
+' Relationships
+TripModel ||--|| LocationModel : startLocation
+TripModel ||--|| LocationModel : endLocation
+TripModel ||--o{ TemperatureReadingModel : contains
+TripModel ||--o{ IncidentModel : has
+DriverModel ||--|| PerformanceMetricsModel : has
+IncidentModel ||--|| LocationModel : occurredAt
+ChartDataModel ||--o{ ChartDatasetModel : contains
+ChartDataModel ||--|| ChartOptionsModel : has
+DashboardSummaryModel ||--o{ DriverModel : topDrivers
+DashboardSummaryModel ||--o{ IncidentModel : recentIncidents
+DashboardSummaryModel ||--o{ TemperatureReadingModel : temperatureTrends
+FilterOptionsModel ||--|| DateRangeModel : dateRange
+FilterOptionsModel ||--|| TemperatureThresholdModel : temperatureThresholds
+
+@enduml
+        +tripData: TripAnalyticsModel?
+        +temperatureChartData: TemperatureChartModel?
+        +isLoading: bool
+        +filterOptions: TripFilterOptions
+        
+        +createState(): _TripAnalyticsScreenState
+        +initState(): void
+        +dispose(): void
+        +loadTripAnalytics({required int tripId}): Future<void>
+        +onTripSelectionChanged(tripId: int): Future<void>
+        +onApplyFilters(filters: TripFilterOptions): Future<void>
+        +onExportTripReport(): Future<void>
+        +onRefreshData(): Future<void>
+        -validateTripId(tripId: int): bool
+        -showTripSelectionDialog(): Future<void>
+        -navigateToTemperatureDetails(): void
+    }
+    
+    class IncidentsOverviewScreen {
+        +incidentData: List<IncidentAnalyticsModel>
+        +monthlyStats: List<MonthlyIncidentStats>
+        +chartData: IncidentChartModel?
+        +selectedYear: int
+        +isLoading: bool
+        +filterType: IncidentType?
+        
+        +createState(): _IncidentsOverviewScreenState
+        +initState(): void
+        +dispose(): void
+        +loadIncidentOverview(): Future<void>
+        +onYearChanged(year: int): Future<void>
+        +onIncidentTypeFilter(type: IncidentType?): Future<void>
+        +onSeverityFilter(severity: IncidentSeverity?): Future<void>
+        +onExportIncidentReport(): Future<void>
+        +onIncidentTap(incident: IncidentAnalyticsModel): void
+        -showYearSelectionDialog(): Future<void>
+        -showIncidentDetails(incident: IncidentAnalyticsModel): void
+    }
+    
+    class DriversRankingScreen {
+        +drivers: List<DriverPerformanceModel>
+        +rankingMetric: PerformanceMetric
+        +topDriversCount: int
+        +isLoading: bool
+        +sortBy: String
+        +sortAscending: bool
+        
+        +createState(): _DriversRankingScreenState
+        +initState(): void
+        +dispose(): void
+        +loadDriversRanking(): Future<void>
+        +onMetricChanged(metric: PerformanceMetric): Future<void>
+        +onTopCountChanged(count: int): Future<void>
+        +onSortChanged(column: String): void
+        +onDriverTap(driver: DriverPerformanceModel): void
+        +onExportDriverReport(): Future<void>
+        -sortDrivers(): void
+        -showMetricSelectionDialog(): Future<void>
+        -navigateToDriverDetails(driverId: int): void
+    }
+}
+
+package "Chart Widgets" {
+    class TemperatureLineChartWidget {
+        +chartData: TemperatureChartModel
+        +isInteractive: bool
+        +showTooltips: bool
+        +temperatureThresholds: TemperatureThresholds
+        +onChartTap: Function(FlTouchEvent, LineTouchResponse?)?
+        
+        +TemperatureLineChartWidget({Key? key, required this.chartData, this.isInteractive = true, this.showTooltips = true, required this.temperatureThresholds, this.onChartTap}): super(key: key)
+        +build(context: BuildContext): Widget
+        +createLineChartData(): LineChartData
+        +getLineBarsData(): List<LineChartBarData>
+        +createTooltipData(): LineTouchTooltipData?
+        -configureChartStyle(): FlBorderData
+        -getTemperatureColors(): List<Color>
+        -formatTemperatureValue(value: double): String
+    }
+    
+    class IncidentsBarChartWidget {
+        +chartData: IncidentChartModel
+        +groupBy: IncidentGroupBy
+        +showLegend: bool
+        +onBarTap: Function(FlTouchEvent, BarTouchResponse?)?
+        
+        +IncidentsBarChartWidget({Key? key, required this.chartData, this.groupBy = IncidentGroupBy.month, this.showLegend = true, this.onBarTap}): super(key: key)
+        +build(context: BuildContext): Widget
+        +createBarChartData(): BarChartData
+        +getBarGroups(): List<BarChartGroupData>
+        +createTooltipData(): BarTouchTooltipData?
+        -configureBarChartStyle(): FlBorderData
+        -getIncidentColors(): List<Color>
+        -formatIncidentValue(value: double): String
+    }
+    
+    class CustomTooltipWidget {
+        +content: TooltipContent
+        +position: Offset
+        +isVisible: bool
+        +backgroundColor: Color
+        +textColor: Color
+        +borderRadius: double
+        
+        +CustomTooltipWidget({Key? key, required this.content, required this.position, this.isVisible = false, this.backgroundColor = Colors.black87, this.textColor = Colors.white, this.borderRadius = 8.0}): super(key: key)
+        +build(context: BuildContext): Widget
+        +show({required TooltipContent content, required Offset position}): void
+        +hide(): void
+        +updatePosition(position: Offset): void
+        -buildTooltipContent(): Widget
+        -calculateTooltipPosition(): Offset
+    }
+}
+
+package "BLoCs for State Management" {
+    class TripAnalyticsBloc {
+        +tripAnalyticsRepository: TripAnalyticsRepository
+        +currentState: TripAnalyticsState
+        
+        +TripAnalyticsBloc({required this.tripAnalyticsRepository}): super(TripAnalyticsInitial())
+        +add(event: TripAnalyticsEvent): void
+        +mapEventToState(event: TripAnalyticsEvent): Stream<TripAnalyticsState>
+        -onTripAnalyticsRequested(event: TripAnalyticsRequested): Future<void>
+        -onTemperatureAnalyticsRequested(event: TemperatureAnalyticsRequested): Future<void>
+        -onTripFilterChanged(event: TripFilterChanged): Future<void>
+        -onTripAnalyticsRefreshRequested(event: TripAnalyticsRefreshRequested): Future<void>
+        -handleTripAnalyticsError(error: Exception): void
+    }
+    
+    class IncidentAnalyticsBloc {
+        +incidentAnalyticsRepository: IncidentAnalyticsRepository
+        +currentState: IncidentAnalyticsState
+        
+        +IncidentAnalyticsBloc({required this.incidentAnalyticsRepository}): super(IncidentAnalyticsInitial())
+        +add(event: IncidentAnalyticsEvent): void
+        +mapEventToState(event: IncidentAnalyticsEvent): Stream<IncidentAnalyticsState>
+        -onIncidentAnalyticsRequested(event: IncidentAnalyticsRequested): Future<void>
+        -onMonthlyStatsRequested(event: MonthlyStatsRequested): Future<void>
+        -onIncidentFilterChanged(event: IncidentFilterChanged): Future<void>
+        -onIncidentAnalyticsRefreshRequested(event: IncidentAnalyticsRefreshRequested): Future<void>
+        -handleIncidentAnalyticsError(error: Exception): void
+    }
+    
+    class DriverAnalyticsBloc {
+        +driverAnalyticsRepository: DriverAnalyticsRepository
+        +currentState: DriverAnalyticsState
+        
+        +DriverAnalyticsBloc({required this.driverAnalyticsRepository}): super(DriverAnalyticsInitial())
+        +add(event: DriverAnalyticsEvent): void
+        +mapEventToState(event: DriverAnalyticsEvent): Stream<DriverAnalyticsState>
+        -onDriverPerformanceRequested(event: DriverPerformanceRequested): Future<void>
+        -onTopDriversRequested(event: TopDriversRequested): Future<void>
+        -onDriverTrendsRequested(event: DriverTrendsRequested): Future<void>
+        -onDriverAnalyticsRefreshRequested(event: DriverAnalyticsRefreshRequested): Future<void>
+        -handleDriverAnalyticsError(error: Exception): void
+    }
+    
+    class ChartConfigBloc {
+        +chartConfigService: ChartConfigService
+        +currentState: ChartConfigState
+        
+        +ChartConfigBloc({required this.chartConfigService}): super(ChartConfigInitial())
+        +add(event: ChartConfigEvent): void
+        +mapEventToState(event: ChartConfigEvent): Stream<ChartConfigState>
+        -onChartConfigLoadRequested(event: ChartConfigLoadRequested): Future<void>
+        -onChartConfigUpdateRequested(event: ChartConfigUpdateRequested): Future<void>
+        -onChartThemeChanged(event: ChartThemeChanged): Future<void>
+        -handleChartConfigError(error: Exception): void
+    }
+}
+
+package "Services" {
+    class AnalyticsService {
+        +analyticsApiService: AnalyticsApiService
+        +dataTransformationService: DataTransformationService
+        
+        +AnalyticsService({required this.analyticsApiService, required this.dataTransformationService})
+        +getTripAnalytics({required DateRange dateRange, int? tripId}): Future<TripAnalyticsResponse>
+        +getTemperatureAnalytics({required int tripId}): Future<TemperatureAnalyticsResponse>
+        +getIncidentAnalytics({required DateRange dateRange}): Future<IncidentAnalyticsResponse>
+        +getMonthlyIncidentStats({required int year}): Future<List<MonthlyIncidentStats>>
+        +getDriverPerformance({required int driverId, required DateRange dateRange}): Future<DriverPerformanceResponse>
+        +getTopDrivers({required int limit, required PerformanceMetric metric}): Future<List<DriverRankingResponse>>
+        +exportAnalyticsData({required ExportRequest request}): Future<Uint8List>
+        -handleAnalyticsError(error: Exception): Exception
+        -validateAnalyticsRequest(request: AnalyticsRequest): bool
+    }
+    
+    class ChartRenderingService {
+        +colorSchemeService: ColorSchemeService
+        +formatUtilityService: FormatUtilityService
+        
+        +ChartRenderingService({required this.colorSchemeService, required this.formatUtilityService})
+        +createLineChartData({required List<ChartDataPoint> dataPoints, required ChartConfigModel config}): LineChartData
+        +createBarChartData({required Map<String, double> data, required ChartConfigModel config}): BarChartData
+        +configureChartInteractions({required ChartType chartType}): TouchCallback
+        +applyChartTheme({required ChartData chartData, required ChartTheme theme}): ChartData
+        +generateChartImage({required Widget chartWidget}): Future<Uint8List>
+        +optimizeChartPerformance({required ChartData chartData}): ChartData
+        -validateChartData(chartData: ChartData): bool
+        -calculateChartDimensions(screenSize: Size): ChartDimensions
+    }
+    
+    class DataTransformationService {
+        +transformTripDataForChart({required List<TripAnalyticsModel> tripData}): TemperatureChartModel
+        +transformIncidentDataForChart({required List<IncidentAnalyticsModel> incidentData}): IncidentChartModel
+        +transformDriverDataForChart({required List<DriverPerformanceModel> driverData}): DriverChartModel
+        +aggregateDataByTimeInterval({required List<dynamic> data, required TimeInterval interval}): List<AggregatedDataPoint>
+        +filterDataByDateRange({required List<dynamic> data, required DateRange dateRange}): List<dynamic>
+        +normalizeDataForMobileVisualization({required List<double> data}): List<double>
+        +calculateMobileDataStatistics({required List<double> data}): MobileDataStatistics
+        +detectDataAnomaliesForMobile({required List<double> data}): List<DataAnomaly>
+        -validateTransformationData(data: List<dynamic>): bool
+        -interpolateMissingDataPoints(data: List<dynamic>): List<dynamic>
+        -optimizeDataForMobileRendering(data: List<dynamic>): List<dynamic>
+    }
+}
+
+package "HTTP and API Services" {
+    class AnalyticsApiService {
+        +dio: Dio
+        +baseUrl: String
+        +authInterceptor: AuthInterceptor
+        
+        +AnalyticsApiService({required this.baseUrl})
+        +getTripAnalytics({required String endpoint, required Map<String, dynamic> queryParams}): Future<Response<Map<String, dynamic>>>
+        +getIncidentAnalytics({required String endpoint, required Map<String, dynamic> queryParams}): Future<Response<Map<String, dynamic>>>
+        +getDriverAnalytics({required String endpoint, required Map<String, dynamic> queryParams}): Future<Response<Map<String, dynamic>>>
+        +exportAnalyticsReport({required String endpoint, required ExportRequest request}): Future<Response<List<int>>>
+        +uploadAnalyticsData({required String endpoint, required FormData data}): Future<Response<Map<String, dynamic>>>
+        -buildRequestHeaders(): Map<String, String>
+        -handleApiError(error: DioError): Exception
+        -retryRequest({required RequestOptions requestOptions, required int maxRetries}): Future<Response>
+    }
+}
+
+package "Local Storage Services" {
+    class AnalyticsCacheService {
+        +database: Database?
+        +databaseName: String
+        +cacheExpirationHours: int
+        
+        +AnalyticsCacheService()
+        +initDatabase(): Future<void>
+        +cacheTripAnalytics({required String key, required TripAnalyticsModel data}): Future<void>
+        +getCachedTripAnalytics({required String key}): Future<TripAnalyticsModel?>
+        +cacheIncidentAnalytics({required String key, required IncidentAnalyticsModel data}): Future<void>
+        +getCachedIncidentAnalytics({required String key}): Future<IncidentAnalyticsModel?>
+        +cacheDriverAnalytics({required String key, required DriverPerformanceModel data}): Future<void>
+        +getCachedDriverAnalytics({required String key}): Future<DriverPerformanceModel?>
+        +clearExpiredCache(): Future<void>
+        +clearAllCache(): Future<void>
+        +getCacheSize(): Future<int>
+        -isDataExpired(timestamp: DateTime): bool
+        -generateCacheKey(params: Map<String, dynamic>): String
+    }
+    
+    class ChartConfigService {
+        +preferences: SharedPreferences?
+        
+        +ChartConfigService()
+        +initPreferences(): Future<void>
+        +saveChartConfig({required String chartType, required ChartConfigModel config}): Future<bool>
+        +getChartConfig({required String chartType}): Future<ChartConfigModel?>
+        +saveChartTheme({required ChartTheme theme}): Future<bool>
+        +getChartTheme(): Future<ChartTheme>
+        +saveChartInteractionSettings({required ChartInteractionSettings settings}): Future<bool>
+        +getChartInteractionSettings(): Future<ChartInteractionSettings>
+        +resetChartConfigToDefaults(): Future<bool>
+        +exportChartConfigurations(): Future<Map<String, dynamic>>
+        +importChartConfigurations({required Map<String, dynamic> configs}): Future<bool>
+        -serializeChartConfig(config: ChartConfigModel): String
+        -deserializeChartConfig(configString: String): ChartConfigModel
+    }
+}
+
+package "Repositories" {
+    class TripAnalyticsRepository {
+        +analyticsService: AnalyticsService
+        +analyticsCacheService: AnalyticsCacheService
+        
+        +TripAnalyticsRepository({required this.analyticsService, required this.analyticsCacheService})
+        +getTripAnalytics({required DateRange dateRange, int? tripId}): Future<TripAnalyticsModel>
+        +getTemperatureAnalytics({required int tripId}): Future<TemperatureAnalyticsModel>
+        +getTripsByDateRange({required DateRange dateRange, required PaginationParams params}): Future<PageResponse<TripSummaryModel>>
+        +getTripsWithIncidents({required DateRange dateRange}): Future<List<TripIncidentModel>>
+        +getTemperatureAlerts({required int tripId}): Future<List<TemperatureAlertModel>>
+        +cacheTripAnalyticsData({required String key, required TripAnalyticsModel data}): Future<void>
+        +getCachedTripAnalyticsData({required String key}): Future<TripAnalyticsModel?>
+        +refreshTripAnalyticsCache(): Future<void>
+        -shouldUseCachedData(key: String): Future<bool>
+        -mergeCachedAndFreshData(cached: TripAnalyticsModel?, fresh: TripAnalyticsModel): TripAnalyticsModel
+    }
+    
+    class IncidentAnalyticsRepository {
+        +analyticsService: AnalyticsService
+        +analyticsCacheService: AnalyticsCacheService
+        
+        +IncidentAnalyticsRepository({required this.analyticsService, required this.analyticsCacheService})
+        +getIncidentAnalytics({required DateRange dateRange}): Future<IncidentAnalyticsModel>
+        +getMonthlyIncidentStats({required int year}): Future<List<MonthlyIncidentStats>>
+        +getIncidentsByType({required DateRange dateRange}): Future<Map<IncidentType, int>>
+        +getIncidentTrends({required AnalyticsPeriod period}): Future<IncidentTrendsModel>
+        +getIncidentSeverityDistribution(): Future<Map<IncidentSeverity, int>>
+        +cacheIncidentAnalyticsData({required String key, required IncidentAnalyticsModel data}): Future<void>
+        +getCachedIncidentAnalyticsData({required String key}): Future<IncidentAnalyticsModel?>
+        +refreshIncidentAnalyticsCache(): Future<void>
+        -shouldUseCachedData(key: String): Future<bool>
+        -mergeCachedAndFreshData(cached: IncidentAnalyticsModel?, fresh: IncidentAnalyticsModel): IncidentAnalyticsModel
+    }
+    
+    class DriverAnalyticsRepository {
+        +analyticsService: AnalyticsService
+        +analyticsCacheService: AnalyticsCacheService
+        
+        +DriverAnalyticsRepository({required this.analyticsService, required this.analyticsCacheService})
+        +getDriverPerformance({required int driverId, required DateRange dateRange}): Future<DriverPerformanceModel>
+        +getTopDrivers({required int limit, required PerformanceMetric metric}): Future<List<DriverRankingModel>>
+        +getDriverTrends({required int driverId, required AnalyticsPeriod period}): Future<DriverTrendsModel>
+        +getDriverIncidentStats({required int driverId, required DateRange dateRange}): Future<DriverIncidentStatsModel>
+        +getAllDriversPerformance({required DateRange dateRange, required PaginationParams params}): Future<PageResponse<DriverPerformanceModel>>
+        +cacheDriverAnalyticsData({required String key, required DriverPerformanceModel data}): Future<void>
+        +getCachedDriverAnalyticsData({required String key}): Future<DriverPerformanceModel?>
+        +refreshDriverAnalyticsCache(): Future<void>
+        -shouldUseCachedData(key: String): Future<bool>
+        -mergeCachedAndFreshData(cached: DriverPerformanceModel?, fresh: DriverPerformanceModel): DriverPerformanceModel
+    }
+}
+
+package "Data Models" {
+    class TripAnalyticsModel {
+        +id: int
+        +driverId: int
+        +driverName: String
+        +routeId: int
+        +routeName: String
+        +vehicleId: int
+        +startTime: DateTime
+        +endTime: DateTime
+        +status: TripStatus
+        +distance: double
+        +duration: Duration
+        +averageSpeed: double
+        +maxSpeed: double
+        +fuelConsumption: double
+        +incidentCount: int
+        +temperatureViolations: int
+        +temperatureData: List<TemperatureDataPoint>
+        
+        +TripAnalyticsModel({required this.id, required this.driverId, required this.driverName, required this.routeId, required this.routeName, required this.vehicleId, required this.startTime, required this.endTime, required this.status, required this.distance, required this.duration, required this.averageSpeed, required this.maxSpeed, required this.fuelConsumption, required this.incidentCount, required this.temperatureViolations, required this.temperatureData})
+        +factory TripAnalyticsModel.fromJson(Map<String, dynamic> json): TripAnalyticsModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({int? id, int? driverId, String? driverName, int? routeId, String? routeName, int? vehicleId, DateTime? startTime, DateTime? endTime, TripStatus? status, double? distance, Duration? duration, double? averageSpeed, double? maxSpeed, double? fuelConsumption, int? incidentCount, int? temperatureViolations, List<TemperatureDataPoint>? temperatureData}): TripAnalyticsModel
+        +get durationInHours(): double
+        +get hasTemperatureIssues(): bool
+        +get averageTemperature(): double
+    }
+    
+    class IncidentAnalyticsModel {
+        +id: int
+        +tripId: int
+        +type: IncidentType
+        +severity: IncidentSeverity
+        +description: String
+        +location: GeoLocation
+        +timestamp: DateTime
+        +resolved: bool
+        +resolutionTime: DateTime?
+        +resolutionDuration: Duration?
+        +driverName: String
+        +vehiclePlateNumber: String
+        
+        +IncidentAnalyticsModel({required this.id, required this.tripId, required this.type, required this.severity, required this.description, required this.location, required this.timestamp, required this.resolved, this.resolutionTime, this.resolutionDuration, required this.driverName, required this.vehiclePlateNumber})
+        +factory IncidentAnalyticsModel.fromJson(Map<String, dynamic> json): IncidentAnalyticsModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({int? id, int? tripId, IncidentType? type, IncidentSeverity? severity, String? description, GeoLocation? location, DateTime? timestamp, bool? resolved, DateTime? resolutionTime, Duration? resolutionDuration, String? driverName, String? vehiclePlateNumber}): IncidentAnalyticsModel
+        +get isResolved(): bool
+        +get resolutionTimeInHours(): double?
+        +get severityLevel(): int
+    }
+    
+    class DriverPerformanceModel {
+        +id: int
+        +employeeId: String
+        +firstName: String
+        +lastName: String
+        +licenseNumber: String
+        +experience: int
+        +performanceScore: double
+        +totalTrips: int
+        +totalIncidents: int
+        +averageRating: double
+        +totalDistance: double
+        +totalDrivingHours: double
+        +fuelEfficiency: double
+        +safetyScore: double
+        +punctualityScore: double
+        +isActive: bool
+        
+        +DriverPerformanceModel({required this.id, required this.employeeId, required this.firstName, required this.lastName, required this.licenseNumber, required this.experience, required this.performanceScore, required this.totalTrips, required this.totalIncidents, required this.averageRating, required this.totalDistance, required this.totalDrivingHours, required this.fuelEfficiency, required this.safetyScore, required this.punctualityScore, required this.isActive})
+        +factory DriverPerformanceModel.fromJson(Map<String, dynamic> json): DriverPerformanceModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({int? id, String? employeeId, String? firstName, String? lastName, String? licenseNumber, int? experience, double? performanceScore, int? totalTrips, int? totalIncidents, double? averageRating, double? totalDistance, double? totalDrivingHours, double? fuelEfficiency, double? safetyScore, double? punctualityScore, bool? isActive}): DriverPerformanceModel
+        +get fullName(): String
+        +get incidentRate(): double
+        +get averageDistancePerTrip(): double
+        +get overallRanking(): DriverRank
+    }
+    
+    class TemperatureChartModel {
+        +labels: List<String>
+        +temperatureData: List<TemperatureDataPoint>
+        +thresholds: TemperatureThresholds
+        +alerts: List<TemperatureAlertModel>
+        +chartConfig: ChartConfigModel
+        
+        +TemperatureChartModel({required this.labels, required this.temperatureData, required this.thresholds, required this.alerts, required this.chartConfig})
+        +factory TemperatureChartModel.fromJson(Map<String, dynamic> json): TemperatureChartModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({List<String>? labels, List<TemperatureDataPoint>? temperatureData, TemperatureThresholds? thresholds, List<TemperatureAlertModel>? alerts, ChartConfigModel? chartConfig}): TemperatureChartModel
+        +get hasTemperatureViolations(): bool
+        +get averageTemperature(): double
+        +get temperatureRange(): TemperatureRange
+    }
+    
+    class ChartConfigModel {
+        +chartType: ChartType
+        +title: String
+        +showGrid: bool
+        +showLegend: bool
+        +showTooltips: bool
+        +enableInteraction: bool
+        +colorScheme: ChartColorScheme
+        +animationDuration: Duration
+        +backgroundColor: Color
+        +gridColor: Color
+        +textColor: Color
+        
+        +ChartConfigModel({required this.chartType, required this.title, this.showGrid = true, this.showLegend = true, this.showTooltips = true, this.enableInteraction = true, required this.colorScheme, this.animationDuration = const Duration(milliseconds: 500), this.backgroundColor = Colors.white, this.gridColor = Colors.grey, this.textColor = Colors.black})
+        +factory ChartConfigModel.fromJson(Map<String, dynamic> json): ChartConfigModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({ChartType? chartType, String? title, bool? showGrid, bool? showLegend, bool? showTooltips, bool? enableInteraction, ChartColorScheme? colorScheme, Duration? animationDuration, Color? backgroundColor, Color? gridColor, Color? textColor}): ChartConfigModel
+        +factory ChartConfigModel.defaultConfig(ChartType chartType): ChartConfigModel
+        +get isValidConfig(): bool
+    }
+}
+
+package "Filter and Search Widgets" {
+    class DateRangePickerWidget {
+        +initialDateRange: DateRange?
+        +onDateRangeChanged: Function(DateRange)
+        +predefinedRanges: List<PredefinedDateRange>
+        +maxDate: DateTime
+        +minDate: DateTime
+        
+        +DateRangePickerWidget({Key? key, this.initialDateRange, required this.onDateRangeChanged, this.predefinedRanges = const [], required this.maxDate, required this.minDate}): super(key: key)
+        +createState(): _DateRangePickerWidgetState
+        +build(context: BuildContext): Widget
+        +showDateRangePicker(): Future<void>
+        +onPredefinedRangeSelected(range: PredefinedDateRange): void
+        +onCustomDateRangeSelected(startDate: DateTime, endDate: DateTime): void
+        -validateDateRange(startDate: DateTime, endDate: DateTime): bool
+        -formatDateRange(dateRange: DateRange): String
+    }
+    
+    class TripFilterWidget {
+        +filterOptions: TripFilterOptions
+        +onFilterChanged: Function(TripFilterOptions)
+        +availableDrivers: List<DriverOption>
+        +availableRoutes: List<RouteOption>
+        +availableStatuses: List<TripStatus>
+        
+        +TripFilterWidget({Key? key, required this.filterOptions, required this.onFilterChanged, required this.availableDrivers, required this.availableRoutes, required this.availableStatuses}): super(key: key)
+        +createState(): _TripFilterWidgetState
+        +build(context: BuildContext): Widget
+        +onDriverSelectionChanged(driverIds: List<int>): void
+        +onRouteSelectionChanged(routeIds: List<int>): void
+        +onStatusSelectionChanged(statuses: List<TripStatus>): void
+        +onResetFilters(): void
+        +onApplyFilters(): void
+        -validateFilters(): bool
+        -buildFilterSection(title: String, content: Widget): Widget
+    }
+    
+    class SearchWidget {
+        +searchQuery: String
+        +onSearchChanged: Function(String)
+        +searchPlaceholder: String
+        +isSearching: bool
+        +searchResults: List<SearchResult>
+        +onResultSelected: Function(SearchResult)?
+        
+        +SearchWidget({Key? key, this.searchQuery = '', required this.onSearchChanged, this.searchPlaceholder = 'Search...', this.isSearching = false, this.searchResults = const [], this.onResultSelected}): super(key: key)
+        +createState(): _SearchWidgetState
+        +build(context: BuildContext): Widget
+        +onSearchSubmitted(query: String): void
+        +onSearchCleared(): void
+        +onResultTap(result: SearchResult): void
+        -debounceSearch(query: String): void
+        -buildSearchResults(): Widget
+        -highlightSearchTerm(text: String, searchTerm: String): Widget
+    }
+}
+
+package "Utility Services" {
+    class ExportService {
+        +exportToCsv({required List<Map<String, dynamic>> data, required String filename}): Future<void>
+        +exportToPdf({required String title, required String content, required String filename}): Future<void>
+        +exportChartAsImage({required Widget chartWidget, required String filename}): Future<void>
+        +shareAnalyticsReport({required AnalyticsReportData reportData}): Future<void>
+        +saveToDevice({required Uint8List data, required String filename, required String mimeType}): Future<bool>
+        +generateAnalyticsReport({required AnalyticsReportData data}): Future<AnalyticsReport>
+        -formatDataForExport(data: List<Map<String, dynamic>>): String
+        -generatePdfDocument(title: String, content: String): Future<Uint8List>
+        -captureWidgetAsImage(widget: Widget): Future<Uint8List>
+        -getDeviceStoragePath(): Future<String>
+    }
+    
+    class ColorSchemeService {
+        +primaryColors: List<Color>
+        +secondaryColors: List<Color>
+        +gradientColors: List<LinearGradient>
+        +currentTheme: ColorTheme
+        
+        +ColorSchemeService()
+        +getColorForChart({required ChartType chartType}): List<Color>
+        +getColorForSeries({required int seriesIndex}): Color
+        +getGradientForChart({required ChartType chartType}): LinearGradient
+        +getTemperatureColors(): TemperatureColorScale
+        +getIncidentSeverityColors(): Map<IncidentSeverity, Color>
+        +getStatusColors(): Map<String, Color>
+        +generateColorPalette({required int count, Color? baseColor}): List<Color>
+        +applyColorTheme({required ColorTheme theme}): void
+        +getContrastColor({required Color backgroundColor}): Color
+        -interpolateColors(color1: Color, color2: Color, ratio: double): Color
+        -adjustColorOpacity(color: Color, opacity: double): Color
+    }
+    
+    class FormatUtilityService {
+        +formatTemperature({required double value, String unit = '°C', int decimals = 1}): String
+        +formatDistance({required double value, String unit = 'km', int decimals = 2}): String
+        +formatDuration({required Duration duration}): String
+        +formatDateTime({required DateTime dateTime, String format = 'dd/MM/yyyy HH:mm'}): String
+        +formatNumber({required double value, int decimals = 2, bool useThousandsSeparator = true}): String
+        +formatPercentage({required double value, int decimals = 1}): String
+        +formatFileSize({required int sizeInBytes}): String
+        +parseFormattedNumber({required String formattedNumber}): double?
+        +validateNumericInput({required String input}): bool
+        -getLocalizedNumberFormat(): NumberFormat
+        -getLocalizedDateFormat(String pattern): DateFormat
+    }
+}
+
+package "Helpers" {
+    class ChartInteractionHelper {
+        +handleChartTap({required FlTouchEvent touchEvent, required ChartTouchResponse? touchResponse, required ChartType chartType}): void
+        +handleChartPan({required DragUpdateDetails details, required ChartType chartType}): void
+        +handleChartZoom({required ScaleUpdateDetails details, required ChartType chartType}): void
+        +showChartTooltip({required TooltipContent content, required Offset position, required BuildContext context}): void
+        +hideChartTooltip({required BuildContext context}): void
+        +calculateTouchPosition({required FlTouchEvent touchEvent}): Offset
+        +determineChartRegion({required Offset position, required Size chartSize}): ChartRegion
+        +enableChartInteractions({required ChartType chartType}): bool
+        -validateTouchInput(touchEvent: FlTouchEvent): bool
+        -handleTouchFeedback(): void
+    }
+    
+    class AnalyticsCalculationHelper {
+        +calculatePercentageChange({required double oldValue, required double newValue}): double
+        +calculateAverage({required List<double> values}): double
+        +calculateMedian({required List<double> values}): double
+        +calculateStandardDeviation({required List<double> values}): double
+        +calculatePercentile({required List<double> values, required double percentile}): double
+        +calculateTrend({required List<DataPoint> dataPoints}): TrendDirection
+        +calculateCorrelation({required List<double> xValues, required List<double> yValues}): double
+        +identifyOutliers({required List<double> values}): List<OutlierPoint>
+        +calculateMovingAverage({required List<double> values, required int windowSize}): List<double>
+        +calculateGrowthRate({required List<double> values}): double
+        +smoothData({required List<double> values, required int smoothingFactor}): List<double>
+        -validateCalculationInput(values: List<double>): bool
+        -handleDivisionByZero(numerator: double, denominator: double): double
+    }
+}
+
+package "Custom UI Components" {
+    class AnalyticsCardWidget {
+        +title: String
+        +value: String
+        +subtitle: String?
+        +icon: IconData?
+        +color: Color
+        +onTap: VoidCallback?
+        +isLoading: bool
+        
+        +AnalyticsCardWidget({Key? key, required this.title, required this.value, this.subtitle, this.icon, this.color = Colors.blue, this.onTap, this.isLoading = false}): super(key: key)
+        +build(context: BuildContext): Widget
+        -buildCardContent(): Widget
+        -buildLoadingIndicator(): Widget
+        -buildCardIcon(): Widget?
+    }
+    
+    class MetricDisplayWidget {
+        +metricName: String
+        +metricValue: String
+        +changePercentage: double?
+        +isPositiveChange: bool
+        +showTrend: bool
+        +compactMode: bool
+        
+        +MetricDisplayWidget({Key? key, required this.metricName, required this.metricValue, this.changePercentage, this.isPositiveChange = true, this.showTrend = true, this.compactMode = false}): super(key: key)
+        +build(context: BuildContext): Widget
+        -buildTrendIndicator(): Widget
+        -buildMetricValue(): Widget
+        -buildChangeIndicator(): Widget
+        -getTrendColor(): Color
+    }
+    
+    class LoadingIndicatorWidget {
+        +message: String?
+        +size: double
+        +color: Color?
+        +showMessage: bool
+        
+        +LoadingIndicatorWidget({Key? key, this.message, this.size = 50.0, this.color, this.showMessage = true}): super(key: key)
+        +build(context: BuildContext): Widget
+        -buildLoadingAnimation(): Widget
+        -buildLoadingMessage(): Widget?
+    }
+}
+
+' Relationships
+AnalyticsDashboardScreen --> TripAnalyticsBloc
+AnalyticsDashboardScreen --> IncidentAnalyticsBloc
+AnalyticsDashboardScreen --> DriverAnalyticsBloc
+
+TripAnalyticsScreen --> TripAnalyticsBloc
+TripAnalyticsScreen --> TemperatureLineChartWidget
+IncidentsOverviewScreen --> IncidentAnalyticsBloc
+IncidentsOverviewScreen --> IncidentsBarChartWidget
+DriversRankingScreen --> DriverAnalyticsBloc
+
+TemperatureLineChartWidget --> CustomTooltipWidget
+IncidentsBarChartWidget --> CustomTooltipWidget
+TemperatureLineChartWidget --> ChartConfigBloc
+
+TripAnalyticsBloc --> TripAnalyticsRepository
+IncidentAnalyticsBloc --> IncidentAnalyticsRepository
+DriverAnalyticsBloc --> DriverAnalyticsRepository
+ChartConfigBloc --> ChartConfigService
+
+TripAnalyticsRepository --> AnalyticsService
+TripAnalyticsRepository --> AnalyticsCacheService
+IncidentAnalyticsRepository --> AnalyticsService
+IncidentAnalyticsRepository --> AnalyticsCacheService
+DriverAnalyticsRepository --> AnalyticsService
+DriverAnalyticsRepository --> AnalyticsCacheService
+
+AnalyticsService --> AnalyticsApiService
+AnalyticsService --> DataTransformationService
+ChartRenderingService --> ColorSchemeService
+ChartRenderingService --> FormatUtilityService
+
+AnalyticsDashboardScreen --> DateRangePickerWidget
+TripAnalyticsScreen --> TripFilterWidget
+AnalyticsDashboardScreen --> SearchWidget
+
+AnalyticsDashboardScreen --> ExportService
+AnalyticsService --> TripAnalyticsModel
+AnalyticsService --> IncidentAnalyticsModel
+AnalyticsService --> DriverPerformanceModel
+ChartRenderingService --> TemperatureChartModel
+ChartRenderingService --> ChartConfigModel
+
+TemperatureLineChartWidget --> ChartInteractionHelper
+IncidentsBarChartWidget --> ChartInteractionHelper
+AnalyticsCalculationHelper --> FormatUtilityService
+
+AnalyticsDashboardScreen --> AnalyticsCardWidget
+DriversRankingScreen --> MetricDisplayWidget
+AnalyticsDashboardScreen --> LoadingIndicatorWidget
+
+@enduml

@@ -1,0 +1,80 @@
+@startuml Real-Time-Monitoring-WebApp-Domain-Classes
+
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Enum>> Wheat
+}
+
+' ========================
+' Entities
+' ========================
+class MonitoringSession <<Entity>> {
+  - id: number
+  - tripId: number
+  - deviceId: number
+  - startTime: Date
+  - endTime: Date | null
+  - createdAt: Date
+  - sessionStatusId: number
+  - sessionStatus: MonitoringSessionStatus
+  - telemetryReadings: TelemetryData[]
+  --
+  + startSession(): void
+  + endSession(): void
+  + updateStatus(newStatus: SessionStatus): void
+  + isActive(): boolean
+}
+
+class TelemetryData <<Entity>> {
+  - id: number
+  - monitoringSessionId: number
+  - temperature: number
+  - humidity: number
+  - vibration: number
+  - latitude: number
+  - longitude: number
+  - createdAt: Date
+  --
+  + getTemperature(): number
+  + getHumidity(): number
+  + getVibration(): number
+  + getLocation(): Location
+}
+
+class MonitoringSessionStatus <<Entity>> {
+  - id: number
+  - name: string
+  --
+  + isFinal(): boolean
+}
+
+' ========================
+' Value Objects
+' ========================
+class Location <<ValueObject>> {
+  - latitude: number
+  - longitude: number
+  --
+  + distanceTo(other: Location): number
+}
+
+class SessionStatus <<ValueObject>> {
+  - status: string
+}
+
+' ========================
+' Relationships
+' ========================
+MonitoringSession *-- "1" MonitoringSessionStatus : has
+MonitoringSession *-- "0..*" TelemetryData : contains
+MonitoringSession --> SessionStatus : uses
+
+TelemetryData --> "1" Location : has
+
+MonitoringSessionStatus --> SessionStatus : represents
+
+@enduml

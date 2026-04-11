@@ -1,0 +1,59 @@
+@startuml Profile-And-Preferences-Mobile-Domain-Classes
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Enum>> Wheat
+}
+
+' ========================
+' Entities (mobile models)
+' ========================
+class Profile <<Entity>> {
+  - id: int
+  - userId: int
+  - fullName: String
+  - phoneNumber?: PhoneNumber
+  - avatarUrl?: String
+  - createdAt: DateTime
+  - updatedAt: DateTime
+  - preferences: Preferences
+}
+
+class Preferences <<Entity>> {
+  - id: int
+  - profileId: int
+  - language: Language
+  - timeZone: TimeZone
+  - alertEmailEnabled: bool
+  - alertPushEnabled: bool
+  - alertSmsEnabled: bool
+}
+
+' ========================
+' Value Objects
+' ========================
+class PhoneNumber <<ValueObject>> {
+  - countryCode: String
+  - number: String
+}
+
+class Language <<ValueObject>> {
+  - code: String
+  - name: String
+}
+
+class TimeZone <<ValueObject>> {
+  - code: String
+}
+
+' ========================
+' Relationships
+' ========================
+Profile *-- Preferences
+Profile --> PhoneNumber : optional
+Preferences --> Language
+Preferences --> TimeZone
+@enduml

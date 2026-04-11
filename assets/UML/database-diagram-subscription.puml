@@ -1,0 +1,103 @@
+@startuml
+
+
+
+entity companies {
+
+  id: uuid <<PK>>
+
+  --
+
+  name: text
+
+  created_at: timestamptz
+
+  updated_at: timestamptz
+
+}
+
+
+
+entity subscriptions {
+
+  id: uuid <<PK>>
+
+  --
+
+  company_id: uuid <<FK companies.id>>
+
+  status: varchar(16) *Draft|Active|Canceled (simplificado)
+
+  plan_type: varchar(16) *BASIC|STANDARD|PREMIUM
+
+  plan_renewal_on: timestamptz
+
+  created_at: timestamptz
+
+  updated_at: timestamptz
+
+  --
+
+  {unique} (company_id, status) where status='Active'
+
+}
+
+
+
+entity stripe_webhook_events {
+
+  id: varchar(255) <<PK>> *event.id de Stripe
+
+  --
+
+  received_at: timestamptz
+
+  payload: jsonb
+
+  signature_valid: boolean
+
+}
+
+
+
+entity payments {
+
+  id: uuid <<PK>>
+
+  --
+
+  subscription_id: uuid <<FK subscriptions.id>>
+
+  status: varchar(16) *Pending|Succeeded|Failed
+
+  amount: numeric(12,2)
+
+  currency: char(3)
+
+  provider_ref: varchar(255) *payment_intent_id/charge_id
+
+  provider_event_id: varchar(255) <<FK stripe_webhook_events.id>> *nullable
+
+  failure_reason: text
+
+  created_at: timestamptz
+
+  captured_at: timestamptz *nullable
+
+  --
+
+  {unique} (provider_ref)
+
+}
+
+
+
+companies ||--o{ subscriptions : company_id
+
+subscriptions ||--o{ payments : subscription_id
+
+stripe_webhook_events ||--o| payments : provider_event_id
+
+
+
+@enduml

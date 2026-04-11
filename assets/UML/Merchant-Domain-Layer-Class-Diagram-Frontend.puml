@@ -1,0 +1,171 @@
+@startuml Merchant-Frontend-Domain-Classes
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Enum>> Wheat
+}
+
+' ========================
+' Enums
+' ========================
+enum MerchantStatus <<Enum>> {
+  ACTIVE
+  SUSPENDED
+}
+
+enum SubscriptionStatus <<Enum>> {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+enum InvoiceStatus <<Enum>> {
+  DRAFT
+  OPEN
+  PAID
+  VOID
+}
+
+enum PaymentMethodType <<Enum>> {
+  CARD
+  BANK
+}
+
+enum CurrencyCode <<Enum>> {
+  USD
+  EUR
+  PEN
+}
+
+enum BillingPeriod <<Enum>> {
+  MONTHLY
+  YEARLY
+}
+
+' ========================
+' Value Objects
+' ========================
+class Email <<ValueObject>> {
+  - value: string
+}
+
+class Phone <<ValueObject>> {
+  - value: string
+}
+
+class Address <<ValueObject>> {
+  - line1: string
+  - line2: string
+  - city: string
+  - region: string
+  - countryCode: string   ' ISO-3166-1 alpha-2
+  - postalCode: string
+}
+
+class Money <<ValueObject>> {
+  - value: number
+  - currency: CurrencyCode
+}
+
+class Period <<ValueObject>> {
+  - startAt: Date
+  - endAt: Date
+}
+
+class PaymentCard <<ValueObject>> {
+  - brand: string        ' VISA, MC, etc.
+  - last4: string
+  - expMonth: number
+  - expYear: number
+}
+
+' ========================
+' Entities
+' ========================
+class Merchant <<Entity>> {
+  - id: string           ' usar string para IDs (BIGINT backend)
+  - name: string
+  - taxId: string
+  - email: Email
+  - status: MerchantStatus
+  - primaryAddress: Address
+  - contacts: Contact[]
+  - locations: Location[]
+  - paymentMethods: PaymentMethod[]
+}
+
+class Contact <<Entity>> {
+  - id: string
+  - fullName: string
+  - email: Email
+  - phone: Phone
+  - role: string         ' ADMIN, BILLING, OPERATIONS
+  - isPrimary: boolean
+}
+
+class Location <<Entity>> {
+  - id: string
+  - name: string
+  - address: Address
+  - latitude: number
+  - longitude: number
+}
+
+class PaymentMethod <<Entity>> {
+  - id: string
+  - type: PaymentMethodType
+  - card: PaymentCard     ' opcional si type=CARD
+  - externalId: string    ' id del PSP (p.ej., Stripe)
+  - isDefault: boolean
+}
+
+class Plan <<Entity>> {
+  - id: string
+  - name: string
+  - price: Money
+  - billingPeriod: BillingPeriod
+  - features: string[]
+  - active: boolean
+}
+
+class Subscription <<Entity>> {
+  - id: string
+  - merchantId: string
+  - plan: Plan
+  - status: SubscriptionStatus
+  - currentPeriod: Period
+  - cancelAt: Date
+  - externalId: string    ' id del PSP
+}
+
+class Invoice <<Entity>> {
+  - id: string
+  - subscriptionId: string
+  - amountTotal: Money
+  - status: InvoiceStatus
+  - issuedAt: Date
+  - dueAt: Date
+  - paidAt: Date
+  - externalId: string
+  - pdfUrl: string
+}
+
+' ========================
+' Relationships
+' ========================
+Merchant *-- "0..*" Contact
+Merchant *-- "0..*" Location
+Merchant *-- "0..*" PaymentMethod
+
+Subscription --> "1" Plan
+Subscription *-- "0..*" Invoice
+
+' (En frontend puedes cargar suscripciones por merchant)
+Merchant --> "0..*" Subscription : subscriptions
+
+' Tip: PaymentMethod.card es relevante cuando type=CARD
+@enduml

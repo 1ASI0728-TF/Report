@@ -1,0 +1,53 @@
+@startuml Trip-Management-Domain-Layer-DataBase-Diagram
+!theme plain
+
+entity Trip {
+  * trip_id : BIGINT <<PK>>
+  --
+  client_id : BIGINT
+  driver_id : BIGINT
+  vehicle_id : BIGINT
+  status : VARCHAR(20) -- PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+  requested_at : TIMESTAMP
+  route_id : BIGINT <<FK>>
+}
+
+entity Route {
+  * route_id : BIGINT <<PK>>
+  --
+  origin_latitude : DOUBLE
+  origin_longitude : DOUBLE
+  destination_latitude : DOUBLE
+  destination_longitude : DOUBLE
+  total_distance_value : DOUBLE
+  total_distance_unit : VARCHAR(10)
+  total_duration_value : DOUBLE
+  total_duration_unit : VARCHAR(10)
+  polyline : TEXT
+}
+
+entity RouteSegment {
+  * segment_id : BIGINT <<PK>>
+  --
+  route_id : BIGINT <<FK>>
+  distance_value : DOUBLE
+  distance_unit : VARCHAR(10)
+  duration_value : DOUBLE
+  duration_unit : VARCHAR(10)
+}
+
+entity GeoCoordinate {
+  * coordinate_id : BIGINT <<PK>>
+  --
+  segment_id : BIGINT <<FK>>
+  latitude : DOUBLE
+  longitude : DOUBLE
+}
+
+' ========================
+' Relationships with cardinalities
+' ========================
+Trip ||--|| Route : "1 : 1"
+Route ||--o{ RouteSegment : "1 : N"
+RouteSegment ||--o{ GeoCoordinate : "1 : N"
+@enduml

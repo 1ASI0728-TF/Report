@@ -1,0 +1,169 @@
+@startuml Merchant-Management-Mobile-Domain-Classes
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Enum>> Wheat
+}
+
+' ========================
+' Enums
+' ========================
+enum MerchantStatus <<Enum>> {
+  ACTIVE
+  SUSPENDED
+}
+
+enum SubscriptionStatus <<Enum>> {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+enum InvoiceStatus <<Enum>> {
+  DRAFT
+  OPEN
+  PAID
+  VOID
+}
+
+enum PaymentMethodType <<Enum>> {
+  CARD
+  BANK
+}
+
+enum CurrencyCode <<Enum>> {
+  USD
+  EUR
+  PEN
+}
+
+enum BillingPeriod <<Enum>> {
+  MONTHLY
+  YEARLY
+}
+
+' ========================
+' Value Objects
+' ========================
+class Email <<ValueObject>> {
+  - value: String
+}
+
+class Phone <<ValueObject>> {
+  - value: String
+}
+
+class Address <<ValueObject>> {
+  - line1: String
+  - line2: String
+  - city: String
+  - region: String
+  - countryCode: String   ' ISO-3166-1 alpha-2
+  - postalCode: String
+}
+
+class Money <<ValueObject>> {
+  - value: double
+  - currency: CurrencyCode
+}
+
+class Period <<ValueObject>> {
+  - startAt: DateTime      ' llega ISO-string; mapear a DateTime
+  - endAt: DateTime
+}
+
+class PaymentCard <<ValueObject>> {
+  - brand: String          ' VISA, MC, etc.
+  - last4: String
+  - expMonth: int
+  - expYear: int
+}
+
+' ========================
+' Entities
+' ========================
+class Merchant <<Entity>> {
+  - id: String             ' usar String para BIGINT backend
+  - name: String
+  - taxId: String
+  - email: Email
+  - status: MerchantStatus
+  - primaryAddress: Address
+  - contacts: List<Contact>
+  - locations: List<Location>
+  - paymentMethods: List<PaymentMethod>
+}
+
+class Contact <<Entity>> {
+  - id: String
+  - fullName: String
+  - email: Email
+  - phone: Phone
+  - role: String           ' ADMIN, BILLING, OPERATIONS
+  - isPrimary: boolean
+}
+
+class Location <<Entity>> {
+  - id: String
+  - name: String
+  - address: Address
+  - latitude: double
+  - longitude: double
+}
+
+class PaymentMethod <<Entity>> {
+  - id: String
+  - type: PaymentMethodType
+  - card: PaymentCard      ' relevante si type=CARD
+  - externalId: String     ' id del PSP (p.ej., Stripe)
+  - isDefault: boolean
+}
+
+class Plan <<Entity>> {
+  - id: String
+  - name: String
+  - price: Money
+  - billingPeriod: BillingPeriod
+  - features: List<String>
+  - active: boolean
+}
+
+class Subscription <<Entity>> {
+  - id: String
+  - merchantId: String
+  - plan: Plan
+  - status: SubscriptionStatus
+  - currentPeriod: Period
+  - cancelAt: DateTime
+  - externalId: String      ' id del PSP
+}
+
+class Invoice <<Entity>> {
+  - id: String
+  - subscriptionId: String
+  - amountTotal: Money
+  - status: InvoiceStatus
+  - issuedAt: DateTime
+  - dueAt: DateTime
+  - paidAt: DateTime
+  - externalId: String
+  - pdfUrl: String
+}
+
+' ========================
+' Relationships
+' ========================
+Merchant *-- "0..*" Contact
+Merchant *-- "0..*" Location
+Merchant *-- "0..*" PaymentMethod
+
+Subscription --> "1" Plan
+Subscription *-- "0..*" Invoice
+
+' En móvil puedes cargar suscripciones por merchant
+Merchant --> "0..*" Subscription : subscriptions
+@enduml
