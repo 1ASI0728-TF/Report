@@ -589,13 +589,9 @@ El diagrama del frontend Angular muestra la arquitectura de componentes y servic
 
 **Mobile - Identity & Access Management Domain Layer Class Diagram**
 
-![Identity & Access Management - Mobile Domain Layer Class Diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Los-Parkers-IoT/LosParkers-report/refs/heads/feature/chapter-1-2-3-4/assets/UML/IAM_Mobile_Classes.puml)
-
 La aplicación móvil Flutter implementa BLoC pattern para el manejo de estado de autenticación. Los BLoCs (AuthBloc, UserBloc) coordinan entre las pantallas y los services, mientras que el local storage permite funcionalidad offline. La arquitectura asegura sincronización de credenciales entre la app y el backend.
 
 ##### 4.2.1.6.2. Bounded Context Database Design Diagram
-
-![Identity & Access Management - Database Design](assets/IdentityAndAccessManagementDatabaseDiagram.png)
 
 El diagrama de base de datos implementa un modelo RBAC (Role-Based Access Control) robusto. Las tablas principales (USERS, ROLES, PERMISSIONS) están conectadas através de tablas de unión que permiten relaciones many-to-many. Se incluyen tablas auxiliares para tokens de sesión, logs de auditoría y tokens de recuperación de contraseña. La estructura está optimizada para consultas frecuentes de autorización y mantiene integridad referencial.
 
@@ -687,10 +683,6 @@ _Entities_
 
 #### 4.2.2.5. Bounded Context Software Architecture Component Level Diagrams
 
-_Diagrama de componentes - Backend - Subscriptions and Billing_
-
-![Component diagrams](assets/Component_backend_subscription.png)
-
 El backend del bounded context de Suscripciones y Pagos está estructurado siguiendo el enfoque de Domain-Driven Design (DDD), y se organiza en cuatro capas principales:
 
 - **Interface Layer**: expone los controladores REST que atienden las operaciones de planes, suscripciones y pagos.Es la puerta de entrada para los usuarios o sistemas que consumen la API.
@@ -706,9 +698,6 @@ Conexiones externas actuales:
 • **Stripe**: pasarela de pagos (configurada mediante variables de entorno, preparada para integración futura).
 • **SendGrid**: servicio de envío de correos electrónicos (reservado para notificaciones de facturación y confirmaciones).
 
-_Diagrama de componentes - Application Web - Subscriptions and Billing_
-
-![Component diagrams](assets/Component_diagram_applicationweb.png)
 
 La aplicación web se comunica con el bounded context Subscriptions exclusivamente a través de endpoints REST del backend (mismo API para commands y queries). No existe un módulo separado de “Billing” ni una “Query API” independiente.
 
@@ -726,10 +715,6 @@ _Conexiones externas representadas en el backend_:
 • **Stripe** (pasarela de pagos — integración planificada).
 • **SendGrid** (correos transaccionales — integración planificada).
 
-_Diagrama de componentes - Mobile Application - Subscriptions and Billing_
-
-![Component diagrams](assets/Component_diagram_mobile.png)
-
 La aplicación móvil de Subscriptions mantiene una arquitectura muy similar a la versión web, ya que también se conecta al backend a través de la Subscriptions REST API, utilizando comandos (POST/PUT) para ejecutar acciones y consultas (GET) para obtener datos de planes, suscripciones y pagos.
 
 La principal diferencia con respecto a la versión web es que en el entorno móvil se incorpora una base de datos local SQLite, la cual permite el funcionamiento offline.Gracias a esta base local, la aplicación puede continuar operando aun sin conexión, guardando temporalmente los datos y sincronizándolos cuando se restablece el acceso a internet.
@@ -746,8 +731,6 @@ _La app se organiza en los siguientes componentes_:
 
 ##### 4.2.2.6.1. Bounded Context Domain Layer Class Diagrams
 
-![layer diagrams](assets/subscriptions_class_diagram.png)
-
 ##### Explicación del diagrama
 
 El diagrama de clases del Domain Layer se centra en tres entidades: Subscription (aggregate), Plan (entity) y Payment(entity).
@@ -759,8 +742,6 @@ _Plan_ modela las ofertas disponibles y persiste atributos como name, limits, pr
 _Payment_ registra transacciones asociadas a un usuario (userId) con transactionId único, amount, receiptUrl, paymentDate y status (PENDING, SUCCEEDED, FAILED).
 
 ##### 4.2.2.6.2. Bounded Context Database Design Diagram
-
-![layer diagrams](assets/subscriptions_database_diagram.png)
 
 ##### Explicación del diagrama
 
@@ -2736,8 +2717,6 @@ La aplicación móvil Flutter prioriza visualizaciones optimizadas para pantalla
 
 ##### 4.2.8.6.2. Bounded Context Database Design Diagram
 
-![Visualization Analytics - Database Design](assets/VisualizationAnalyticsDatabaseDiagram.png)
-
 El diseño de base de datos del módulo Analytics está optimizado para consultas analíticas y agregaciones. Las tablas principales (DASHBOARDS, WIDGETS, REPORTS) mantienen configuraciones de usuario, mientras que las tablas de métricas están desnormalizadas para consultas rápidas. Se incluyen índices especializados para consultas temporales y agregaciones frecuentes.
 
 ### 4.2.9. Bounded Context: Merchant
@@ -3101,25 +3080,17 @@ La aplicación móvil prioriza visualizaciones optimizadas para pantallas peque�
 
 **Backend - Merchant Domain Layer Class Diagram**
 
-![Merchant - Backend Domain Layer Class Diagram](assets/Merchant-Backend-Class-Diagram.png)
-
 El diagrama de clases del backend de Merchant modela el dominio comercial y de facturación. Merchant es Aggregate Root para la identidad del cliente (contactos, ubicaciones, métodos de pago), mientras que Subscription es un aggregate root separado que representa la relación Plan↔Merchant y su ciclo de vida. Invoice es entidad de billing asociada a Subscription. Se emplean Value Objects (Email, Address, Money, Period, PaymentCard) y Enums (MerchantStatus, SubscriptionStatus, InvoiceStatus, PaymentMethodType, CurrencyCode, BillingPeriod). Los Domain Services (p.ej., MerchantOnboardingService, BillingService) orquestan onboarding, creación de suscripciones y aplicación de pagos; los Domain Events (MerchantCreated, SubscriptionActivated, InvoicePaid) sincronizan estados con otros BCs y el PSP.
 
 **Frontend - Merchant Domain Layer Class Diagram**
-
-![Merchant - Frontend Domain Layer Class Diagram](assets/Merchant-Frontend-Class-Diagram.png)
 
 El diagrama del frontend (Web App) de Merchant refleja modelos de UI para perfil de merchant, contactos, ubicaciones, suscripciones e invoices. Los identificadores se manejan como string (por BIGINT en backend) y las fechas como Date. Se tipan VO y Enums (p.ej., CurrencyCode, BillingPeriod, SubscriptionStatus) para evitar errores. Los servicios de UI consumen APIs de Merchant/Billing y gestionan cache/estado (listas paginadas, filtros por estado/periodo) para una interacción rápida en administración.
 
 **Mobile - Merchant Domain Layer Class Diagram**
 
-![Merchant - Mobile Domain Layer Class Diagram](assets/Merchant-Mobile-Class-Diagram.png)
-
 El diagrama móvil (Flutter) de Merchant prioriza gestión ágil de perfil/ubicaciones/medios de pago y consulta de suscripciones e invoices. Los IDs se modelan como String y fechas como DateTime. Se reutilizan VO/Enums del dominio (p.ej., Money, Period, SubscriptionStatus). El state management (BLoC/Provider) coordina cache local y refresco de datos, permitiendo operaciones básicas offline (lectura) y sincronización cuando hay conectividad.
 
 ##### 4.2.9.6.2. Bounded Context Database Design Diagram
-
-![Merchant - Database Design](assets/Merchant-Database-Diagram.png)
 
 El diseño de base de datos de Merchant está orientado a datos transaccionales con trazabilidad de billing e integración con el PSP. Tablas principales:
 
