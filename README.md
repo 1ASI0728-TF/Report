@@ -58,8 +58,6 @@ Como resultado, se identificaron ocho bounded contexts:
 - **Visualization/Analytics**: visualización de métricas y reportes.
 - **Subscriptions and payments**: gestión de suscripciones y pagos con Stripe.
 
-![EventStorming – Candidate Context Discovery](assets/Candidate_Context_Discovery_Image.png)
-
 ### Leyenda utilizada en el EventStorming
 
 - 🟧 **Event**: describe algo que ocurrió en el dominio (Viaje iniciado, Alerta generada).
