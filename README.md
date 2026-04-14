@@ -265,6 +265,34 @@ Además, CargaSafe se integra con varios sistemas externos:
 - _SendGrid_  
    Servicio de mensajería utilizado para el envío de correos electrónicos transaccionales, reportes y alertas.
 
+##### Visual Container Diagrams
+
+A continuación se presentan los diagramas C4 de nivel contenedor de CargaSafe, que ilustran visualmente cómo se estructura internamente el sistema y cómo interactúan sus componentes.
+
+###### Diagrama 1: Vista de Contenedores - Nivel Alto
+
+![CargaSafe Container View - Vista General](./assets/C4/Container-Overview.jpeg)
+
+_Descripción:_ Este diagrama muestra la arquitectura general de CargaSafe desde la perspectiva del usuario final (Conductor/Driver). Se visualiza cómo el Driver interactúa con la Mobile App, que utiliza una base de datos local (SQLite) para operar en modo offline-first, sincronizando posteriormente con el Backend API. También se muestran las conexiones de la plataforma con servicios externos como Google Maps, Firebase Cloud Messaging y SendGrid.
+
+###### Diagrama 2: Vista de Contenedores - Arquitectura Completa
+
+![CargaSafe Container View - Arquitectura Detallada](./assets/C4/Container-SupportDomain.jpeg)
+
+_Descripción:_ Este diagrama presenta la arquitectura completa del sistema, incluyendo todas las personas (Company Operator, Driver, End Customer), contenedores internos (Landing Page, Web App, Mobile App, Backend API, Bases de datos) y sistemas externos (Google Maps, Stripe, Firebase, SendGrid, Google Maps). Muestra las relaciones entre operadores que planifican viajes, conductores que los ejecutan y clientes que reciben actualizaciones.
+
+###### Diagrama 3: Vista de Contenedores - Perspectiva de Operadores
+
+![CargaSafe Container View - Operadores y Administradores](./assets/C4/Container-OperationDomain.jpeg)
+
+_Descripción:_ Este diagrama enfatiza la interacción de los Operadores de Empresa con la plataforma. Muestra cómo los operadores utilizan la Web Application para gestionar la flota, crear y asignar viajes, monitorear en tiempo real y generar reportes. Ilustra la comunicación entre el operador y los servicios backend a través de APIs REST/GraphQL, así como la integración con sistemas de pago (Stripe) y notificaciones.
+
+###### Diagrama 4: Vista de Contenedores - Integración con Servicios Externos
+
+![CargaSafe Container View - Integraciones Externas](./assets/C4/Container-EdgeLayer.jpeg)
+
+_Descripción:_ Este diagrama destaca las integraciones de CargaSafe con servicios externos críticos. Muestra cómo el API Gateway actúa como punto central de enrutamiento, canalizando solicitudes hacia el Report Service, Subscription Service, Trip Service, Alert Service y Tracking Service. Además, visualiza las conexiones con proveedores externos como Redis (para cache), Firebase Cloud Messaging (notificaciones) y SendGrid (correos), estableciendo un ecosistema robusto de integraciones.
+
 #### 4.1.3.3. Software Architecture Deployment Diagrams
 
 El Deployment Diagram de CargaSafe muestra cómo se despliega la solución en un entorno de producción real, representando los nodos de infraestructura, los contenedores de software y las interacciones entre ellos.
