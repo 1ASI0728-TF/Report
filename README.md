@@ -104,8 +104,6 @@ Para la construcción de estos flujos se aplicó la técnica de **Domain Storyte
    - Cada _alerta generada o reconocida_ en **Alerts** actualiza los indicadores en **Dashboard & Analytics**, alimentando las métricas de cumplimiento y los reportes de incidentes.
    - Cuando **Dashboard & Analytics** genera un _reporte final_, este puede personalizarse de acuerdo con las preferencias almacenadas en **Profiles**, permitiendo al usuario recibir información ajustada a su rol o necesidades.
 
-![EventStorming – Domain Message Flows Modeling](assets/Domain_Message_Flows_Modeling.png)
-
 ### Resultados
 
 Los flujos de mensajes de dominio evidencian la cooperación entre los ocho bounded contexts de CargaSafe:
@@ -124,24 +122,6 @@ Este ejercicio permitió comprender cómo un evento local en un contexto puede i
 #### 4.1.1.3. Bounded Context Canvases
 
 En esta sección se elaboraron los Bounded Context Canvases de CargaSafe para los ocho contextos identificados. El objetivo fue delimitar con precisión responsabilidades, lenguaje ubicuo y decisiones de negocio, además de explicitar las comunicaciones (Queries, Commands y Events) y colaboradores (otros BC, sistemas externos y frontend). Cada canvas documenta: Descripción, Clasificación estratégica (core/supporting/generic), Rol de dominio (draft/execution/analysis/gateway), Inbound/Outbound communication, Ubiquitous Language, Business Decisions y Collaborators. Esta definición fija ownership de datos, reduce ambigüedades y prepara los contratos de integración que se implementarán en APIs y mensajería.
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_iam.png)
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_profiles.png)
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_subscriptions.png)
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_alerts.png)
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_fleet.png)
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_tripManagement.png)
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_realtimeMonitoring.png)
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_analytics.png)
-
-![EventStorming – Bounded Context Canvases](assets/Canvases_merchant.png)
 
 [Ver gráfico en Miro](https://miro.com/app/board/uXjVJ8W56f8=/?share_link_id=323586946145)
 
@@ -162,8 +142,6 @@ El mapa final permitió:
 
 De esta manera, el Context Mapping consolida una visión global del sistema, mostrando cómo los distintos contextos colaboran para dar soporte al negocio.
 
-![EventStorming – Context Mapping](assets/Context_Mapping.png)
-
 ### 4.1.3. Software Architecture
 
 #### 4.1.3.1. Software Architecture System Landscape Diagram
@@ -177,8 +155,6 @@ El objetivo de este diagrama es:
 1. Mostrar el alcance de la organización y cómo conviven sus distintos sistemas.
 2. Identificar a las **personas, sistemas internos, SaaS externos y proveedores** que colaboran en la cadena de valor.
 3. Resaltar cómo **CargaSafe (SaaS)** se conecta dentro de este panorama, en interacción con otros actores y servicios.
-
-![Software Architecture – System Landscape Diagram](assets/System_Landscape_Diagram.png)
 
 ### Elementos incluidos
 
@@ -210,8 +186,6 @@ El diagrama muestra a CargaSafe (SaaS) como el núcleo de integración entre ope
 
 El **Context Diagram** de CargaSafe muestra una visión de alto nivel del sistema y de cómo se relaciona con los actores humanos y los sistemas externos que lo rodean.
 
-![Software Architecture – Context Level Diagram](assets/Context_Level_Diagram.png)
-
 En el centro se ubica CargaSafe (SaaS), que representa el sistema principal encargado del monitoreo de la cadena de frío, la trazabilidad y la generación de alertas en los viajes logísticos.
 
 Alrededor del sistema se identifican los siguientes actores:
@@ -232,7 +206,6 @@ Asimismo, se destacan las interacciones con sistemas externos que complementan l
 
 En esta parte expandimos el sistema **CargaSafe (SaaS)** para mostrar sus contenedores internos, las tecnologías que utilizamos y cómo se comunican entre sí y con los sistemas externos.
 
-![Software Architecture – Container Level Diagram](assets/Container_Diagram1.png)
 
 El diagrama de contenedores muestra cómo se organiza internamente CargaSafe (SaaS) y cómo se relaciona con los actores y sistemas externos.
 
@@ -295,8 +268,6 @@ Además, CargaSafe se integra con varios sistemas externos:
 #### 4.1.3.3. Software Architecture Deployment Diagrams
 
 El Deployment Diagram de CargaSafe muestra cómo se despliega la solución en un entorno de producción real, representando los nodos de infraestructura, los contenedores de software y las interacciones entre ellos.
-
-![Software Architecture – Deployment Diagram](assets/Deployment_Diagram.png)
 
 **Clientes:**
 
