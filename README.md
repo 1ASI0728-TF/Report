@@ -58,6 +58,8 @@ Como resultado, se identificaron ocho bounded contexts:
 - **Visualization/Analytics**: visualización de métricas y reportes.
 - **Subscriptions and payments**: gestión de suscripciones y pagos con Stripe.
 
+![EventStorming – Candidate Context Discovery](assets/Candidate_Context_Discovery_Image.png)
+
 ### Leyenda utilizada en el EventStorming
 
 - 🟧 **Event**: describe algo que ocurrió en el dominio (Viaje iniciado, Alerta generada).
@@ -104,6 +106,8 @@ Para la construcción de estos flujos se aplicó la técnica de **Domain Storyte
    - Cada _alerta generada o reconocida_ en **Alerts** actualiza los indicadores en **Dashboard & Analytics**, alimentando las métricas de cumplimiento y los reportes de incidentes.
    - Cuando **Dashboard & Analytics** genera un _reporte final_, este puede personalizarse de acuerdo con las preferencias almacenadas en **Profiles**, permitiendo al usuario recibir información ajustada a su rol o necesidades.
 
+![EventStorming – Domain Message Flows Modeling](assets/Domain_Message_Flows_Modeling.png)
+
 ### Resultados
 
 Los flujos de mensajes de dominio evidencian la cooperación entre los ocho bounded contexts de CargaSafe:
@@ -122,6 +126,24 @@ Este ejercicio permitió comprender cómo un evento local en un contexto puede i
 #### 4.1.1.3. Bounded Context Canvases
 
 En esta sección se elaboraron los Bounded Context Canvases de CargaSafe para los ocho contextos identificados. El objetivo fue delimitar con precisión responsabilidades, lenguaje ubicuo y decisiones de negocio, además de explicitar las comunicaciones (Queries, Commands y Events) y colaboradores (otros BC, sistemas externos y frontend). Cada canvas documenta: Descripción, Clasificación estratégica (core/supporting/generic), Rol de dominio (draft/execution/analysis/gateway), Inbound/Outbound communication, Ubiquitous Language, Business Decisions y Collaborators. Esta definición fija ownership de datos, reduce ambigüedades y prepara los contratos de integración que se implementarán en APIs y mensajería.
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_iam.png)
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_profiles.png)
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_subscriptions.png)
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_alerts.png)
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_fleet.png)
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_tripManagement.png)
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_realtimeMonitoring.png)
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_analytics.png)
+
+![EventStorming – Bounded Context Canvases](assets/Canvases_merchant.png)
 
 [Ver gráfico en Miro](https://miro.com/app/board/uXjVJ8W56f8=/?share_link_id=323586946145)
 
@@ -142,6 +164,8 @@ El mapa final permitió:
 
 De esta manera, el Context Mapping consolida una visión global del sistema, mostrando cómo los distintos contextos colaboran para dar soporte al negocio.
 
+![EventStorming – Context Mapping](assets/Context_Mapping.png)
+
 ### 4.1.3. Software Architecture
 
 #### 4.1.3.1. Software Architecture System Landscape Diagram
@@ -155,6 +179,9 @@ El objetivo de este diagrama es:
 1. Mostrar el alcance de la organización y cómo conviven sus distintos sistemas.
 2. Identificar a las **personas, sistemas internos, SaaS externos y proveedores** que colaboran en la cadena de valor.
 3. Resaltar cómo **CargaSafe (SaaS)** se conecta dentro de este panorama, en interacción con otros actores y servicios.
+
+![Software Architecture – System Landscape Diagram](assets/System_Landscape_Diagram.png)
+
 
 ### Elementos incluidos
 
@@ -186,6 +213,8 @@ El diagrama muestra a CargaSafe (SaaS) como el núcleo de integración entre ope
 
 El **Context Diagram** de CargaSafe muestra una visión de alto nivel del sistema y de cómo se relaciona con los actores humanos y los sistemas externos que lo rodean.
 
+![Software Architecture – Context Level Diagram](assets/Context_Level_Diagram.png)
+
 En el centro se ubica CargaSafe (SaaS), que representa el sistema principal encargado del monitoreo de la cadena de frío, la trazabilidad y la generación de alertas en los viajes logísticos.
 
 Alrededor del sistema se identifican los siguientes actores:
@@ -206,6 +235,7 @@ Asimismo, se destacan las interacciones con sistemas externos que complementan l
 
 En esta parte expandimos el sistema **CargaSafe (SaaS)** para mostrar sus contenedores internos, las tecnologías que utilizamos y cómo se comunican entre sí y con los sistemas externos.
 
+![Software Architecture – Context Level Diagram](assets/Container_Diagram.png)
 
 El diagrama de contenedores muestra cómo se organiza internamente CargaSafe (SaaS) y cómo se relaciona con los actores y sistemas externos.
 
@@ -265,72 +295,30 @@ Además, CargaSafe se integra con varios sistemas externos:
 - _SendGrid_  
    Servicio de mensajería utilizado para el envío de correos electrónicos transaccionales, reportes y alertas.
 
-##### Visual Container Diagrams
 
-A continuación se presentan los diagramas C4 de nivel contenedor de CargaSafe, que ilustran visualmente cómo se estructura internamente el sistema y cómo interactúan sus componentes.
-
-###### Diagrama 1: Vista de Contenedores - Nivel Alto
-
-![CargaSafe Container View - Vista General](./assets/C4/Container-Overview.jpeg)
-
-_Descripción:_ Este diagrama muestra la arquitectura general de CargaSafe desde la perspectiva del usuario final (Conductor/Driver). Se visualiza cómo el Driver interactúa con la Mobile App, que utiliza una base de datos local (SQLite) para operar en modo offline-first, sincronizando posteriormente con el Backend API. También se muestran las conexiones de la plataforma con servicios externos como Google Maps, Firebase Cloud Messaging y SendGrid.
-
-###### Diagrama 2: Vista de Contenedores - Arquitectura Completa
-
-![CargaSafe Container View - Arquitectura Detallada](./assets/C4/Container-SupportDomain.jpeg)
-
-_Descripción:_ Este diagrama presenta la arquitectura completa del sistema, incluyendo todas las personas (Company Operator, Driver, End Customer), contenedores internos (Landing Page, Web App, Mobile App, Backend API, Bases de datos) y sistemas externos (Google Maps, Stripe, Firebase, SendGrid, Google Maps). Muestra las relaciones entre operadores que planifican viajes, conductores que los ejecutan y clientes que reciben actualizaciones.
-
-###### Diagrama 3: Vista de Contenedores - Perspectiva de Operadores
-
-![CargaSafe Container View - Operadores y Administradores](./assets/C4/Container-OperationDomain.jpeg)
-
-_Descripción:_ Este diagrama enfatiza la interacción de los Operadores de Empresa con la plataforma. Muestra cómo los operadores utilizan la Web Application para gestionar la flota, crear y asignar viajes, monitorear en tiempo real y generar reportes. Ilustra la comunicación entre el operador y los servicios backend a través de APIs REST/GraphQL, así como la integración con sistemas de pago (Stripe) y notificaciones.
-
-###### Diagrama 4: Vista de Contenedores - Integración con Servicios Externos
-
-![CargaSafe Container View - Integraciones Externas](./assets/C4/Container-EdgeLayer.jpeg)
-
-_Descripción:_ Este diagrama destaca las integraciones de CargaSafe con servicios externos críticos. Muestra cómo el API Gateway actúa como punto central de enrutamiento, canalizando solicitudes hacia el Report Service, Subscription Service, Trip Service, Alert Service y Tracking Service. Además, visualiza las conexiones con proveedores externos como Redis (para cache), Firebase Cloud Messaging (notificaciones) y SendGrid (correos), estableciendo un ecosistema robusto de integraciones.
 
 #### 4.1.3.3. Software Architecture Deployment Diagrams
 
 El Deployment Diagram de CargaSafe muestra cómo se despliega la solución en un entorno de producción real, representando los nodos de infraestructura, los contenedores de software y las interacciones entre ellos.
 
-**Clientes:**
+![Software Architecture – Context Level Diagram](assets/Deployment_Diagram.png)
 
-- Los usuarios finales acceden desde navegadores web, donde la Landing Page y el Web Frontend se sirven por separado desde CDNs independientes (CloudFlare/AWS CloudFront) para optimizar la entrega de contenido.
-- Los conductores utilizan una aplicación móvil Flutter en dispositivos Android/iOS, que incluye una base de datos SQLite local para almacenamiento offline y sincronización de datos.
-- Todas las peticiones de API se realizan mediante HTTPS y son redirigidas hacia el Load Balancer, encargado de enrutar el tráfico hacia los servicios backend.
+
+**Clientes**
+Los usuarios finales acceden desde navegadores web, donde la Landing Page se sirve desde Cloudflare CDN y el Web Frontend es entregado a través de un AWS Application Load Balancer, ambos optimizando la entrega de contenido estáticamente. Los conductores utilizan una aplicación móvil nativa en dispositivos Android/iOS con SQLite local para almacenamiento offline y sincronización de datos. Todas las peticiones de API se realizan mediante HTTPS hacia el API Gateway, encargado de enrutar el tráfico con autenticación JWT y rate limiting.
 
 **Backend y orquestación**
+El backend se compone de microservicios Node.js desplegados dentro de un Kubernetes Cluster (Amazon EKS) en múltiples pods independientes para alta disponibilidad y escalabilidad: Trip Service, Fleet Service, Tracking Service, Auth Service, Confirma Service y Report Service. La comunicación asíncrona entre servicios se gestiona a través de un Message Broker (Kafka/RabbitMQ) desplegado en un node group dedicado. Los dispositivos Edge embebidos en los vehículos envían telemetría al broker vía MQTT.
 
-- El Backend API (Spring Boot) se despliega dentro de un Kubernetes Cluster en múltiples pods de aplicaciones para alta disponibilidad y escalabilidad.
-- El backend centraliza la lógica de negocio, gestiona operaciones de viajes, monitoreo de cadena de frío y orquestación de alertas en tiempo real.
 
 **Base de datos**
-
-- El sistema utiliza una base de datos PostgreSQL gestionada (AWS RDS/Google Cloud SQL), con una instancia primaria para operaciones de escritura y réplicas de solo lectura para consultas distribuidas y balanceo de carga.
-- Los dispositivos móviles mantienen datos críticos localmente en SQLite para funcionamiento offline durante los viajes.
+El sistema utiliza múltiples bases de datos especializadas: Trip DB y Auth DB sobre PostgreSQL en Amazon RDS Multi-AZ, Fleet DB y Tracking DB sobre TimescaleDB Cloud optimizadas para series temporales, y Subscription DB y Notification DB con almacenamiento embebido Node.js/LevelDB. Los dispositivos Edge mantienen datos localmente en SQLite para operación offline.
 
 **Integraciones externas**
-El backend consume servicios de terceros para extender sus capacidades:
-
-- Google Maps para rutas, geocodificación y cálculo de ETA en tiempo real.
-- Stripe para procesamiento de pagos y facturación de subscripciones.
-- Firebase Cloud Messaging (FCM) para la entrega de notificaciones push directamente a los dispositivos móviles de los conductores.
+El backend consume servicios de terceros para extender sus capacidades: Google Maps para rutas, geocodificación y cálculo de ETA. Stripe Pages y Stripe Petet para procesamiento de pagos y facturación de suscripciones. Firebase Cloud Messaging (FCM) para entrega de notificaciones push a los dispositivos móviles de los conductores.
 
 **Resultado**
-El diagrama de despliegue muestra que la solución CargaSafe está organizada bajo una arquitectura cloud-native optimizada, con:
-
-- Separación de responsabilidades: Landing page y aplicación web servidas independientemente
-- Capacidades offline: Base de datos local SQLite en dispositivos móviles
-- Kubernetes para la orquestación de contenedores del backend
-- CDNs separados para optimizar la entrega de contenido estático
-- Base de datos gestionada con réplicas para mejorar el rendimiento y disponibilidad
-- Notificaciones push nativas a través de FCM
-
-Esta infraestructura permite un sistema escalable, resiliente y con capacidades offline críticas para la operación de conductores en campo, garantizando la continuidad operativa en la gestión de la cadena de frío incluso sin conectividad permanente.
+El diagrama de despliegue muestra que CargaSafe está organizado bajo una arquitectura cloud-native con separación de responsabilidades en microservicios, Kubernetes para orquestación de contenedores, CDN y Load Balancer independientes para contenido estático, bases de datos especializadas por dominio, mensajería asíncrona con Kafka/RabbitMQ, dispositivos Edge con capacidad offline en campo y notificaciones push nativas a través de FCM. Esta infraestructura garantiza escalabilidad, resiliencia y continuidad operativa en la gestión de la cadena de frío.
 
 ## 4.2. Tactical-Level Domain-Driven Design
 
@@ -711,6 +699,8 @@ _Entities_
 
 #### 4.2.2.5. Bounded Context Software Architecture Component Level Diagrams
 
+![Component diagrams](assets/Component_backend_subscription.png)
+
 El backend del bounded context de Suscripciones y Pagos está estructurado siguiendo el enfoque de Domain-Driven Design (DDD), y se organiza en cuatro capas principales:
 
 - **Interface Layer**: expone los controladores REST que atienden las operaciones de planes, suscripciones y pagos.Es la puerta de entrada para los usuarios o sistemas que consumen la API.
@@ -726,6 +716,9 @@ Conexiones externas actuales:
 • **Stripe**: pasarela de pagos (configurada mediante variables de entorno, preparada para integración futura).
 • **SendGrid**: servicio de envío de correos electrónicos (reservado para notificaciones de facturación y confirmaciones).
 
+Diagrama de componentes - Application Web - Subscriptions and Billing
+
+![Component diagrams](assets/Component_diagram_applicationweb.png)
 
 La aplicación web se comunica con el bounded context Subscriptions exclusivamente a través de endpoints REST del backend (mismo API para commands y queries). No existe un módulo separado de “Billing” ni una “Query API” independiente.
 
@@ -743,6 +736,10 @@ _Conexiones externas representadas en el backend_:
 • **Stripe** (pasarela de pagos — integración planificada).
 • **SendGrid** (correos transaccionales — integración planificada).
 
+Diagrama de componentes - Mobile Application - Subscriptions and Billing
+
+![Component diagrams](assets/Component_diagram_mobile.png)
+
 La aplicación móvil de Subscriptions mantiene una arquitectura muy similar a la versión web, ya que también se conecta al backend a través de la Subscriptions REST API, utilizando comandos (POST/PUT) para ejecutar acciones y consultas (GET) para obtener datos de planes, suscripciones y pagos.
 
 La principal diferencia con respecto a la versión web es que en el entorno móvil se incorpora una base de datos local SQLite, la cual permite el funcionamiento offline.Gracias a esta base local, la aplicación puede continuar operando aun sin conexión, guardando temporalmente los datos y sincronizándolos cuando se restablece el acceso a internet.
@@ -759,6 +756,8 @@ _La app se organiza en los siguientes componentes_:
 
 ##### 4.2.2.6.1. Bounded Context Domain Layer Class Diagrams
 
+![class diagrams](assets/subscriptions_class_diagram.png)
+
 ##### Explicación del diagrama
 
 El diagrama de clases del Domain Layer se centra en tres entidades: Subscription (aggregate), Plan (entity) y Payment(entity).
@@ -770,6 +769,8 @@ _Plan_ modela las ofertas disponibles y persiste atributos como name, limits, pr
 _Payment_ registra transacciones asociadas a un usuario (userId) con transactionId único, amount, receiptUrl, paymentDate y status (PENDING, SUCCEEDED, FAILED).
 
 ##### 4.2.2.6.2. Bounded Context Database Design Diagram
+
+![database diagrams](assets/subscriptions_database_diagram.png)
 
 ##### Explicación del diagrama
 
@@ -1010,9 +1011,6 @@ Diagrama de componentes - Mobile App - Alerts & Resolution
 
 ##### 4.2.3.6.1. Bounded Context Domain Layer Class Diagrams
 
-**Domain Layer Class Diagram**
-
-![Alert Management Domain Layer Class Diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Los-Parkers-IoT/LosParkers-report/refs/heads/feature/chapter-4/assets/UML/Alert-Management-Domain-Layer-Class-Diagram.puml&v=3)
 
 **WebApp Class Diagram**
 
@@ -1786,10 +1784,6 @@ Diagrama de componentes - Mobile App - Trip Management
 
 ##### 4.2.5.6.1. Bounded Context Domain Layer Class Diagrams.
 
-![Trip Management Domain Layer Class Diagram Backend](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Los-Parkers-IoT/LosParkers-report/refs/heads/feature/chapter-1-2-3-4/assets/UML/Trip-Management-Domain-Layer-Class-Diagram.puml)
-
-![Trip Management Domain Layer Class Diagram Web App](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Los-Parkers-IoT/LosParkers-report/refs/heads/feature/chapter-1-2-3-4/assets/UML/Trip-Management-Domain-Layer-Class-Diagram-Frontend.puml)
-
 ![Trip Management Domain Layer Class Diagram Mobile App](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Los-Parkers-IoT/LosParkers-report/refs/heads/feature/chapter-1-2-3-4/assets/UML/Trip-Management-Domain-Layer-Class-Diagram-Mobile.puml)
 
 ##### 4.2.5.6.2. Bounded Context Database Design Diagram.
@@ -2485,7 +2479,6 @@ Diagrama de componentes - Mobile App - Profiles and Preferences Management
 
 ##### 4.2.7.6.1. Bounded Context Domain Layer Class Diagrams.
 
-![Profile And Preferences Management Domain Layer Class Diagram Backend](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Los-Parkers-IoT/LosParkers-report/refs/heads/feature/chapter-1-2-3-4/assets/UML/ProfileAndPreferencesManagement-Domain-Layer-Class-Diagram.puml)
 
 ![Profile And Preferences Management Domain Layer Class Diagram Web App](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Los-Parkers-IoT/LosParkers-report/refs/heads/feature/chapter-1-2-3-4/assets/UML/ProfileAndPreferencesManagement-Domain-Layer-Class-Diagram-Frontend.puml)
 
