@@ -72,7 +72,9 @@
 
 # Registro de Versiones del Informe
 
-| Versión | Fecha      | Autor            | Descripción de modificación                                                                                                                                                                                                                                                                                                                                                  |
+| Versión | Fecha      | Autor            | Descripción de modificación                                                                                                                                                                                                                                                                                                                              |
+| ------- | ---------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0     | 15/04/2026 | George, Jefrey, Jose Luis, Paulo, Edery           | Se entregó una primera entrega del informe con los siguientes apartados: Carátula, Registro de Versiones, Project Report Collaboration Insights, Contenido, Student Outcome, Capítulo I: Introducción, Capítulo II: Requirements Elicitation & Analysis, Capítulo III: Requirements Specification, Capítulo IV: Solution Software Design y Bibliografía. |
 
 ---
 
@@ -316,7 +318,7 @@ _Tabla de contenidos_
 
 El curso contribuye de manera directa al desarrollo y cumplimiento del Student Outcome 5 definido por ABET – EAC, asegurando que los estudiantes alcancen las competencias establecidas en dicho resultado.
 
-Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros juntos proporcionan liderazgo, crean un entorno de colaboración e inclusivo, establecen objetivos, planifican tareas y cumplen objetivos. En el siguiente cuadro se describe las acciones realizadas y enunciados de conclusiones por parte del grupo, que permiten sustentar el haber alcanzado el logro del ABET – EAC - Student Outcome 5.
+Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros juntos proporcionan liderazgo, crean un entorno de colaboración e inclusivo, establecen objetivos, planifican tareas y cumplen objetivos. En el siguiente cuadro se describe las acciones realizadas y enunciados de conclusiones por parte del grupo, que permiten sustentar el haber alcanzado el logro del ABET – EAC - Student Outcome 3.
 
 <table>
   <thead>
@@ -330,61 +332,25 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
   </thead>
   <tbody>
     <tr>
-      <td>Trabaja en equipo para proporcionar liderazgo conjunto</td>
+      <td>Capacidad de comunicarse efectivamente con un rango de audiencias</td>
       <td>
-        <span class="person">Nombre</span><br />
+        <span class="person">Jefrey Martin Sanchez Ignacio</span><br />
         <span class="entry-order">TB1:</span><br/>
-          Texto
-        </span><br/><br/>
-        <span class="entry-order">TP1:<br/>
-          Texto.
-        </span><br/><br/>
-        <span class="entry-order">TB2:<br/>
-          Texto.
-        </span><br/><br/>
-        <span class="entry-order">TF:<br/>Texto</span>
-        <br /> <br><span class="person">George Arturo Aliaga Pimentel</span><br />
+       Soy capaz de comunicar de forma clara y efectiva el funcionamiento, la arquitectura y los resultados del proyecto CargaSafe, adaptando la explicación técnica según la audiencia, ya sea académica, técnica o usuarios finales, mediante presentaciones, documentación y demostraciones del sistema.
+        </span>
+        <br/>
+    	<br><span class="person">George Arturo Aliaga Pimentel</span><br />
         <span class="entry-order">TB1:</span><br/>
         Texto  <br />
-	     <span class="entry-order">TP:</span><br/>
-        Texto  <br />
-        <span class="entry-order">TB2:</span><br/>
-       Texto  <br />
-	  <span class="entry-order">TF:</span><br/>
-        Texto  <br />
-        <br><span class="person">Nombre</span><br />
+        <br><span class="person">Jose Luis</span><br />
         <span class="entry-order">TB1:</span><br/>
         Texto  <br />
-        <span class="entry-order">TP:</span><br/>
-        Texto  <br />
-        <span class="entry-order">TB2:</span><br/>
-        Texto <br />
-        <span class="entry-order">TF:</span><br/>
-        Texto  <br />
-        <br><span class="person">Nombre</span><br />
+        <br><span class="person">Paulo</span><br />
         <span class="entry-order">TB1:</span><br/>
        Texto<br />
-        <span class="entry-order">TP1:</span><br/>
-        Texto<br />
-        <span class="entry-order">TB2:</span><br/>
-        Texto<br />
-        <span class="entry-order">TF:</span><br/>
-        Texto<br />
-        <br><span class="person">Nombre</span><br />
+        <br><span class="person">Edery</span><br />
         <span class="entry-order">TB1:</span><br/>
         Texto<br /><br/>
-        <span class="entry-order">TP:</span><br/>
-        Texto<br /><br/>
-        <span class="entry-order">TB2:</span><br/>
-        Texto<br /><br/>
-        <span class="entry-order">TF:</span><br/>
-        Texto<br /><br/>
-        <br><span class="person">Sanchez Ignacio, Jefrey Martin</span><br />
-        <span class="entry-order">TP:</span><br/>
-        Texto<br />
-         <br><span class="person">Sanchez Ignacio, Jefrey Martin</span><br />
-        <span class="entry-order">TB2:</span><br/>
-        Texto <br />
         </td>
       <td class="conclusions-column">
       <span class="entry-order">TB1:</span><br/>
@@ -395,70 +361,8 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
         Texto<br/><br/>
       </td>
     </tr>
-    <tr>
-      <td>
-        texto
-      </td>
-      <td>
-        <span class="person">Nombre Alumno</span><br />
-        <span class="entry-order">TB1:<br/></span>Texto <br />
-        <span class="entry-order">TP1:<br/></span> Texto <br />
-        <span class="entry-order">TB2:<br/>
-          Texto
-        </span><br/>
-        <span class="entry-order">TF1:<br/>
-          Texto
-        </span>
-        </span> <br/><br/> 
-        <span class="person">George Arturo Aliaga Pimentel</span><br />
-        <span class="entry-order">TB1:</span><br/>
-        Texto <br />
-	     <span class="entry-order">TP1:</span><br/>
-       Texto<br/><br/>
-      <span class="entry-order">TB2:</span><br/>
-       Texto<br/><br/>
-	  <span class="entry-order">TF:</span><br/>
-        Texto<br/><br/>
-	<br><span class="person">Nombre Alumno</span><br />
-        <span class="entry-order">TB1:</span><br/>
-        Texto <br />
-        <span class="entry-order">TP:</span><br/>
-        Texto  <br />
-        <span class="entry-order">TB2:</span><br/>
-        Texto  <br />
-        <span class="entry-order">TF:</span><br/>
-        Texto  <br />
-        <br><span class="person">Nombre Alumno </span><br />
-        <span class="entry-order">TB1:</span> Texto<br />
-        <span class="entry-order">TP1:</span> Texto<br />
-        <span class="entry-order">TB2:</span> Texto<br />
-        <span class="entry-order">TF:</span> Texto<br />
-        <br><span class="person">Nombre Alumno</span><br />
-        <span class="entry-order">TB1:</span><br/>
-        Texto<br /><br/>
-        <span class="entry-order">TP:</span><br/>
-        Texto<br /><br/>
-        <span class="entry-order">TB2:</span><br/>
-        Texto<br /><br/>
-        <span class="entry-order">TF:</span><br/>
-        Texto<br /><br/>
-        <br><span class="person">Sanchez Ignacio, Jefrey Martin</span><br />
-        <span class="entry-order">TP:</span><br/>
-        Texto<br />
-        <br><span class="person">Sanchez Ignacio, Jefrey Martin</span><br />
-        <span class="entry-order">TB2:</span><br/>
-        Texto<br />
+    
  </td>
-      <td class="conclusions-column">
-      <span class="entry-order">TB1:</span><br/>
-        Texto<br/><br/>
-      <span class="entry-order">TP1:</span><br/>
-        Texto.<br/><br/>
-      <span class="entry-order">TB2:</span><br/>
-        Texto<br/><br/>
-      </td>
-    </tr>
-  </tbody>
 </table>
 
 ---
