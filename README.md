@@ -488,7 +488,7 @@ Entre sus principales productos destaca CargaSafe, una solución integral que pe
 <table width="100%">
   <tr>
     <td rowspan="4" align="center" width="25%">
-      <img src="assets/Alumno2.png" alt="Imagen del integrante" width="150" style="margin-bottom: 5px;"/>
+      <img src="assets/FOTO_JOSE.jpg" alt="Imagen del integrante" width="150" style="margin-bottom: 5px;"/>
     </td>
     <td align="left">
       <b>Nombre y Apellido:</b><br>
