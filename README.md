@@ -276,15 +276,15 @@ Requisitos: Sensor temperatura; alertas; linea de tiempo por viaje; Link para co
 
 <br/>
 
-- **Nombre**: Mario Hinostroza
-- **Edad**: 22 años
+- **Nombre**: Sebastian Montalvo
+- **Edad**: 26 años
 - **Ocupación**: Operador Logístico
 - **Empresa**: Urbano - Distribuidora Ecommerces
-- **Enlace**: [Click aquí para ver la entrevista](https://upcedupe-my.sharepoint.com/:v:/g/personal/u20201c410_upc_edu_pe/EQnkVAuczH1LrYiGNF_7JdcBPW2RT-EsqX0thMbMGisRKg?e=RHa6s0&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifSwicGxheWJhY2tPcHRpb25zIjp7InN0YXJ0VGltZUluU2Vjb25kcyI6NDQ5LjQ4fX0%3D)
-- **Fecha de entrevista**: 11 de Setiembre del 2025
-- **Tiempo inicio - tiempo fin**: 00:07:28 - 00:13:36
+- **Enlace**: [Click aquí para ver la entrevista](https://upcedupe-my.sharepoint.com/:v:/g/personal/u202213989_upc_edu_pe/IQCTVpRAR7pGSKc6yom4PbHXAYR81cn0dUrEr2dtwXW0h9Q?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=7SUVjD)
+- **Fecha de entrevista**: 18 abril del 2025
+- **Tiempo inicio - tiempo fin**: 00:00:10 - 00:08:06
 
-<img src="assets/entrevista_empresa_2.png"><br/>
+<img src="assets/entrevista_2.png"><br/>
 
 <br/>
 
