@@ -50,8 +50,8 @@
             <td>Aliaga Pimentel, George Arturo</td>
           </tr>
           <tr>
-            <td>u20</td>
-            <td>Nombre</td>
+            <td>u202213989</td>
+            <td>Martinez Valdivia, Jose Luis</td>
           </tr>
           <tr>
             <td>u20</td>
@@ -344,7 +344,9 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
         Texto  <br />
         <br><span class="person">Jose Luis</span><br />
         <span class="entry-order">TB1:</span><br/>
-        Texto  <br />
+        Se logro realizar un Analisis de Competencia del Proyecto CargaSafe. Asimismo, se entrevisto a potenciales usuarios de
+        nuestra plataforma para tener una mejor vision de lo que ellos necesitan del producto. Gracias a se logro comprender a nuestro 
+        publico objetivo y plantear un producto que los satisfaga en el dia  <br />
         <br><span class="person">Paulo</span><br />
         <span class="entry-order">TB1:</span><br/>
        Texto<br />
@@ -490,13 +492,13 @@ Entre sus principales productos destaca CargaSafe, una solución integral que pe
     </td>
     <td align="left">
       <b>Nombre y Apellido:</b><br>
-      Inserte Nombre
+      Jose Luis Martinez Valdivia
     </td>
   </tr>
   <tr>
     <td align="left">
       <b>Código:</b><br>
-    Inserte código
+    U202213989
     </td>
   </tr>
   <tr>
@@ -508,7 +510,7 @@ Entre sus principales productos destaca CargaSafe, una solución integral que pe
   <tr>
     <td align="left">
       <b>Acerca de:</b><br>
-      Inserte Descripción
+      Desarrollador de resolución de problemas de .NET con experiencia en C#, JavaScript, TypeScript, C++, HTML CSS. Trabajo bien tanto individualmente como en un ambiente de equipo. Como parte de equipos de trabajo, me dedico a dar el 100% hasta su finalización, asegurándose de que se completen en el plazo establecido.
     </td>
   </tr>
 </table>
