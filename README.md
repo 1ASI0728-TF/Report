@@ -350,15 +350,15 @@ _Requisitos_: Link para seguimiento, push WhatsApp/SMS configurable, UI accesibl
 
 <br/>
 
-- **Nombre**: Brenda Calderon
-- **Edad**: 20 años
+- **Nombre**: Maria Vallejos
+- **Edad**: 22 años
 - **Ocupación**: Trabajadora de medio tiempo en un minimarket, responsable de compras de insumos para refrigeración
 - **Empresa/Sector**: Retail alimentario local – Consumo final
-- **Enlace**: [URL del video de la entrevista](https://upcedupe-my.sharepoint.com/:v:/g/personal/u20201c410_upc_edu_pe/EQnkVAuczH1LrYiGNF_7JdcBPW2RT-EsqX0thMbMGisRKg?e=xwhjks&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifSwicGxheWJhY2tPcHRpb25zIjp7InN0YXJ0VGltZUluU2Vjb25kcyI6MTI1MS44OX19)
-- **Fecha de entrevista**: 13 de Setiembre del 2025
-- **Tiempo inicio - tiempo fin**: 00:31:00 - 00:37:20
+- **Enlace**: [URL del video de la entrevista](https://upcedupe-my.sharepoint.com/:v:/g/personal/u202213989_upc_edu_pe/IQCI6MustT6BQYlo3t33Th0aAdd1QhrtHP_3yR0fex2MvDI?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=Cu1n2G)
+- **Fecha de entrevista**: 19 de Abril del 2026
+- **Tiempo inicio - tiempo fin**: 00:00:00 - 00:06:30
   <br/>
-  <img src="assets/entrevista_cliente_2.png">
+  <img src="assets/entrevista_6.png">
   <br/>
 
 **Resumen** <br/>
