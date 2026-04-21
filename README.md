@@ -54,8 +54,8 @@
             <td>Martinez Valdivia, Jose Luis</td>
           </tr>
           <tr>
-            <td>u20</td>
-            <td>Nombre </td>
+            <td>u201822832</td>
+            <td>Abanto Vicente, Edery Renzo</td>
           </tr>
         </tbody>
       </table>
