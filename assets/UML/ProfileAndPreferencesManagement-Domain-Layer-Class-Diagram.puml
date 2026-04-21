@@ -1,0 +1,103 @@
+@startuml Profile-And-Preferences-Domain-Layer-Class-Diagram
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<AggregateRoot>> Wheat
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Factory>> LightBlue
+    BackgroundColor<<DomainService>> LightCyan
+}
+
+' ========================
+' Aggregate Root
+' ========================
+class Profile <<AggregateRoot>> {
+  - id: long
+  - userId: long
+  - fullName: String
+  - phoneNumber: PhoneNumber
+  - avatarUrl: String
+  - createdAt: DateTime
+  - updatedAt: DateTime
+  - preferences: Preferences
+
+  + updateContactInfo(newPhone: PhoneNumber)
+  + updateAvatar(newAvatarUrl: String)
+  + updateName(newName: String)
+}
+
+' ========================
+' Entity
+' ========================
+class Preferences <<Entity>> {
+  - id: long
+  - profileId: long
+  - language: Language
+  - timeZone: TimeZone
+  - alertEmailEnabled: boolean
+  - alertPushEnabled: boolean
+  - alertSmsEnabled: boolean
+
+  + updateLanguage(language: Language)
+  + updateTimeZone(timeZone: TimeZone)
+  + enableEmailAlerts(flag: boolean)
+  + enablePushAlerts(flag: boolean)
+  + enableSmsAlerts(flag: boolean)
+}
+
+' ========================
+' Value Objects
+' ========================
+class PhoneNumber <<ValueObject>> {
+  - countryCode: String
+  - number: String
+  + format(): String
+}
+
+class Language <<ValueObject>> {
+  - code: String
+  - name: String
+}
+
+class TimeZone <<ValueObject>> {
+  - code: String
+}
+
+' ========================
+' Aggregate
+' ========================
+class ProfileAggregate <<AggregateRoot>> {
+  + updateProfileAndPreferences(profile: Profile, preferences: Preferences)
+}
+
+' ========================
+' Factory
+' ========================
+class ProfileFactory <<Factory>> {
+  + createProfile(fullName: String, userId: long): Profile
+}
+
+' ========================
+' Domain Service
+' ========================
+class PreferencesValidationService <<DomainService>> {
+  + validateNotificationSettings(emailFlag: boolean, pushFlag: boolean, smsFlag: boolean): boolean
+  + validateLanguage(language: Language): boolean
+}
+
+' ========================
+' Relationships
+' ========================
+Profile *-- "1" Preferences : has
+Profile --> "0..1" PhoneNumber
+Preferences --> "1" Language
+Preferences --> "1" TimeZone
+
+ProfileAggregate ..> Profile
+ProfileAggregate ..> Preferences
+
+ProfileFactory ..> Profile : creates
+PreferencesValidationService ..> Preferences : validates
+@enduml

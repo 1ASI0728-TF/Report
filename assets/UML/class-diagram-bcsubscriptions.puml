@@ -1,0 +1,133 @@
+@startuml
+
+
+
+class SubscriptionFactory <<Factory>> {
+
+  + create(plan: Plan): Subscription
+
+}
+
+
+
+class Subscription <<AggregateRoot>> {
+
+  - id: SubscriptionId
+
+  - status: SubscriptionStatus
+
+  - plan: Plan
+
+  - nextRenewalAt: DateTime
+
+  + activate(): void
+
+  + cancel(immediate: boolean): void
+
+  + renew(on: DateTime): void
+
+}
+
+
+
+class Plan <<ValueObject>> {
+
+  - type: PlanType
+
+  - vehicleLimit: int
+
+  - price: Money
+
+}
+
+
+
+enum SubscriptionStatus <<Enumeration>> {
+
+  Active
+
+  Canceled
+
+}
+
+
+
+class Money <<ValueObject>> {
+
+  - amount: decimal
+
+  - currency: String
+
+}
+
+
+
+class Payment <<AggregateRoot>> {
+
+  - id: PaymentId
+
+  - subscriptionId: SubscriptionId
+
+  - amount: Money
+
+  - status: PaymentStatus
+
+  - providerRef: String
+
+  + markSucceeded(providerRef: String): void
+
+  + markFailed(reason: String): void
+
+}
+
+
+
+enum PaymentStatus <<Enumeration>> {
+
+  Pending
+
+  Succeeded
+
+  Failed
+
+}
+
+
+
+interface PaymentProcessingService <<DomainService>> {
+
+  + createPaymentIntent(sub: Subscription, amount: Money): Payment
+
+  + capture(p: Payment): void
+
+  + refund(p: Payment, amount: Money): void
+
+}
+
+
+
+' Relationships
+
+SubscriptionFactory ..> Plan : uses
+
+SubscriptionFactory ..> Subscription : creates
+
+PaymentProcessingService ..> Subscription : processes
+
+PaymentProcessingService ..> Payment : manages
+
+Subscription ||--|| Plan : uses
+
+Subscription ||--o{ Payment : aggregates
+
+Payment ||--|| Money : amount
+
+Plan ||--|| Money : price
+
+Subscription --> SubscriptionStatus : status
+
+Payment --> PaymentStatus : status
+
+
+
+@enduml

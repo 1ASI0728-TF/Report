@@ -1,0 +1,117 @@
+@startuml Domain Layer - Real-Time Monitoring
+
+!define ENTITY_COLOR #F5E6A3
+!define VALUE_OBJECT_COLOR #C8E6C9
+!define AGGREGATE_COLOR #F5E6A3
+!define SERVICE_COLOR #B3E5FC
+!define FACTORY_COLOR #B3E5FC
+
+' ==================== AGGREGATE ROOT ====================
+class MonitoringSession <<Entity>> <<AggregateRoot>> ENTITY_COLOR {
+    - id: int
+    - tripId: int
+    - deviceId: int
+    - startTime: timestamp
+    - endTime: timestampz
+    - createdAt: timestampz
+    - sessionStatusId: int
+    --
+    + startSession(): void
+    + endSession(): void
+    + updateStatus(newStatus: SessionStatus): void
+    + isActive(): boolean
+}
+
+' ==================== ENTITIES ====================
+class TelemetryData <<Entity>> ENTITY_COLOR {
+    - id: int
+    - monitoringSessionId: int
+    - temperature: decimal
+    - humidity: decimal
+    - vibration: decimal
+    - latitude: decimal
+    - longitude: decimal
+    - createdAt: timestampz
+    --
+    + getTemperature(): number
+    + getHumidity(): number
+    + getVibration(): number
+    + getLocation(): Location
+}
+
+class MonitoringSessionStatus <<Entity>> ENTITY_COLOR {
+    - id: int
+    - name: string
+    --
+    + isFinal(): boolean
+}
+
+' ==================== VALUE OBJECTS ====================
+class Location <<ValueObject>> VALUE_OBJECT_COLOR {
+    - latitude: decimal
+    - longitude: decimal
+    --
+    + distanceTo(other: Location): decimal
+}
+
+class SessionStatus <<ValueObject>> VALUE_OBJECT_COLOR {
+    - status: string
+}
+
+' ==================== AGGREGATE ====================
+class MonitoringSessionAggregate <<Aggregate>> AGGREGATE_COLOR {
+    - root: MonitoringSession
+    - telemetryDataList: List<TelemetryData>
+    - sessionStatus: MonitoringSessionStatus
+    --
+    + addTelemetryData(data: TelemetryData): void
+    + validateSessionStatus(): boolean
+}
+
+' ==================== FACTORY ====================
+class MonitoringSessionFactory <<Factory>> FACTORY_COLOR {
+    --
+    + createSession(tripId: int, deviceId: int): MonitoringSession
+}
+
+' ==================== DOMAIN SERVICES ====================
+class TelemetryProcessingService <<DomainService>> SERVICE_COLOR {
+    --
+    + processTelemetry(rawData: RawData): TelemetryData
+    + validateTelemetry(data: TelemetryData): boolean
+}
+
+class SessionLifecycleService <<DomainService>> SERVICE_COLOR {
+    --
+    + startSession(session: MonitoringSession): void
+    + endSession(session: MonitoringSession): void
+    + pauseSession(session: MonitoringSession): void
+    + resumeSession(session: MonitoringSession): void
+}
+
+' ==================== RELATIONSHIPS ====================
+
+' Aggregate composition
+MonitoringSessionAggregate *-- "1" MonitoringSession : contains
+MonitoringSessionAggregate o-- "0..*" TelemetryData : manages
+MonitoringSessionAggregate o-- "1" MonitoringSessionStatus : references
+
+' MonitoringSession relationships
+MonitoringSession "1" *-- "0..*" TelemetryData : contains
+MonitoringSession --> "1" MonitoringSessionStatus : has
+
+' TelemetryData uses Value Objects
+TelemetryData --> Location : uses
+
+' MonitoringSessionStatus uses Value Object
+MonitoringSessionStatus --> SessionStatus : represents
+
+' Factory creates entities
+MonitoringSessionFactory ..> MonitoringSession : <<creates>>
+MonitoringSessionFactory ..> MonitoringSessionAggregate : <<creates>>
+
+' Domain Services work with entities
+TelemetryProcessingService ..> TelemetryData : <<processes>>
+SessionLifecycleService ..> MonitoringSession : <<manages>>
+
+@enduml

@@ -1,0 +1,34 @@
+@startuml Profile-And-Preferences-Database-Diagram
+!theme plain
+
+' ========================
+' Tables
+' ========================
+entity Profile {
+  * id : BIGINT <<PK>>
+  --
+  user_id : BIGINT
+  full_name : VARCHAR(150)
+  phone_country_code : VARCHAR(10)
+  phone_number : VARCHAR(20)
+  avatar_url : VARCHAR(255)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity Preferences {
+  * id : BIGINT <<PK>>
+  --
+  profile_id : BIGINT <<FK>>
+  language_code : VARCHAR(10)
+  time_zone_code : VARCHAR(50)
+  alert_email_enabled : BOOLEAN
+  alert_push_enabled : BOOLEAN
+  alert_sms_enabled : BOOLEAN
+}
+
+' ========================
+' Relationships
+' ========================
+Profile ||--o{ Preferences : "has"
+@enduml

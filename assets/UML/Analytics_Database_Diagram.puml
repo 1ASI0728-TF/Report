@@ -1,0 +1,202 @@
+@startuml Analytics_Database_Diagram
+
+
+title Visualization/Analytics - Database Entity Relationship Diagram
+
+' Database entities for Analytics Bounded Context
+entity "drivers" {
+    * id : BIGINT <<PK>>
+    --
+    * employee_id : VARCHAR(20) <<UK>>
+    * first_name : VARCHAR(50)
+    * last_name : VARCHAR(50)
+    * license_number : VARCHAR(30) <<UK>>
+    * phone_number : VARCHAR(20)
+    * email : VARCHAR(100)
+    * hire_date : DATE
+    * is_active : BOOLEAN
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+    --
+    UK: employee_id
+    UK: license_number
+    INDEX: email
+    INDEX: hire_date
+    INDEX: is_active
+}
+
+entity "vehicles" {
+    * id : BIGINT <<PK>>
+    --
+    * vehicle_id : VARCHAR(20) <<UK>>
+    * make : VARCHAR(50)
+    * model : VARCHAR(50)
+    * year : INTEGER
+    * license_plate : VARCHAR(15) <<UK>>
+    * vin_number : VARCHAR(17) <<UK>>
+    * capacity : DECIMAL(10,2)
+    * fuel_type : VARCHAR(20)
+    * is_active : BOOLEAN
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+    --
+    UK: vehicle_id
+    UK: license_plate
+    UK: vin_number
+    INDEX: make
+    INDEX: model
+    INDEX: is_active
+}
+
+entity "trips" {
+    * id : BIGINT <<PK>>
+    --
+    * vehicle_id : VARCHAR(20) <<FK>>
+    * driver_id : BIGINT <<FK>>
+    * start_latitude : DECIMAL(10,8)
+    * start_longitude : DECIMAL(11,8)
+    * start_address : VARCHAR(255)
+    * end_latitude : DECIMAL(10,8)
+    * end_longitude : DECIMAL(11,8)
+    * end_address : VARCHAR(255)
+    * start_time : TIMESTAMP
+    * end_time : TIMESTAMP
+    * distance_km : DECIMAL(10,2)
+    * status : VARCHAR(20)
+    * cargo_type : VARCHAR(50)
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+    --
+    INDEX: vehicle_id
+    INDEX: driver_id
+    INDEX: start_time
+    INDEX: end_time
+    INDEX: status
+    INDEX: cargo_type
+}
+
+entity "temperature_readings" {
+    * id : BIGINT <<PK>>
+    --
+    * trip_id : BIGINT <<FK>>
+    * sensor_id : VARCHAR(20)
+    * temperature_celsius : DECIMAL(5,2)
+    * latitude : DECIMAL(10,8)
+    * longitude : DECIMAL(11,8)
+    * timestamp : TIMESTAMP
+    * is_alert : BOOLEAN
+    * created_at : TIMESTAMP
+    --
+    INDEX: trip_id
+    INDEX: sensor_id
+    INDEX: timestamp
+    INDEX: is_alert
+    INDEX: temperature_celsius
+}
+
+entity "incidents" {
+    * id : BIGINT <<PK>>
+    --
+    * trip_id : BIGINT <<FK>>
+    * driver_id : BIGINT <<FK>>
+    * incident_type : VARCHAR(30)
+    * severity : VARCHAR(20)
+    * description : TEXT
+    * latitude : DECIMAL(10,8)
+    * longitude : DECIMAL(11,8)
+    * address : VARCHAR(255)
+    * timestamp : TIMESTAMP
+    * is_resolved : BOOLEAN
+    * resolution_notes : TEXT
+    * resolved_at : TIMESTAMP
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+    --
+    INDEX: trip_id
+    INDEX: driver_id
+    INDEX: incident_type
+    INDEX: severity
+    INDEX: timestamp
+    INDEX: is_resolved
+}
+
+entity "driver_performance_metrics" {
+    * id : BIGINT <<PK>>
+    --
+    * driver_id : BIGINT <<FK>>
+    * period_start : DATE
+    * period_end : DATE
+    * total_trips : INTEGER
+    * total_distance_km : DECIMAL(12,2)
+    * average_rating : DECIMAL(3,2)
+    * on_time_delivery_rate : DECIMAL(5,2)
+    * safety_score : DECIMAL(5,2)
+    * fuel_efficiency : DECIMAL(5,2)
+    * incident_count : INTEGER
+    * temperature_violations : INTEGER
+    * calculated_at : TIMESTAMP
+    --
+    UK: (driver_id, period_start, period_end)
+    INDEX: driver_id
+    INDEX: period_start
+    INDEX: period_end
+    INDEX: average_rating
+    INDEX: safety_score
+}
+
+' entity "temperature_thresholds" {
+'     * id : BIGINT <<PK>>
+'     --
+'     * product_type : VARCHAR(50) <<UK>>
+'     * min_temperature : DECIMAL(5,2)
+'     * max_temperature : DECIMAL(5,2)
+'     * description : VARCHAR(255)
+'     * is_active : BOOLEAN
+'     * created_at : TIMESTAMP
+'     * updated_at : TIMESTAMP
+'     --
+'     UK: product_type
+'     INDEX: is_active
+' }
+
+' entity "analytics_cache" {
+'     * id : BIGINT <<PK>>
+'     --
+'     * cache_key : VARCHAR(255) <<UK>>
+'     * cache_type : VARCHAR(50)
+'     * data_json : TEXT
+'     * expiry_time : TIMESTAMP
+'     * created_at : TIMESTAMP
+'     --
+'     UK: cache_key
+'     INDEX: cache_type
+'     INDEX: expiry_time
+' }
+
+' entity "dashboard_snapshots" {
+'     * id : BIGINT <<PK>>
+'     --
+'     * snapshot_date : DATE <<UK>>
+'     * total_trips : INTEGER
+'     * total_incidents : INTEGER
+'     * average_temperature : DECIMAL(5,2)
+'     * total_distance_km : DECIMAL(12,2)
+'     * active_drivers : INTEGER
+'     * active_vehicles : INTEGER
+'     * temperature_violations : INTEGER
+'     * on_time_delivery_rate : DECIMAL(5,2)
+'     * created_at : TIMESTAMP
+'     --
+'     UK: snapshot_date
+'     INDEX: created_at
+' }
+
+' Relationships
+drivers ||--o{ trips : "performs"
+vehicles ||--o{ trips : "used in"
+trips ||--o{ temperature_readings : "has readings"
+trips ||--o{ incidents : "has incidents"
+drivers ||--o{ incidents : "involved in"
+drivers ||--o{ driver_performance_metrics : "has metrics"
+
+@enduml

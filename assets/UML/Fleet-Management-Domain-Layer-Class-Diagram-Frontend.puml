@@ -1,0 +1,64 @@
+@startuml
+title Fleet Management - Web App Components (State/Services)
+
+@startuml Fleet-Management-Frontend-Domain-Classes
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Enum>> Wheat
+}
+
+' ========================
+' Entities (Frontend / TypeScript-like)
+' ========================
+class Vehicle <<Entity>> {
+  - id: string
+  - plate: Plate
+  - make: string
+  - model: string
+  - active: boolean
+  - tenantId: string
+  - createdAt: Date
+  - updatedAt: Date
+}
+
+class Device <<Entity>> {
+  - id: string
+  - type: string        ' temp|gps|humidity|door...
+  - serial: string
+  - lastCalibrationAt: Date
+  - active: boolean
+  - vehicleId: string
+  - tenantId: string
+  - createdAt: Date
+}
+
+
+' ========================
+' Value Objects
+' ========================
+class Plate <<ValueObject>> {
+  - value: string
+}
+
+' ========================
+' Enums
+' ========================
+enum DeviceType <<Enum>> {
+  TEMPERATURE
+  HUMIDITY
+  VIBRATION
+  TILT
+  GPS
+  BATTERY
+}
+
+' ========================
+' Relationships
+' ========================
+Vehicle *-- "0..*" Device : devices
+Device --> DeviceType
+@enduml

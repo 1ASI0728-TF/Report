@@ -1,0 +1,30 @@
+@startuml
+class Alert {
+  +alertId: number
+  +type: string
+  +status: string
+  +sensorType: string
+  +createdAt: Date
+  +acknowledgedAt: Date
+  +closedAt: Date
+}
+
+class Notification {
+  +notificationId: number
+  +alertId: number
+  +channel: string
+  +message: string
+  +sentAt: Date
+}
+
+class Incident {
+  +incidentId: number
+  +alertId: number
+  +tripId: number
+  +description: string
+  +createdAt: Date
+}
+
+Alert "1" -- "*" Notification
+Alert "1" -- "*" Incident
+@enduml

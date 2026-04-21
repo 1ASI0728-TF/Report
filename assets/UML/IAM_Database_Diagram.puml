@@ -1,0 +1,124 @@
+@startuml IAM_Database_Diagram
+
+
+title Identity & Access Management - Database Entity Relationship Diagram
+
+' Database entities for IAM Bounded Context
+entity "users" {
+    * id : BIGINT <<PK>>
+    --
+    * username : VARCHAR(50) <<UK>>
+    * email : VARCHAR(100) <<UK>>
+    * password_hash : VARCHAR(255)
+    * first_name : VARCHAR(50)
+    * last_name : VARCHAR(50)
+    * is_enabled : BOOLEAN
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+    --
+    UK: username
+    UK: email
+    INDEX: created_at
+    INDEX: is_enabled
+}
+
+entity "roles" {
+    * id : BIGINT <<PK>>
+    --
+    * name : VARCHAR(50) <<UK>>
+    * description : VARCHAR(255)
+    * created_at : TIMESTAMP
+    --
+    UK: name
+}
+
+entity "permissions" {
+    * id : BIGINT <<PK>>
+    --
+    * name : VARCHAR(50) <<UK>>
+    * resource : VARCHAR(50)
+    * action : VARCHAR(50)
+    * description : VARCHAR(255)
+    --
+    UK: name
+    INDEX: resource
+    INDEX: action
+}
+
+entity "user_roles" {
+    * user_id : BIGINT <<PK,FK>>
+    * role_id : BIGINT <<PK,FK>>
+    --
+    assigned_at : TIMESTAMP
+    --
+    PK: (user_id, role_id)
+}
+
+entity "role_permissions" {
+    * role_id : BIGINT <<PK,FK>>
+    * permission_id : BIGINT <<PK,FK>>
+    --
+    granted_at : TIMESTAMP
+    --
+    PK: (role_id, permission_id)
+}
+
+entity "refresh_tokens" {
+    * id : BIGINT <<PK>>
+    --
+    * token : VARCHAR(255) <<UK>>
+    * user_id : BIGINT <<FK>>
+    * expiry_date : TIMESTAMP
+    * is_revoked : BOOLEAN
+    * created_at : TIMESTAMP
+    --
+    UK: token
+    INDEX: user_id
+    INDEX: expiry_date
+    INDEX: is_revoked
+}
+
+entity "password_reset_tokens" {
+    * id : BIGINT <<PK>>
+    --
+    * token : VARCHAR(255) <<UK>>
+    * user_id : BIGINT <<FK>>
+    * expiry_date : TIMESTAMP
+    * is_used : BOOLEAN
+    * created_at : TIMESTAMP
+    --
+    UK: token
+    INDEX: user_id
+    INDEX: expiry_date
+    INDEX: is_used
+}
+
+entity "audit_logs" {
+    * id : BIGINT <<PK>>
+    --
+    * user_id : BIGINT <<FK>>
+    * action : VARCHAR(50)
+    * resource : VARCHAR(50)
+    * resource_id : VARCHAR(50)
+    * details : TEXT
+    * ip_address : VARCHAR(45)
+    * user_agent : VARCHAR(255)
+    * timestamp : TIMESTAMP
+    --
+    INDEX: user_id
+    INDEX: action
+    INDEX: resource
+    INDEX: timestamp
+}
+
+' Relationships
+users ||--o{ user_roles : "has roles"
+roles ||--o{ user_roles : "assigned to users"
+roles ||--o{ role_permissions : "has permissions"
+permissions ||--o{ role_permissions : "granted to roles"
+users ||--o{ refresh_tokens : "generates"
+users ||--o{ password_reset_tokens : "requests"
+users ||--o{ audit_logs : "performs actions"
+
+
+@enduml

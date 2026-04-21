@@ -1,0 +1,59 @@
+@startuml
+title Fleet Management - Database Design (PostgreSQL)
+
+/'
+  Based on current JPA model:
+
+  - Vehicle.id / Device.id => Long (BIGINT)
+  - Plate, Imei, FirmwareVersion, OdometerKm => @Embeddable VOs
+  - vehicle_capabilities => @ElementCollection<Capability>
+  - vehicle_device_imeis => @ElementCollection<Imei>
+'/
+
+
+entity vehicles {
+  * id : bigint <<PK>>
+  --
+  plate        : varchar(12)   -- VO Plate [A-Z0-9-]{4,12}
+  type         : varchar(16)   -- VehicleType (VAN, TRUCK, CAR, MOTORCYCLE)
+  status       : varchar(16)   -- VehicleStatus (IN_SERVICE, OUT_OF_SERVICE, MAINTENANCE, RETIRED)
+  odometer_km  : integer       -- VO OdometerKm >= 0
+  created_at   : timestamp
+  updated_at   : timestamp
+  --
+  {unique} (plate)
+}
+
+entity devices {
+  * id : bigint <<PK>>
+  --
+  imei          : varchar(20)  -- VO Imei IMEI-[0-9]{7,15}
+  firmware      : varchar(16)  -- VO FirmwareVersion vMAJOR.MINOR.PATCH
+  online        : boolean
+  vehicle_plate : varchar(12)  -- nullable, Plate of assigned vehicle (if any)
+  created_at    : timestamp
+  updated_at    : timestamp
+  --
+  {unique} (imei)
+  {index} (vehicle_plate)
+}
+
+entity vehicle_capabilities {
+  * vehicle_id : bigint <<PK, FK>>
+  * capability : varchar(32) <<PK>> -- Capability enum
+  --
+  -- capability ∈ {BOX, REFRIGERATED, GPS_ONLY, HEAVY_LOAD, FRAGILE_CARGO}
+}
+
+entity vehicle_device_imeis {
+  * vehicle_id   : bigint <<PK, FK>>
+  * device_imei  : varchar(20) <<PK>> -- Imei value
+}
+
+vehicles ||--o{ vehicle_capabilities : "has capabilities"
+vehicles ||--o{ vehicle_device_imeis : "tracks IMEIs"
+
+' Relación lógica: cada device puede estar asignado a lo más un vehículo (por plate)
+vehicles ||--o{ devices : "assigned via plate (vehicle_plate)"
+
+@enduml

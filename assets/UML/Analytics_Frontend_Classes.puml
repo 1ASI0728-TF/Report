@@ -1,0 +1,610 @@
+@startuml Analytics_Frontend_Class_Diagram
+
+
+title Visualization/Analytics - Frontend Models Class Diagram
+
+package "Models" {
+    
+    interface TripModel {
+        +id: number
+        +vehicleId: string
+        +driverId: number
+        +startLocation: LocationModel
+        +endLocation: LocationModel
+        +startTime: Date
+        +endTime: Date
+        +distance: number
+        +status: string
+        +temperatureReadings: TemperatureReadingModel[]
+        +incidents: IncidentModel[]
+        +calculateDuration(): number
+        +getAverageTemperature(): number
+        +hasTemperatureViolations(): boolean
+        +getIncidentCount(): number
+    }
+    
+    interface DriverModel {
+        +id: number
+        +employeeId: string
+        +firstName: string
+        +lastName: string
+        +licenseNumber: string
+        +phoneNumber: string
+        +email: string
+        +hireDate: Date
+        +performanceMetrics: PerformanceMetricsModel
+        +getFullName(): string
+        +getTotalTrips(): number
+        +getAverageRating(): number
+        +getIncidentRate(): number
+    }
+    
+    interface IncidentModel {
+        +id: number
+        +tripId: number
+        +driverId: number
+        +type: string
+        +severity: string
+        +description: string
+        +location: LocationModel
+        +timestamp: Date
+        +resolved: boolean
+        +isTemperatureRelated(): boolean
+        +getCriticalityLevel(): number
+    }
+    
+    interface TemperatureReadingModel {
+        +id: number
+        +tripId: number
+        +temperature: number
+        +timestamp: Date
+        +sensorId: string
+        +isAlert: boolean
+        +isWithinThreshold(min: number, max: number): boolean
+        +getTemperatureCelsius(): number
+        +getTemperatureFahrenheit(): number
+    }
+    
+    interface LocationModel {
+        +latitude: number
+        +longitude: number
+        +address: string
+        +calculateDistance(other: LocationModel): number
+    }
+    
+    interface PerformanceMetricsModel {
+        +totalTrips: number
+        +averageRating: number
+        +onTimeDeliveryRate: number
+        +safetyScore: number
+        +fuelEfficiency: number
+        +calculateOverallScore(): number
+        +isExcellentPerformance(): boolean
+    }
+    
+    interface ChartDataModel {
+        +labels: string[]
+        +datasets: ChartDatasetModel[]
+        +options: ChartOptionsModel
+    }
+    
+    interface ChartDatasetModel {
+        +label: string
+        +data: number[]
+        +backgroundColor: string[]
+        +borderColor: string[]
+        +borderWidth: number
+    }
+    
+    interface ChartOptionsModel {
+        +responsive: boolean
+        +plugins: any
+        +scales: any
+        +interaction: any
+    }
+    
+    interface DashboardSummaryModel {
+        +totalTrips: number
+        +totalIncidents: number
+        +averageTemperature: number
+        +topDrivers: DriverModel[]
+        +recentIncidents: IncidentModel[]
+        +temperatureTrends: TemperatureReadingModel[]
+    }
+    
+    interface DateRangeModel {
+        +startDate: Date
+        +endDate: Date
+        +getDurationInDays(): number
+        +isValid(): boolean
+    }
+    
+    interface FilterOptionsModel {
+        +dateRange: DateRangeModel
+        +driverIds: number[]
+        +vehicleIds: string[]
+        +incidentTypes: string[]
+        +temperatureThresholds: TemperatureThresholdModel
+    }
+    
+    interface TemperatureThresholdModel {
+        +minTemperature: number
+        +maxTemperature: number
+        +productType: string
+        +isWithinThreshold(temperature: number): boolean
+    }
+}
+
+' Relationships
+TripModel ||--|| LocationModel : startLocation
+TripModel ||--|| LocationModel : endLocation
+TripModel ||--o{ TemperatureReadingModel : contains
+TripModel ||--o{ IncidentModel : has
+DriverModel ||--|| PerformanceMetricsModel : has
+IncidentModel ||--|| LocationModel : occurredAt
+ChartDataModel ||--o{ ChartDatasetModel : contains
+ChartDataModel ||--|| ChartOptionsModel : has
+DashboardSummaryModel ||--o{ DriverModel : topDrivers
+DashboardSummaryModel ||--o{ IncidentModel : recentIncidents
+DashboardSummaryModel ||--o{ TemperatureReadingModel : temperatureTrends
+FilterOptionsModel ||--|| DateRangeModel : dateRange
+FilterOptionsModel ||--|| TemperatureThresholdModel : temperatureThresholds
+
+@enduml
+        +filterForm: FormGroup
+        
+        +constructor(tripAnalyticsService: TripAnalyticsService, chartService: ChartService, formBuilder: FormBuilder)
+        +ngOnInit(): void
+        +loadTripAnalytics(tripId: number): void
+        +onTripSelectionChange(): void
+        +onApplyFilters(): void
+        +onExportTripReport(): void
+        +onRefreshData(): void
+        -validateTripId(tripId: number): boolean
+        -formatTripData(data: any): TripModel
+    }
+    
+    class IncidentsOverviewComponent {
+        +incidentData: IncidentModel[]
+        +monthlyStats: MonthlyIncidentStats[]
+        +chartData: IncidentChartData
+        +selectedYear: number
+        +isLoading: boolean
+        
+        +constructor(incidentAnalyticsService: IncidentAnalyticsService, chartService: ChartService)
+        +ngOnInit(): void
+        +loadIncidentOverview(): void
+        +onYearChange(year: number): void
+        +onIncidentTypeFilter(type: string): void
+        +onSeverityFilter(severity: string): void
+        +onExportIncidentReport(): void
+        -prepareChartData(): void
+        -calculateIncidentTrends(): void
+    }
+    
+    class DriversRankingComponent {
+        +drivers: DriverModel[]
+        +rankingMetric: PerformanceMetric
+        +topDriversCount: number
+        +isLoading: boolean
+        +sortBy: string
+        +sortDirection: 'asc' | 'desc'
+        
+        +constructor(driverAnalyticsService: DriverAnalyticsService)
+        +ngOnInit(): void
+        +loadDriversRanking(): void
+        +onMetricChange(metric: PerformanceMetric): void
+        +onTopCountChange(count: number): void
+        +onSortChange(column: string): void
+        +onViewDriverDetails(driverId: number): void
+        +onExportDriverReport(): void
+        -sortDrivers(): void
+        -calculateDriverScore(driver: DriverModel): number
+    }
+}
+
+package "Chart Components" {
+    class TemperatureChartComponent {
+        +chartData: TemperatureChartData
+        +chartOptions: ChartOptions
+        +isInteractive: boolean
+        +showTooltips: boolean
+        +temperatureThresholds: TemperatureThresholds
+        
+        +constructor(chartService: ChartService, colorPaletteService: ColorPaletteService)
+        +ngOnInit(): void
+        +ngOnChanges(changes: SimpleChanges): void
+        +updateChartData(data: TemperatureChartData): void
+        +onChartClick(event: ChartEvent): void
+        +onChartHover(event: ChartEvent): void
+        +exportChart(): void
+        -configureChartOptions(): void
+        -applyTemperatureThresholds(): void
+    }
+    
+    class IncidentsBarChartComponent {
+        +chartData: IncidentChartData
+        +chartOptions: ChartOptions
+        +groupBy: 'month' | 'type' | 'severity'
+        +showLegend: boolean
+        
+        +constructor(chartService: ChartService, colorPaletteService: ColorPaletteService)
+        +ngOnInit(): void
+        +ngOnChanges(changes: SimpleChanges): void
+        +updateChartData(data: IncidentChartData): void
+        +onGroupByChange(groupBy: string): void
+        +onChartInteraction(event: ChartEvent): void
+        +exportChart(): void
+        -configureBarChartOptions(): void
+        -groupIncidentData(): void
+    }
+    
+    class TooltipComponent {
+        +isVisible: boolean
+        +content: TooltipContent
+        +position: TooltipPosition
+        +theme: 'light' | 'dark'
+        
+        +show(content: TooltipContent, position: TooltipPosition): void
+        +hide(): void
+        +updatePosition(position: TooltipPosition): void
+        +updateContent(content: TooltipContent): void
+        -calculatePosition(): TooltipPosition
+        -formatTooltipContent(): string
+    }
+}
+
+package "Data Visualization Services" {
+    class ChartService {
+        -dataVisualizationService: DataVisualizationService
+        -colorPaletteService: ColorPaletteService
+        
+        +constructor(dataVisualizationService: DataVisualizationService, colorPaletteService: ColorPaletteService)
+        +createLineChart(data: LineChartData, options?: ChartOptions): Chart
+        +createBarChart(data: BarChartData, options?: ChartOptions): Chart
+        +createPieChart(data: PieChartData, options?: ChartOptions): Chart
+        +updateChart(chart: Chart, newData: ChartData): void
+        +destroyChart(chart: Chart): void
+        +exportChartAsImage(chart: Chart, format: 'png' | 'jpeg' | 'svg'): string
+        +getDefaultChartOptions(chartType: ChartType): ChartOptions
+        -configureResponsiveOptions(): ResponsiveOptions
+        -applyChartAnimations(options: ChartOptions): ChartOptions
+    }
+    
+    class DataVisualizationService {
+        +transformTripDataForChart(tripData: TripModel[]): LineChartData
+        +transformIncidentDataForChart(incidentData: IncidentModel[]): BarChartData
+        +transformDriverDataForChart(driverData: DriverModel[]): mixed
+        +aggregateDataByTimeInterval(data: any[], interval: TimeInterval): AggregatedData[]
+        +filterDataByDateRange(data: any[], dateRange: DateRange): any[]
+        +normalizeDataForVisualization(data: number[]): number[]
+        +calculateDataStatistics(data: number[]): DataStatistics
+        +detectDataAnomalies(data: number[]): Anomaly[]
+        -validateChartData(data: ChartData): boolean
+        -interpolateMissingData(data: any[]): any[]
+    }
+    
+    class ColorPaletteService {
+        +primaryColors: string[]
+        +secondaryColors: string[]
+        +gradientColors: GradientColor[]
+        
+        +getColorForChart(chartType: ChartType): string[]
+        +getColorForSeries(seriesIndex: number): string
+        +getGradientColor(startColor: string, endColor: string): GradientColor
+        +getTemperatureColors(): TemperatureColorScale
+        +getIncidentSeverityColors(): SeverityColorMap
+        +getStatusColors(): StatusColorMap
+        +generateColorPalette(count: number, baseColor?: string): string[]
+        -hexToRgb(hex: string): RGB
+        -rgbToHex(rgb: RGB): string
+        -adjustColorBrightness(color: string, factor: number): string
+    }
+}
+
+package "Analytics Services" {
+    class TripAnalyticsService {
+        -httpClient: HttpClient
+        -cacheService: CacheService
+        
+        +constructor(http: HttpClient, cacheService: CacheService)
+        +getTripAnalytics(dateRange: DateRange, tripId?: number): Observable<TripAnalyticsResponse>
+        +getTemperatureAnalytics(tripId: number): Observable<TemperatureAnalyticsResponse>
+        +getTripsByDateRange(dateRange: DateRange, pageable: PaginationParams): Observable<PageResponse<TripModel>>
+        +getTripsWithIncidents(dateRange: DateRange): Observable<TripIncidentResponse[]>
+        +exportTripAnalytics(dateRange: DateRange, format: ExportFormat): Observable<Blob>
+        +getTemperatureAlerts(tripId: number): Observable<TemperatureAlert[]>
+        -handleTripAnalyticsError(error: HttpError): Observable<never>
+        -cacheTripData(key: string, data: any): void
+    }
+    
+    class IncidentAnalyticsService {
+        -httpClient: HttpClient
+        -cacheService: CacheService
+        
+        +constructor(http: HttpClient, cacheService: CacheService)
+        +getIncidentAnalytics(dateRange: DateRange): Observable<IncidentAnalyticsResponse>
+        +getMonthlyIncidentStats(year: number): Observable<MonthlyIncidentStats[]>
+        +getIncidentsByType(dateRange: DateRange): Observable<Map<string, number>>
+        +getIncidentTrends(period: AnalyticsPeriod): Observable<IncidentTrendsResponse>
+        +getIncidentSeverityDistribution(): Observable<Map<string, number>>
+        +exportIncidentReport(dateRange: DateRange, format: ExportFormat): Observable<Blob>
+        -handleIncidentAnalyticsError(error: HttpError): Observable<never>
+        -cacheIncidentData(key: string, data: any): void
+    }
+    
+    class DriverAnalyticsService {
+        -httpClient: HttpClient
+        -cacheService: CacheService
+        
+        +constructor(http: HttpClient, cacheService: CacheService)
+        +getDriverPerformance(driverId: number, dateRange: DateRange): Observable<DriverPerformanceResponse>
+        +getTopDrivers(limit: number, metric: PerformanceMetric): Observable<DriverRankingResponse[]>
+        +getDriverTrends(driverId: number, period: AnalyticsPeriod): Observable<DriverTrendsResponse>
+        +getDriverIncidentStats(driverId: number, dateRange: DateRange): Observable<DriverIncidentStatsResponse>
+        +getAllDriversPerformance(dateRange: DateRange, pageable: PaginationParams): Observable<PageResponse<DriverPerformanceResponse>>
+        +exportDriverReport(driverId: number, dateRange: DateRange, format: ExportFormat): Observable<Blob>
+        -handleDriverAnalyticsError(error: HttpError): Observable<never>
+        -cacheDriverData(key: string, data: any): void
+    }
+}
+
+package "Filter and Search Components" {
+    class DateRangeFilterComponent {
+        +startDate: Date | null
+        +endDate: Date | null
+        +predefinedRanges: PredefinedDateRange[]
+        +maxDate: Date
+        +minDate: Date
+        +dateRangeChange: EventEmitter<DateRange>
+        
+        +constructor()
+        +ngOnInit(): void
+        +onStartDateChange(date: Date): void
+        +onEndDateChange(date: Date): void
+        +onPredefinedRangeSelect(range: PredefinedDateRange): void
+        +onClearDates(): void
+        +onApplyDateRange(): void
+        -validateDateRange(): boolean
+        -emitDateRangeChange(): void
+    }
+    
+    class TripFilterComponent {
+        +filterForm: FormGroup
+        +tripStatuses: TripStatus[]
+        +driverOptions: DriverOption[]
+        +routeOptions: RouteOption[]
+        +filterChange: EventEmitter<TripFilter>
+        
+        +constructor(formBuilder: FormBuilder)
+        +ngOnInit(): void
+        +onFilterChange(): void
+        +onResetFilters(): void
+        +onApplyFilters(): void
+        +loadFilterOptions(): void
+        -buildFilterForm(): void
+        -validateFilters(): boolean
+    }
+    
+    class SearchComponent {
+        +searchForm: FormGroup
+        +searchResults: SearchResult[]
+        +isSearching: boolean
+        +searchPlaceholder: string
+        +searchChange: EventEmitter<string>
+        
+        +constructor(formBuilder: FormBuilder)
+        +ngOnInit(): void
+        +onSearchInput(): void
+        +onSearchSubmit(): void
+        +onClearSearch(): void
+        +onResultSelect(result: SearchResult): void
+        -performSearch(query: string): void
+        -debounceSearch(): void
+    }
+}
+
+package "Utility Services" {
+    class ExportService {
+        +exportToCsv(data: any[], filename: string, headers?: string[]): void
+        +exportToPdf(data: any[], title: string, filename: string): void
+        +exportToExcel(data: any[], filename: string, sheetName?: string): void
+        +exportChartAsImage(chart: Chart, filename: string, format: 'png' | 'jpeg'): void
+        +generateAnalyticsReport(analyticsData: AnalyticsReportData): void
+        +downloadBlob(blob: Blob, filename: string): void
+        -formatDataForExport(data: any[]): any[]
+        -generateExportHeaders(data: any[]): string[]
+        -validateExportData(data: any[]): boolean
+    }
+    
+    class CacheService {
+        -cache: Map<string, CacheEntry>
+        -maxCacheSize: number
+        -defaultTtl: number
+        
+        +set(key: string, data: any, ttl?: number): void
+        +get<T>(key: string): T | null
+        +has(key: string): boolean
+        +delete(key: string): boolean
+        +clear(): void
+        +getSize(): number
+        +getCacheStatistics(): CacheStatistics
+        -isExpired(entry: CacheEntry): boolean
+        -evictExpiredEntries(): void
+        -generateCacheKey(params: any[]): string
+    }
+}
+
+package "Data Models" {
+    interface TripModel {
+        +id: number
+        +driverId: number
+        +driverName: string
+        +routeId: number
+        +routeName: string
+        +vehicleId: number
+        +startTime: Date
+        +endTime: Date
+        +status: TripStatus
+        +distance: number
+        +duration: number
+        +averageSpeed: number
+        +maxSpeed: number
+        +fuelConsumption: number
+        +incidentCount: number
+        +temperatureViolations: number
+    }
+    
+    interface IncidentModel {
+        +id: number
+        +tripId: number
+        +type: IncidentType
+        +severity: IncidentSeverity
+        +description: string
+        +location: GeoLocation
+        +timestamp: Date
+        +resolved: boolean
+        +resolutionTime: Date | null
+        +resolutionDuration: number | null
+    }
+    
+    interface DriverModel {
+        +id: number
+        +employeeId: string
+        +firstName: string
+        +lastName: string
+        +fullName: string
+        +licenseNumber: string
+        +experience: number
+        +performanceScore: number
+        +totalTrips: number
+        +totalIncidents: number
+        +averageRating: number
+        +isActive: boolean
+    }
+    
+    interface ChartConfigModel {
+        +chartType: ChartType
+        +title: string
+        +xAxisLabel: string
+        +yAxisLabel: string
+        +colors: string[]
+        +responsive: boolean
+        +showLegend: boolean
+        +showTooltips: boolean
+        +animations: boolean
+    }
+    
+    interface TemperatureChartData {
+        +labels: string[]
+        +datasets: TemperatureDataset[]
+        +thresholds: TemperatureThresholds
+        +alerts: TemperatureAlert[]
+    }
+    
+    interface IncidentChartData {
+        +labels: string[]
+        +datasets: IncidentDataset[]
+        +totalIncidents: number
+        +groupBy: 'month' | 'type' | 'severity'
+    }
+    
+    interface DateRange {
+        +startDate: Date
+        +endDate: Date
+        +preset?: PredefinedDateRange
+    }
+    
+    interface FilterOptions {
+        +dateRange: DateRange
+        +tripStatus: TripStatus[]
+        +incidentTypes: IncidentType[]
+        +driverIds: number[]
+        +routeIds: number[]
+    }
+    
+    interface AnalyticsReportData {
+        +title: string
+        +dateRange: DateRange
+        +tripAnalytics: TripAnalyticsResponse
+        +incidentAnalytics: IncidentAnalyticsResponse
+        +driverAnalytics: DriverPerformanceResponse[]
+        +charts: ChartData[]
+        +summary: AnalyticsSummary
+    }
+}
+
+package "Pipes and Formatters" {
+    class TemperatureFormatPipe {
+        +transform(value: number, unit?: 'C' | 'F', decimals?: number): string
+        -convertTemperature(value: number, targetUnit: 'C' | 'F'): number
+        -formatDecimalPlaces(value: number, decimals: number): string
+    }
+    
+    class DateFormatPipe {
+        +transform(value: Date | string, format?: string, timezone?: string): string
+        -parseDate(value: Date | string): Date
+        -applyTimezone(date: Date, timezone: string): Date
+        -formatDate(date: Date, format: string): string
+    }
+    
+    class DistanceFormatPipe {
+        +transform(value: number, unit?: 'km' | 'miles', decimals?: number): string
+        -convertDistance(value: number, targetUnit: 'km' | 'miles'): number
+        -formatWithUnit(value: number, unit: string): string
+    }
+}
+
+' Relationships
+AnalyticsDashboardComponent --> TripAnalyticsService
+AnalyticsDashboardComponent --> IncidentAnalyticsService
+AnalyticsDashboardComponent --> DriverAnalyticsService
+AnalyticsDashboardComponent --> TripAnalyticsComponent
+AnalyticsDashboardComponent --> IncidentsOverviewComponent
+AnalyticsDashboardComponent --> DriversRankingComponent
+
+TripAnalyticsComponent --> TripAnalyticsService
+TripAnalyticsComponent --> TemperatureChartComponent
+TripAnalyticsComponent --> ChartService
+
+IncidentsOverviewComponent --> IncidentAnalyticsService
+IncidentsOverviewComponent --> IncidentsBarChartComponent
+IncidentsOverviewComponent --> ChartService
+
+DriversRankingComponent --> DriverAnalyticsService
+
+TemperatureChartComponent --> ChartService
+TemperatureChartComponent --> ColorPaletteService
+TemperatureChartComponent --> TooltipComponent
+
+IncidentsBarChartComponent --> ChartService
+IncidentsBarChartComponent --> ColorPaletteService
+IncidentsBarChartComponent --> TooltipComponent
+
+ChartService --> DataVisualizationService
+ChartService --> ColorPaletteService
+
+TripAnalyticsService --> CacheService
+IncidentAnalyticsService --> CacheService
+DriverAnalyticsService --> CacheService
+
+AnalyticsDashboardComponent --> DateRangeFilterComponent
+TripAnalyticsComponent --> TripFilterComponent
+AnalyticsDashboardComponent --> SearchComponent
+
+AnalyticsDashboardComponent --> ExportService
+
+TripAnalyticsService --> TripModel
+IncidentAnalyticsService --> IncidentModel
+DriverAnalyticsService --> DriverModel
+ChartService --> ChartConfigModel
+
+TemperatureChartComponent --> TemperatureFormatPipe
+TripAnalyticsComponent --> DateFormatPipe
+DriversRankingComponent --> DistanceFormatPipe
+
+DataVisualizationService --> TripModel
+DataVisualizationService --> IncidentModel
+DataVisualizationService --> DriverModel
+
+@enduml

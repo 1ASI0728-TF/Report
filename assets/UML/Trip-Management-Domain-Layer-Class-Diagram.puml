@@ -1,0 +1,140 @@
+@startuml Trip-Management-Domain-Layer-Class-Diagram
+' ========================
+' Stereotypes colors
+' ========================
+skinparam class {
+    BackgroundColor<<Entity>> LightYellow
+    BackgroundColor<<AggregateRoot>> Wheat
+    BackgroundColor<<ValueObject>> LightGreen
+    BackgroundColor<<Factory>> LightBlue
+    BackgroundColor<<DomainService>> LightCyan
+}
+
+' ========================
+' Entities and Aggregate
+' ========================
+class Trip <<AggregateRoot>> {
+  - tripId: long
+  - clientId: long
+  - driverId: long
+  - vehicleId: long
+  - requestedAt: DateTime
+  - status: TripStatus
+  - route: Route
+
+  + assignDriver(driverId: long)
+  + assignVehicle(vehicleId: long)
+  + startTrip()
+  + completeTrip()
+  + cancelTrip(reason: String)
+  + canTransitionTo(nextStatus: TripStatus): boolean
+}
+
+class TripAggregate <<AggregateRoot>> {
+  + validateTripReady(trip: Trip)
+  + ensureValidTransition(current: TripStatus, next: TripStatus)
+}
+
+class Route <<Entity>> {
+  - routeId: long
+  - origin: GeoCoordinate
+  - destination: GeoCoordinate
+  - totalDistance: Distance
+  - totalDuration: Duration
+
+  + addSegment(segment: RouteSegment)
+  + updateDestination(newDestination: GeoCoordinate)
+  + recalculateTotals()
+  + isValid(): boolean
+}
+
+' ========================
+' Value Objects
+' ========================
+class GeoCoordinate <<ValueObject>> {
+  - latitude: double
+  - longitude: double
+
+  + distanceTo(other: GeoCoordinate): Distance
+}
+
+class Polyline <<ValueObject>> {
+  - encodedPath: String
+
+  + decode(): List<GeoCoordinate>
+  + isEmpty(): boolean
+}
+
+class RouteSegment <<ValueObject>> {
+  - coordinates: List<GeoCoordinate>
+  - distance: Distance
+  - duration: Duration
+
+  + averageSpeed(): double
+}
+
+class Distance <<ValueObject>> {
+  - value: double
+  - unit: String
+
+  + to(unit: String): Distance
+  + add(other: Distance): Distance
+}
+
+class Duration <<ValueObject>> {
+  - value: double
+  - unit: String
+
+  + to(unit: String): Duration
+  + add(other: Duration): Duration
+}
+
+enum TripStatus <<ValueObject>> {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+' ========================
+' Factory
+' ========================
+class TripFactory <<Factory>> {
+  + createTrip(clientId: long, driverId: long, vehicleId: long, route: Route): Trip
+}
+
+' ========================
+' Domain Services
+' ========================
+class RoutePlanningService <<DomainService>> {
+  + generateRoute(origin: GeoCoordinate, destination: GeoCoordinate): Route
+  + estimateDuration(route: Route): Duration
+}
+
+class TripSchedulerService <<DomainService>> {
+  + checkDriverAvailability(driverId: long, timeRange: DateTimeRange): boolean
+  + checkVehicleAvailability(vehicleId: long, timeRange: DateTimeRange): boolean
+}
+
+' ========================
+' Main Relationships
+' ========================
+Trip *-- "1" Route : has
+Trip o-- "1" TripStatus : status
+
+Route *-- "1..*" RouteSegment : composed of
+Route --> "1" GeoCoordinate : origin
+Route --> "1" GeoCoordinate : destination
+Route --> "0..1" Polyline : polyline
+Route --> "1" Distance : totalDistance
+Route --> "1" Duration : totalDuration
+
+RouteSegment o-- "2..*" GeoCoordinate : coordinates
+RouteSegment --> "1" Distance
+RouteSegment --> "1" Duration
+
+TripFactory ..> Trip : creates
+TripAggregate ..> Trip : validates
+RoutePlanningService ..> Route
+TripSchedulerService ..> Trip
+@enduml

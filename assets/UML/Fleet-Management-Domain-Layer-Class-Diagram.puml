@@ -1,0 +1,45 @@
+@startuml
+title Fleet Management - Backend Domain Layer Class Diagram
+
+class Vehicle {
+  +UUID id
+  +String plate
+  +String make
+  +String model
+  +boolean active
+  +UUID tenantId
+  +Instant createdAt
+  +Instant updatedAt
+  +register(data)
+  +update(data)
+  +activate()
+  +deactivate()
+}
+
+class Device {
+  +UUID id
+  +String type        // temp|gps|humidity|door...
+  +String serial      // unique (tenant)
+  +Instant lastCalibrationAt
+  +boolean active
+  +UUID tenantId
+  +UUID vehicleId
+  +Instant createdAt
+  +Instant updatedAt
+  +create(data)
+  +update(data)
+  +attachToVehicle(vehicleId)
+  +detach()
+  +activate()
+  +deactivate()
+}
+
+class DeviceAttachmentService {
+  +attach(d: Device, v: Vehicle)
+  +detach(d: Device)
+}
+
+Vehicle "1" o-- "0..*" Device : attached >
+DeviceAttachmentService ..> Device
+DeviceAttachmentService ..> Vehicle
+@enduml

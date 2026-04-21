@@ -1,0 +1,329 @@
+@startuml IAM_Backend_Class_Diagram
+
+
+title Identity & Access Management - Backend Domain Layer Class Diagram
+
+package "Domain Layer" {
+    
+    package "Aggregates" {
+        class User {
+            -id: Long
+            -username: String
+            -email: String
+            -password: String
+            -firstName: String
+            -lastName: String
+            -isEnabled: Boolean
+            -roles: Set<Role>
+            -createdAt: LocalDateTime
+            -updatedAt: LocalDateTime
+            +changePassword(newPassword: String): void
+            +addRole(role: Role): void
+            +removeRole(role: Role): void
+            +isActive(): Boolean
+            +getFullName(): String
+        }
+        
+        class Role {
+            -id: Long
+            -name: String
+            -description: String
+            -permissions: Set<Permission>
+            -createdAt: LocalDateTime
+            +addPermission(permission: Permission): void
+            +removePermission(permission: Permission): void
+            +hasPermission(permission: Permission): Boolean
+        }
+    }
+    
+    package "Entities" {
+        class Permission {
+            -id: Long
+            -name: String
+            -resource: String
+            -action: String
+            -description: String
+            +getFullPermissionName(): String
+        }
+        
+        class RefreshToken {
+            -id: Long
+            -token: String
+            -userId: Long
+            -expiryDate: LocalDateTime
+            -isRevoked: Boolean
+            +isExpired(): Boolean
+            +revoke(): void
+        }
+    }
+    
+    package "Value Objects" {
+        class Email {
+            -value: String
+            +Email(value: String)
+            +getValue(): String
+            +isValid(): Boolean
+        }
+        
+        class Username {
+            -value: String
+            +Username(value: String)
+            +getValue(): String
+            +isValid(): Boolean
+        }
+        
+        class Password {
+            -hashedValue: String
+            +Password(plainPassword: String)
+            +matches(plainPassword: String): Boolean
+            +getHashedValue(): String
+        }
+    }
+    
+    package "Domain Services" {
+        class UserDomainService {
+            +validateUserCreation(user: User): void
+            +canDeleteUser(user: User): Boolean
+            +generateUsername(firstName: String, lastName: String): String
+        }
+        
+        class AuthenticationDomainService {
+            +validateCredentials(username: String, password: String): Boolean
+            +generateAuthToken(user: User): String
+            +isTokenValid(token: String): Boolean
+        }
+        
+        class RoleDomainService {
+            +validateRoleAssignment(user: User, role: Role): void
+            +canAssignRole(user: User, role: Role): Boolean
+            +getEffectivePermissions(user: User): Set<Permission>
+        }
+    }
+}
+
+' Relationships
+User ||--o{ Role : has
+Role ||--o{ Permission : contains
+User ||--|| Email : has
+User ||--|| Username : has
+User ||--|| Password : has
+User ||--o{ RefreshToken : generates
+
+UserDomainService ..> User : validates
+AuthenticationDomainService ..> User : authenticates
+RoleDomainService ..> User : manages
+RoleDomainService ..> Role : validates
+
+@enduml
+        +logout(token: String): void
+        +validateCredentials(username: String, password: String): boolean
+    }
+    
+    class UserService {
+        -userRepository: UserRepository
+        -passwordEncoder: PasswordEncoder
+        +createUser(userRequest: CreateUserRequest): User
+        +updateUser(userId: Long, userRequest: UpdateUserRequest): User
+        +getUserById(userId: Long): User
+        +getUserByUsername(username: String): User
+        +getUserByEmail(email: String): User
+        +getAllUsers(pageable: Pageable): Page<User>
+        +deleteUser(userId: Long): void
+        +changePassword(userId: Long, newPassword: String): void
+        +isEmailTaken(email: String): boolean
+        +isUsernameTaken(username: String): boolean
+    }
+    
+    class RoleService {
+        -roleRepository: RoleRepository
+        +createRole(roleRequest: CreateRoleRequest): Role
+        +updateRole(roleId: Long, roleRequest: UpdateRoleRequest): Role
+        +getRoleById(roleId: Long): Role
+        +getAllRoles(): List<Role>
+        +deleteRole(roleId: Long): void
+        +assignRoleToUser(user: User, role: Role): void
+        +removeRoleFromUser(user: User, role: Role): void
+        +getUserRoles(userId: Long): Set<Role>
+    }
+    
+    class TokenService {
+        -jwtUtil: JwtUtil
+        -refreshTokenRepository: RefreshTokenRepository
+        +generateAccessToken(user: User): String
+        +generateRefreshToken(user: User): RefreshToken
+        +validateToken(token: String): boolean
+        +getUserFromToken(token: String): User
+        +invalidateRefreshToken(token: String): void
+        +refreshAccessToken(refreshToken: String): String
+        +getTokenExpirationDate(token: String): Date
+    }
+    
+    class EmailService {
+        -javaMailSender: JavaMailSender
+        +sendPasswordResetEmail(email: String, resetToken: String): void
+        +sendWelcomeEmail(email: String, username: String): void
+        +sendAccountActivationEmail(email: String, activationToken: String): void
+        -buildEmailContent(template: String, variables: Map<String, String>): String
+    }
+}
+
+package "Security" {
+    class SecurityConfig {
+        -jwtAuthFilter: JwtAuthenticationFilter
+        +passwordEncoder(): BCryptPasswordEncoder
+        +authenticationManager(): AuthenticationManager
+        +filterChain(http: HttpSecurity): SecurityFilterChain
+        +corsConfigurationSource(): CorsConfigurationSource
+    }
+    
+    class JwtAuthenticationFilter {
+        -tokenService: TokenService
+        -userService: UserService
+        +doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain): void
+        -extractTokenFromRequest(request: HttpServletRequest): String
+        -setAuthenticationContext(token: String): void
+    }
+}
+
+package "Repositories" {
+    interface UserRepository {
+        +findByUsername(username: String): Optional<User>
+        +findByEmail(email: String): Optional<User>
+        +existsByUsername(username: String): boolean
+        +existsByEmail(email: String): boolean
+        +findByRoles_Name(roleName: String): List<User>
+        +findActiveUsers(): List<User>
+    }
+    
+    interface RoleRepository {
+        +findByName(name: String): Optional<Role>
+        +findByUsersId(userId: Long): Set<Role>
+        +existsByName(name: String): boolean
+    }
+    
+    interface RefreshTokenRepository {
+        +findByToken(token: String): Optional<RefreshToken>
+        +deleteByToken(token: String): void
+        +deleteByUserId(userId: Long): void
+        +findByUserId(userId: Long): List<RefreshToken>
+        +deleteExpiredTokens(): void
+    }
+}
+
+package "Entities" {
+    class User {
+        -id: Long
+        -username: String
+        -email: String
+        -password: String
+        -firstName: String
+        -lastName: String
+        -phoneNumber: String
+        -isActive: boolean
+        -createdAt: LocalDateTime
+        -updatedAt: LocalDateTime
+        -roles: Set<Role>
+        +getId(): Long
+        +getUsername(): String
+        +getEmail(): String
+        +getFullName(): String
+        +isAccountNonExpired(): boolean
+        +isAccountNonLocked(): boolean
+        +isCredentialsNonExpired(): boolean
+        +isEnabled(): boolean
+    }
+    
+    class Role {
+        -id: Long
+        -name: String
+        -description: String
+        -permissions: Set<String>
+        -users: Set<User>
+        +getId(): Long
+        +getName(): String
+        +getDescription(): String
+        +getPermissions(): Set<String>
+        +hasPermission(permission: String): boolean
+    }
+    
+    class RefreshToken {
+        -id: Long
+        -token: String
+        -userId: Long
+        -expiryDate: LocalDateTime
+        -createdAt: LocalDateTime
+        +getId(): Long
+        +getToken(): String
+        +getUserId(): Long
+        +isExpired(): boolean
+        +getExpiryDate(): LocalDateTime
+    }
+}
+
+package "Utilities" {
+    class PasswordEncoder {
+        +encode(rawPassword: String): String
+        +matches(rawPassword: String, encodedPassword: String): boolean
+        +upgradeEncoding(encodedPassword: String): boolean
+    }
+    
+    class JwtUtil {
+        -secretKey: String
+        -accessTokenExpiration: long
+        -refreshTokenExpiration: long
+        +generateToken(user: User): String
+        +extractUsername(token: String): String
+        +extractExpiration(token: String): Date
+        +validateToken(token: String, username: String): boolean
+        +isTokenExpired(token: String): boolean
+        -extractClaim(token: String, claimsResolver: Function<Claims, T>): T
+        -createToken(claims: Map<String, Object>, subject: String): String
+    }
+}
+
+package "Exception Handling" {
+    class GlobalExceptionHandler {
+        +handleAuthenticationException(ex: AuthenticationException): ResponseEntity<ErrorResponse>
+        +handleUserNotFoundException(ex: UserNotFoundException): ResponseEntity<ErrorResponse>
+        +handleEmailAlreadyTakenException(ex: EmailAlreadyTakenException): ResponseEntity<ErrorResponse>
+        +handleUsernameAlreadyTakenException(ex: UsernameAlreadyTakenException): ResponseEntity<ErrorResponse>
+        +handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity<ErrorResponse>
+        +handleTokenExpiredException(ex: TokenExpiredException): ResponseEntity<ErrorResponse>
+        +handleGenericException(ex: Exception): ResponseEntity<ErrorResponse>
+        -buildErrorResponse(message: String, status: HttpStatus): ErrorResponse
+    }
+}
+
+' Relationships
+AuthController --> AuthenticationService
+AuthController --> UserService
+UserController --> UserService
+RoleController --> RoleService
+
+AuthenticationService --> UserService
+AuthenticationService --> TokenService
+AuthenticationService --> PasswordEncoder
+AuthenticationService --> EmailService
+
+UserService --> UserRepository
+UserService --> PasswordEncoder
+RoleService --> RoleRepository
+TokenService --> JwtUtil
+TokenService --> RefreshTokenRepository
+
+SecurityConfig --> JwtAuthenticationFilter
+JwtAuthenticationFilter --> TokenService
+JwtAuthenticationFilter --> UserService
+
+UserRepository --> User
+RoleRepository --> Role
+RefreshTokenRepository --> RefreshToken
+
+User ||--o{ Role : "has many"
+Role }o--|| User : "belongs to many"
+
+AuthController --> GlobalExceptionHandler
+UserController --> GlobalExceptionHandler
+RoleController --> GlobalExceptionHandler
+
+@enduml

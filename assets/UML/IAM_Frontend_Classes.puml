@@ -1,0 +1,360 @@
+@startuml IAM_Frontend_Class_Diagram
+
+
+title Identity & Access Management - Frontend Models Class Diagram
+
+package "Models" {
+    
+    interface UserModel {
+        +id: number
+        +username: string
+        +email: string
+        +firstName: string
+        +lastName: string
+        +isEnabled: boolean
+        +roles: RoleModel[]
+        +createdAt: Date
+        +updatedAt: Date
+        +getFullName(): string
+        +hasRole(roleName: string): boolean
+        +isActive(): boolean
+    }
+    
+    interface RoleModel {
+        +id: number
+        +name: string
+        +description: string
+        +permissions: PermissionModel[]
+        +hasPermission(permissionName: string): boolean
+        +getPermissionCount(): number
+    }
+    
+    interface PermissionModel {
+        +id: number
+        +name: string
+        +resource: string
+        +action: string
+        +description: string
+        +getFullPermissionName(): string
+    }
+    
+    interface AuthModel {
+        +accessToken: string
+        +refreshToken: string
+        +user: UserModel
+        +expiresIn: number
+        +tokenType: string
+        +isTokenExpired(): boolean
+        +getExpirationDate(): Date
+    }
+    
+    interface LoginCredentials {
+        +username: string
+        +password: string
+        +rememberMe?: boolean
+    }
+    
+    interface RegisterRequest {
+        +username: string
+        +email: string
+        +password: string
+        +confirmPassword: string
+        +firstName: string
+        +lastName: string
+    }
+    
+    interface UserProfile {
+        +id: number
+        +username: string
+        +email: string
+        +firstName: string
+        +lastName: string
+        +phoneNumber?: string
+        +avatar?: string
+    }
+}
+
+' Relationships
+UserModel ||--o{ RoleModel : has
+RoleModel ||--o{ PermissionModel : contains
+AuthModel ||--|| UserModel : includes
+
+@enduml
+        -validateForm(): boolean
+        -checkPasswordStrength(password: string): string
+        -handleRegistrationError(error: HttpError): void
+    }
+    
+    class ForgotPasswordComponent {
+        +forgotPasswordForm: FormGroup
+        +isLoading: boolean
+        +isEmailSent: boolean
+        +errorMessage: string
+        
+        +constructor(authService: AuthService, formBuilder: FormBuilder)
+        +ngOnInit(): void
+        +onSubmit(): void
+        +onBackToLogin(): void
+        -validateEmail(): boolean
+        -handleForgotPasswordError(error: HttpError): void
+    }
+    
+    class UserProfileComponent {
+        +profileForm: FormGroup
+        +currentUser: UserModel | null
+        +isLoading: boolean
+        +isEditing: boolean
+        +successMessage: string
+        
+        +constructor(userService: UserService, formBuilder: FormBuilder)
+        +ngOnInit(): void
+        +loadUserProfile(): void
+        +onEdit(): void
+        +onSave(): void
+        +onCancel(): void
+        +onChangePassword(): void
+        -validateForm(): boolean
+        -handleProfileUpdateError(error: HttpError): void
+    }
+    
+    class UserManagementComponent {
+        +users: UserModel[]
+        +filteredUsers: UserModel[]
+        +searchTerm: string
+        +currentPage: number
+        +pageSize: number
+        +totalUsers: number
+        +isLoading: boolean
+        
+        +constructor(userService: UserService, roleService: RoleService)
+        +ngOnInit(): void
+        +loadUsers(): void
+        +onSearch(): void
+        +onPageChange(page: number): void
+        +onEditUser(user: UserModel): void
+        +onDeleteUser(userId: number): void
+        +onAssignRole(userId: number, roleId: number): void
+        -filterUsers(): void
+        -handleUserManagementError(error: HttpError): void
+    }
+}
+
+package "Services" {
+    class AuthService {
+        -tokenService: TokenService
+        -userService: UserService
+        -httpClient: HttpClient
+        -currentUserSubject: BehaviorSubject<UserModel | null>
+        +currentUser$: Observable<UserModel | null>
+        
+        +constructor(http: HttpClient, tokenService: TokenService, userService: UserService)
+        +login(credentials: LoginCredentials): Observable<AuthResponse>
+        +register(userRequest: RegisterRequest): Observable<UserResponse>
+        +refreshToken(): Observable<AuthResponse>
+        +forgotPassword(email: string): Observable<void>
+        +resetPassword(token: string, newPassword: string): Observable<void>
+        +logout(): void
+        +getCurrentUser(): UserModel | null
+        +isAuthenticated(): boolean
+        -setCurrentUser(user: UserModel): void
+        -handleAuthError(error: HttpError): Observable<never>
+    }
+    
+    class TokenService {
+        -localStorageService: LocalStorageService
+        
+        +constructor(localStorageService: LocalStorageService)
+        +getAccessToken(): string | null
+        +getRefreshToken(): string | null
+        +setTokens(accessToken: string, refreshToken: string): void
+        +removeTokens(): void
+        +isTokenExpired(token?: string): boolean
+        +getTokenExpirationDate(token: string): Date | null
+        +decodeToken(token: string): any
+        -getTokenPayload(token: string): any
+    }
+    
+    class UserService {
+        -httpClient: HttpClient
+        
+        +constructor(http: HttpClient)
+        +getCurrentUser(): Observable<UserModel>
+        +updateProfile(userId: number, userRequest: UpdateUserRequest): Observable<UserModel>
+        +getAllUsers(pageable: PaginationParams): Observable<PageResponse<UserModel>>
+        +getUserById(userId: number): Observable<UserModel>
+        +deleteUser(userId: number): Observable<void>
+        +changePassword(userId: number, passwordRequest: ChangePasswordRequest): Observable<void>
+        -handleUserError(error: HttpError): Observable<never>
+    }
+    
+    class RoleService {
+        -httpClient: HttpClient
+        
+        +constructor(http: HttpClient)
+        +getAllRoles(): Observable<RoleModel[]>
+        +createRole(roleRequest: CreateRoleRequest): Observable<RoleModel>
+        +updateRole(roleId: number, roleRequest: UpdateRoleRequest): Observable<RoleModel>
+        +deleteRole(roleId: number): Observable<void>
+        +assignRoleToUser(userId: number, roleId: number): Observable<void>
+        +removeRoleFromUser(userId: number, roleId: number): Observable<void>
+        -handleRoleError(error: HttpError): Observable<never>
+    }
+    
+    class LocalStorageService {
+        +setItem(key: string, value: string): void
+        +getItem(key: string): string | null
+        +removeItem(key: string): void
+        +clear(): void
+        +exists(key: string): boolean
+    }
+}
+
+package "Guards" {
+    class AuthGuard {
+        +constructor(authService: AuthService, tokenService: TokenService, router: Router)
+        +canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean>
+        +canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean>
+        -checkAuthentication(): boolean
+        -redirectToLogin(): void
+    }
+    
+    class RoleGuard {
+        +constructor(authService: AuthService, roleService: RoleService, router: Router)
+        +canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean>
+        -checkUserRole(requiredRoles: string[]): boolean
+        -redirectToUnauthorized(): void
+    }
+}
+
+package "Interceptors" {
+    class AuthInterceptor {
+        -tokenService: TokenService
+        -authService: AuthService
+        
+        +constructor(tokenService: TokenService, authService: AuthService)
+        +intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+        -addAuthHeader(request: HttpRequest<any>): HttpRequest<any>
+        -handleAuthError(error: HttpErrorResponse): Observable<never>
+        -refreshTokenAndRetry(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+    }
+}
+
+package "Models" {
+    interface UserModel {
+        +id: number
+        +username: string
+        +email: string
+        +firstName: string
+        +lastName: string
+        +phoneNumber?: string
+        +isActive: boolean
+        +createdAt: Date
+        +updatedAt: Date
+        +roles: RoleModel[]
+        +fullName: string
+    }
+    
+    interface AuthModel {
+        +accessToken: string
+        +refreshToken: string
+        +user: UserModel
+        +expiresIn: number
+        +tokenType: string
+    }
+    
+    interface RoleModel {
+        +id: number
+        +name: string
+        +description: string
+        +permissions: string[]
+    }
+    
+    interface LoginCredentials {
+        +username: string
+        +password: string
+        +rememberMe?: boolean
+    }
+    
+    interface RegisterRequest {
+        +username: string
+        +email: string
+        +password: string
+        +firstName: string
+        +lastName: string
+        +phoneNumber?: string
+    }
+    
+    interface UpdateUserRequest {
+        +firstName: string
+        +lastName: string
+        +phoneNumber?: string
+        +email: string
+    }
+    
+    interface ChangePasswordRequest {
+        +currentPassword: string
+        +newPassword: string
+        +confirmPassword: string
+    }
+    
+    interface PaginationParams {
+        +page: number
+        +size: number
+        +sort?: string
+        +direction?: 'asc' | 'desc'
+    }
+    
+    interface PageResponse<T> {
+        +content: T[]
+        +totalElements: number
+        +totalPages: number
+        +size: number
+        +number: number
+        +first: boolean
+        +last: boolean
+    }
+    
+    interface AuthResponse {
+        +accessToken: string
+        +refreshToken: string
+        +user: UserModel
+        +expiresIn: number
+    }
+    
+    interface ErrorResponse {
+        +message: string
+        +statusCode: number
+        +timestamp: Date
+        +path: string
+    }
+}
+
+' Relationships
+LoginComponent --> AuthService
+LoginComponent --> TokenService
+RegisterComponent --> AuthService
+ForgotPasswordComponent --> AuthService
+UserProfileComponent --> UserService
+UserManagementComponent --> UserService
+UserManagementComponent --> RoleService
+
+AuthService --> TokenService
+AuthService --> UserService
+AuthService --> UserModel
+AuthService --> AuthModel
+TokenService --> LocalStorageService
+UserService --> UserModel
+RoleService --> RoleModel
+
+AuthGuard --> AuthService
+AuthGuard --> TokenService
+RoleGuard --> AuthService
+RoleGuard --> RoleService
+
+AuthInterceptor --> TokenService
+AuthInterceptor --> AuthService
+
+UserModel --> RoleModel
+AuthModel --> UserModel
+
+@enduml

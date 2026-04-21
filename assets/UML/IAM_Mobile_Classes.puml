@@ -1,0 +1,499 @@
+@startuml IAM_Mobile_Class_Diagram
+
+
+title Identity & Access Management - Mobile Models Class Diagram
+
+package "Models" {
+    
+    class UserModel {
+        +id: int
+        +username: String
+        +email: String
+        +firstName: String
+        +lastName: String
+        +isEnabled: bool
+        +roles: List<RoleModel>
+        +createdAt: DateTime
+        +updatedAt: DateTime
+        
+        +UserModel({required this.id, required this.username, required this.email, required this.firstName, required this.lastName, required this.isEnabled, required this.roles, required this.createdAt, required this.updatedAt})
+        +getFullName(): String
+        +hasRole(String roleName): bool
+        +isActive(): bool
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): UserModel
+    }
+    
+    class RoleModel {
+        +id: int
+        +name: String
+        +description: String
+        +permissions: List<PermissionModel>
+        
+        +RoleModel({required this.id, required this.name, required this.description, required this.permissions})
+        +hasPermission(String permissionName): bool
+        +getPermissionCount(): int
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): RoleModel
+    }
+    
+    class PermissionModel {
+        +id: int
+        +name: String
+        +resource: String
+        +action: String
+        +description: String
+        
+        +PermissionModel({required this.id, required this.name, required this.resource, required this.action, required this.description})
+        +getFullPermissionName(): String
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): PermissionModel
+    }
+    
+    class AuthModel {
+        +accessToken: String
+        +refreshToken: String
+        +user: UserModel
+        +expiresIn: int
+        +tokenType: String
+        
+        +AuthModel({required this.accessToken, required this.refreshToken, required this.user, required this.expiresIn, required this.tokenType})
+        +isTokenExpired(): bool
+        +getExpirationDate(): DateTime
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): AuthModel
+    }
+    
+    class LoginCredentials {
+        +username: String
+        +password: String
+        +rememberMe: bool?
+        
+        +LoginCredentials({required this.username, required this.password, this.rememberMe})
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): LoginCredentials
+    }
+    
+    class RegisterRequest {
+        +username: String
+        +email: String
+        +password: String
+        +confirmPassword: String
+        +firstName: String
+        +lastName: String
+        
+        +RegisterRequest({required this.username, required this.email, required this.password, required this.confirmPassword, required this.firstName, required this.lastName})
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): RegisterRequest
+    }
+    
+    class UserProfile {
+        +id: int
+        +username: String
+        +email: String
+        +firstName: String
+        +lastName: String
+        +phoneNumber: String?
+        +avatar: String?
+        
+        +UserProfile({required this.id, required this.username, required this.email, required this.firstName, required this.lastName, this.phoneNumber, this.avatar})
+        +toJson(): Map<String, dynamic>
+        +fromJson(Map<String, dynamic> json): UserProfile
+    }
+}
+
+' Relationships
+UserModel ||--o{ RoleModel : has
+RoleModel ||--o{ PermissionModel : contains
+AuthModel ||--|| UserModel : includes
+
+@enduml
+        +firstNameController: TextEditingController
+        +lastNameController: TextEditingController
+        +isLoading: bool
+        +passwordStrength: PasswordStrength
+        
+        +createState(): _RegisterScreenState
+        +dispose(): void
+        +onRegisterPressed(): Future<void>
+        +onBackToLoginPressed(): void
+        +onPasswordChanged(password: String): void
+        -validateForm(): bool
+        -checkPasswordStrength(password: String): PasswordStrength
+        -showSuccessDialog(): void
+    }
+    
+    class ForgotPasswordScreen {
+        +emailFormKey: GlobalKey<FormState>
+        +emailController: TextEditingController
+        +isLoading: bool
+        +isEmailSent: bool
+        
+        +createState(): _ForgotPasswordScreenState
+        +dispose(): void
+        +onSendEmailPressed(): Future<void>
+        +onBackToLoginPressed(): void
+        -validateEmail(): bool
+        -showEmailSentDialog(): void
+    }
+    
+    class ProfileScreen {
+        +profileFormKey: GlobalKey<FormState>
+        +firstNameController: TextEditingController
+        +lastNameController: TextEditingController
+        +emailController: TextEditingController
+        +phoneController: TextEditingController
+        +isEditing: bool
+        +isLoading: bool
+        
+        +createState(): _ProfileScreenState
+        +initState(): void
+        +dispose(): void
+        +loadUserProfile(): Future<void>
+        +onEditPressed(): void
+        +onSavePressed(): Future<void>
+        +onCancelPressed(): void
+        +onChangePasswordPressed(): void
+        +onLogoutPressed(): void
+        -updateControllers(): void
+    }
+}
+
+package "BLoCs" {
+    class AuthBloc {
+        +authRepository: AuthRepository
+        +currentState: AuthState
+        
+        +AuthBloc(this.authRepository): super(AuthInitial())
+        +add(event: AuthEvent): void
+        +mapEventToState(event: AuthEvent): Stream<AuthState>
+        -onLoginRequested(event: LoginRequested): Future<void>
+        -onRegisterRequested(event: RegisterRequested): Future<void>
+        -onLogoutRequested(event: LogoutRequested): Future<void>
+        -onForgotPasswordRequested(event: ForgotPasswordRequested): Future<void>
+        -onTokenRefreshRequested(event: TokenRefreshRequested): Future<void>
+    }
+    
+    class UserBloc {
+        +userRepository: UserRepository
+        +currentState: UserState
+        
+        +UserBloc(this.userRepository): super(UserInitial())
+        +add(event: UserEvent): void
+        +mapEventToState(event: UserEvent): Stream<UserState>
+        -onUserProfileRequested(event: UserProfileRequested): Future<void>
+        -onUserProfileUpdateRequested(event: UserProfileUpdateRequested): Future<void>
+        -onPasswordChangeRequested(event: PasswordChangeRequested): Future<void>
+    }
+}
+
+package "Services" {
+    class AuthService {
+        +httpService: HttpService
+        +secureStorageService: SecureStorageService
+        
+        +AuthService({required this.httpService, required this.secureStorageService})
+        +login({required String username, required String password}): Future<AuthResponse>
+        +register({required RegisterRequest request}): Future<UserResponse>
+        +refreshToken(): Future<AuthResponse>
+        +forgotPassword({required String email}): Future<void>
+        +resetPassword({required String token, required String newPassword}): Future<void>
+        +logout(): Future<void>
+        +getCurrentUser(): Future<UserModel?>
+        +isLoggedIn(): Future<bool>
+        -handleAuthError(error: Exception): void
+    }
+    
+    class UserService {
+        +httpService: HttpService
+        
+        +UserService({required this.httpService})
+        +getUserProfile({required int userId}): Future<UserModel>
+        +updateUserProfile({required int userId, required UpdateUserRequest request}): Future<UserModel>
+        +changePassword({required int userId, required ChangePasswordRequest request}): Future<void>
+        +getAllUsers({required PaginationParams params}): Future<PageResponse<UserModel>>
+        +deleteUser({required int userId}): Future<void>
+        -handleUserError(error: Exception): void
+    }
+    
+    class HttpService {
+        +dio: Dio
+        +authMiddleware: AuthMiddleware
+        +baseUrl: String
+        
+        +HttpService({required this.baseUrl})
+        +get<T>({required String path, Map<String, dynamic>? queryParameters}): Future<Response<T>>
+        +post<T>({required String path, dynamic data, Map<String, dynamic>? queryParameters}): Future<Response<T>>
+        +put<T>({required String path, dynamic data, Map<String, dynamic>? queryParameters}): Future<Response<T>>
+        +delete<T>({required String path, Map<String, dynamic>? queryParameters}): Future<Response<T>>
+        -buildHeaders(): Map<String, String>
+        -handleHttpError(error: DioError): Exception
+    }
+}
+
+package "Storage Services" {
+    class SecureStorageService {
+        +storage: FlutterSecureStorage
+        
+        +SecureStorageService()
+        +storeAccessToken({required String token}): Future<void>
+        +storeRefreshToken({required String token}): Future<void>
+        +getAccessToken(): Future<String?>
+        +getRefreshToken(): Future<String?>
+        +removeTokens(): Future<void>
+        +storeUserData({required UserModel user}): Future<void>
+        +getUserData(): Future<UserModel?>
+        +removeUserData(): Future<void>
+        +containsKey({required String key}): Future<bool>
+    }
+    
+    class LocalDatabaseService {
+        +database: Database?
+        +databaseName: String
+        
+        +LocalDatabaseService()
+        +initDatabase(): Future<void>
+        +insertUser({required UserModel user}): Future<void>
+        +getUser({required int userId}): Future<UserModel?>
+        +updateUser({required UserModel user}): Future<void>
+        +deleteUser({required int userId}): Future<void>
+        +getAllUsers(): Future<List<UserModel>>
+        +clearDatabase(): Future<void>
+        +closeDatabase(): Future<void>
+    }
+    
+    class PreferencesService {
+        +preferences: SharedPreferences?
+        
+        +PreferencesService()
+        +initPreferences(): Future<void>
+        +setString({required String key, required String value}): Future<bool>
+        +getString({required String key}): String?
+        +setBool({required String key, required bool value}): Future<bool>
+        +getBool({required String key}): bool?
+        +setInt({required String key, required int value}): Future<bool>
+        +getInt({required String key}): int?
+        +remove({required String key}): Future<bool>
+        +clear(): Future<bool>
+        +containsKey({required String key}): bool
+    }
+}
+
+package "Data Models" {
+    class UserModel {
+        +id: int
+        +username: String
+        +email: String
+        +firstName: String
+        +lastName: String
+        +phoneNumber: String?
+        +isActive: bool
+        +createdAt: DateTime
+        +updatedAt: DateTime
+        +roles: List<RoleModel>
+        
+        +UserModel({required this.id, required this.username, required this.email, required this.firstName, required this.lastName, this.phoneNumber, required this.isActive, required this.createdAt, required this.updatedAt, required this.roles})
+        +factory UserModel.fromJson(Map<String, dynamic> json): UserModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({int? id, String? username, String? email, String? firstName, String? lastName, String? phoneNumber, bool? isActive, DateTime? createdAt, DateTime? updatedAt, List<RoleModel>? roles}): UserModel
+        +get fullName(): String
+        +hasRole(String roleName): bool
+    }
+    
+    class AuthModel {
+        +accessToken: String
+        +refreshToken: String
+        +user: UserModel
+        +expiresIn: int
+        +tokenType: String
+        
+        +AuthModel({required this.accessToken, required this.refreshToken, required this.user, required this.expiresIn, required this.tokenType})
+        +factory AuthModel.fromJson(Map<String, dynamic> json): AuthModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({String? accessToken, String? refreshToken, UserModel? user, int? expiresIn, String? tokenType}): AuthModel
+        +get isTokenExpired(): bool
+    }
+    
+    class TokenModel {
+        +accessToken: String
+        +refreshToken: String
+        +expiresIn: int
+        +tokenType: String
+        +issuedAt: DateTime
+        
+        +TokenModel({required this.accessToken, required this.refreshToken, required this.expiresIn, required this.tokenType, required this.issuedAt})
+        +factory TokenModel.fromJson(Map<String, dynamic> json): TokenModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({String? accessToken, String? refreshToken, int? expiresIn, String? tokenType, DateTime? issuedAt}): TokenModel
+        +get isExpired(): bool
+        +get expirationDate(): DateTime
+    }
+    
+    class RoleModel {
+        +id: int
+        +name: String
+        +description: String
+        +permissions: List<String>
+        
+        +RoleModel({required this.id, required this.name, required this.description, required this.permissions})
+        +factory RoleModel.fromJson(Map<String, dynamic> json): RoleModel
+        +toJson(): Map<String, dynamic>
+        +copyWith({int? id, String? name, String? description, List<String>? permissions}): RoleModel
+        +hasPermission(String permission): bool
+    }
+}
+
+package "Repositories" {
+    class AuthRepository {
+        +authService: AuthService
+        +localDatabaseService: LocalDatabaseService
+        
+        +AuthRepository({required this.authService, required this.localDatabaseService})
+        +login({required String username, required String password}): Future<AuthModel>
+        +register({required RegisterRequest request}): Future<UserModel>
+        +refreshToken(): Future<AuthModel>
+        +forgotPassword({required String email}): Future<void>
+        +logout(): Future<void>
+        +getCurrentUser(): Future<UserModel?>
+        +isLoggedIn(): Future<bool>
+        +cacheAuthData({required AuthModel authData}): Future<void>
+        +getCachedAuthData(): Future<AuthModel?>
+        +clearCache(): Future<void>
+    }
+    
+    class UserRepository {
+        +userService: UserService
+        +localDatabaseService: LocalDatabaseService
+        
+        +UserRepository({required this.userService, required this.localDatabaseService})
+        +getUserProfile({required int userId}): Future<UserModel>
+        +updateUserProfile({required int userId, required UpdateUserRequest request}): Future<UserModel>
+        +changePassword({required int userId, required ChangePasswordRequest request}): Future<void>
+        +getAllUsers({required PaginationParams params}): Future<PageResponse<UserModel>>
+        +cacheUser({required UserModel user}): Future<void>
+        +getCachedUser({required int userId}): Future<UserModel?>
+        +clearUserCache(): Future<void>
+    }
+}
+
+package "Utilities and Helpers" {
+    class JwtHelper {
+        +decodeToken({required String token}): Map<String, dynamic>?
+        +isTokenExpired({required String token}): bool
+        +getTokenExpirationDate({required String token}): DateTime?
+        +getUserIdFromToken({required String token}): int?
+        +getUserRolesFromToken({required String token}): List<String>
+        -parseJwtPayload({required String token}): Map<String, dynamic>?
+        -base64UrlDecode({required String str}): String
+    }
+    
+    class ValidatorHelper {
+        +validateEmail({required String email}): String?
+        +validatePassword({required String password}): String?
+        +validateUsername({required String username}): String?
+        +validatePhoneNumber({required String phoneNumber}): String?
+        +validateRequiredField({required String value, required String fieldName}): String?
+        +validatePasswordConfirmation({required String password, required String confirmPassword}): String?
+        +isValidEmail({required String email}): bool
+        +getPasswordStrength({required String password}): PasswordStrength
+        -hasMinimumLength({required String value, required int minLength}): bool
+        -containsSpecialCharacters({required String value}): bool
+        -containsUppercase({required String value}): bool
+        -containsLowercase({required String value}): bool
+        -containsNumbers({required String value}): bool
+    }
+}
+
+package "Security Middleware" {
+    class AuthMiddleware {
+        +secureStorageService: SecureStorageService
+        +jwtHelper: JwtHelper
+        
+        +AuthMiddleware({required this.secureStorageService, required this.jwtHelper})
+        +onRequest({required RequestOptions options, required RequestInterceptorHandler handler}): void
+        +onResponse({required Response response, required ResponseInterceptorHandler handler}): void
+        +onError({required DioError error, required ErrorInterceptorHandler handler}): void
+        -addAuthHeader({required RequestOptions options}): Future<void>
+        -handleUnauthorizedError({required DioError error, required ErrorInterceptorHandler handler}): Future<void>
+        -refreshTokenAndRetry({required RequestOptions options}): Future<Response>
+    }
+}
+
+package "Custom Widgets" {
+    class CustomButton {
+        +text: String
+        +onPressed: VoidCallback?
+        +isLoading: bool
+        +buttonType: ButtonType
+        +width: double?
+        +height: double?
+        
+        +CustomButton({Key? key, required this.text, this.onPressed, this.isLoading = false, this.buttonType = ButtonType.primary, this.width, this.height}): super(key: key)
+        +build(context: BuildContext): Widget
+        -getButtonStyle(): ButtonStyle
+        -getButtonChild(): Widget
+    }
+    
+    class CustomTextField {
+        +controller: TextEditingController
+        +labelText: String
+        +hintText: String?
+        +isPassword: bool
+        +validator: String? Function(String?)?
+        +onChanged: Function(String)?
+        +prefixIcon: IconData?
+        +suffixIcon: IconData?
+        
+        +CustomTextField({Key? key, required this.controller, required this.labelText, this.hintText, this.isPassword = false, this.validator, this.onChanged, this.prefixIcon, this.suffixIcon}): super(key: key)
+        +build(context: BuildContext): Widget
+        -getInputDecoration(): InputDecoration
+    }
+    
+    class LoadingWidget {
+        +message: String?
+        +size: double
+        +color: Color?
+        
+        +LoadingWidget({Key? key, this.message, this.size = 50.0, this.color}): super(key: key)
+        +build(context: BuildContext): Widget
+    }
+}
+
+' Relationships
+LoginScreen --> AuthBloc
+RegisterScreen --> AuthBloc
+ForgotPasswordScreen --> AuthBloc
+ProfileScreen --> UserBloc
+
+AuthBloc --> AuthRepository
+UserBloc --> UserRepository
+
+AuthRepository --> AuthService
+AuthRepository --> LocalDatabaseService
+UserRepository --> UserService
+UserRepository --> LocalDatabaseService
+
+AuthService --> HttpService
+AuthService --> SecureStorageService
+UserService --> HttpService
+
+HttpService --> AuthMiddleware
+AuthMiddleware --> SecureStorageService
+AuthMiddleware --> JwtHelper
+
+AuthService --> AuthModel
+AuthService --> UserModel
+UserService --> UserModel
+
+AuthModel --> UserModel
+UserModel --> RoleModel
+
+LoginScreen --> ValidatorHelper
+RegisterScreen --> ValidatorHelper
+LoginScreen --> CustomButton
+LoginScreen --> CustomTextField
+LoginScreen --> LoadingWidget
+RegisterScreen --> CustomButton
+RegisterScreen --> CustomTextField
+
+@enduml

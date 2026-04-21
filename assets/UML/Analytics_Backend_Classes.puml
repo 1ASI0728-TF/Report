@@ -1,0 +1,523 @@
+@startuml Analytics_Backend_Class_Diagram
+
+
+title Visualization/Analytics - Backend Domain Layer Class Diagram
+
+package "Domain Layer" {
+    
+    package "Aggregates" {
+        class Trip {
+            -id: Long
+            -vehicleId: String
+            -driverId: Long
+            -startLocation: Location
+            -endLocation: Location
+            -startTime: LocalDateTime
+            -endTime: LocalDateTime
+            -distance: Double
+            -status: TripStatus
+            -temperatureReadings: List<TemperatureReading>
+            -incidents: List<Incident>
+            +calculateDuration(): Duration
+            +getAverageTemperature(): Double
+            +hasTemperatureViolations(): Boolean
+            +getIncidentCount(): Integer
+            +isCompleted(): Boolean
+        }
+        
+        class Driver {
+            -id: Long
+            -employeeId: String
+            -firstName: String
+            -lastName: String
+            -licenseNumber: String
+            -phoneNumber: String
+            -email: String
+            -hireDate: LocalDate
+            -trips: List<Trip>
+            -performanceMetrics: PerformanceMetrics
+            +getTotalTrips(): Integer
+            +getAverageRating(): Double
+            +getTotalDistance(): Double
+            +getIncidentRate(): Double
+            +isActive(): Boolean
+        }
+    }
+    
+    package "Entities" {
+        class TemperatureReading {
+            -id: Long
+            -tripId: Long
+            -temperature: Double
+            -timestamp: LocalDateTime
+            -sensorId: String
+            -isAlert: Boolean
+            +isWithinThreshold(min: Double, max: Double): Boolean
+            +getTemperatureCelsius(): Double
+            +getTemperatureFahrenheit(): Double
+        }
+        
+        class Incident {
+            -id: Long
+            -tripId: Long
+            -driverId: Long
+            -type: IncidentType
+            -severity: IncidentSeverity
+            -description: String
+            -location: Location
+            -timestamp: LocalDateTime
+            -resolved: Boolean
+            +isTemperatureRelated(): Boolean
+            +getCriticalityLevel(): Integer
+            +getDaysToResolve(): Integer
+        }
+    }
+    
+    package "Value Objects" {
+        class Location {
+            -latitude: Double
+            -longitude: Double
+            -address: String
+            +Location(latitude: Double, longitude: Double)
+            +getLatitude(): Double
+            +getLongitude(): Double
+            +getAddress(): String
+            +calculateDistance(other: Location): Double
+        }
+        
+        class PerformanceMetrics {
+            -totalTrips: Integer
+            -averageRating: Double
+            -onTimeDeliveryRate: Double
+            -safetyScore: Double
+            -fuelEfficiency: Double
+            +calculateOverallScore(): Double
+            +isExcellentPerformance(): Boolean
+        }
+        
+        class DateRange {
+            -startDate: LocalDate
+            -endDate: LocalDate
+            +DateRange(startDate: LocalDate, endDate: LocalDate)
+            +getDurationInDays(): Long
+            +contains(date: LocalDate): Boolean
+            +isValid(): Boolean
+        }
+        
+        class TemperatureThreshold {
+            -minTemperature: Double
+            -maxTemperature: Double
+            -productType: String
+            +TemperatureThreshold(min: Double, max: Double, productType: String)
+            +isWithinThreshold(temperature: Double): Boolean
+            +getViolationSeverity(temperature: Double): IncidentSeverity
+        }
+    }
+    
+    package "Domain Services" {
+        class TripAnalyticsDomainService {
+            +calculateTripEfficiency(trip: Trip): Double
+            +detectTemperatureViolations(trip: Trip, threshold: TemperatureThreshold): List<TemperatureReading>
+            +generateTripSummary(trip: Trip): TripSummary
+            +validateTripCompletion(trip: Trip): Boolean
+        }
+        
+        class DriverPerformanceDomainService {
+            +calculateDriverScore(driver: Driver, period: DateRange): Double
+            +rankDrivers(drivers: List<Driver>, metric: String): List<Driver>
+            +identifyTopPerformers(drivers: List<Driver>, percentage: Double): List<Driver>
+            +calculateIncidentImpact(driver: Driver): Double
+        }
+        
+        class IncidentAnalyticsDomainService {
+            +analyzeIncidentTrends(incidents: List<Incident>, period: DateRange): IncidentTrends
+            +categorizeIncidentsByType(incidents: List<Incident>): Map<IncidentType, List<Incident>>
+            +calculateIncidentSeverityScore(incidents: List<Incident>): Double
+            +predictIncidentRisk(trip: Trip): Double
+        }
+    }
+    
+    package "Enums" {
+        enum TripStatus {
+            PLANNED
+            IN_PROGRESS
+            COMPLETED
+            CANCELLED
+            DELAYED
+        }
+        
+        enum IncidentType {
+            TEMPERATURE_VIOLATION
+            TRAFFIC_ACCIDENT
+            VEHICLE_BREAKDOWN
+            THEFT
+            DELAY
+            DAMAGE
+        }
+        
+        enum IncidentSeverity {
+            LOW
+            MEDIUM
+            HIGH
+            CRITICAL
+        }
+    }
+}
+
+' Relationships
+Trip ||--o{ TemperatureReading : contains
+Trip ||--o{ Incident : has
+Trip ||--|| Location : startLocation
+Trip ||--|| Location : endLocation
+Driver ||--o{ Trip : performs
+Driver ||--|| PerformanceMetrics : has
+Incident ||--|| Location : occurredAt
+Incident ||--|| IncidentType : hasType
+Incident ||--|| IncidentSeverity : hasSeverity
+Trip ||--|| TripStatus : hasStatus
+
+TripAnalyticsDomainService ..> Trip : analyzes
+DriverPerformanceDomainService ..> Driver : evaluates
+IncidentAnalyticsDomainService ..> Incident : analyzes
+
+@enduml
+        +getTripAnalytics(dateRange: DateRange, tripId: Long): TripAnalyticsResponse
+        +getTemperatureAnalytics(tripId: Long): TemperatureAnalyticsResponse
+        +getTripsByDateRange(dateRange: DateRange, pageable: Pageable): Page<TripSummaryResponse>
+        +getTripsWithIncidents(dateRange: DateRange): List<TripIncidentResponse>
+        +getTemperatureAlerts(tripId: Long): List<TemperatureAlertResponse>
+        +calculateTripMetrics(trip: Trip): TripMetrics
+        -aggregateTripData(trips: List<Trip>): TripAggregateData
+        -generateTemperatureChart(tripId: Long): ChartData
+    }
+    
+    class IncidentAnalyticsService {
+        -statisticsCalculationService: StatisticsCalculationService
+        -incidentAnalyticsRepository: IncidentAnalyticsRepository
+        -analyticsCacheManager: AnalyticsCacheManager
+        -chartDataFormatter: ChartDataFormatter
+        
+        +getIncidentAnalytics(dateRange: DateRange): IncidentAnalyticsResponse
+        +getMonthlyIncidentStats(year: Integer): List<MonthlyIncidentStatsResponse>
+        +getIncidentsByType(dateRange: DateRange): Map<String, Long>
+        +getIncidentTrends(period: AnalyticsPeriod): IncidentTrendsResponse
+        +getIncidentSeverityDistribution(): Map<String, Long>
+        +calculateIncidentMetrics(incidents: List<Incident>): IncidentMetrics
+        -groupIncidentsByMonth(incidents: List<Incident>): Map<Integer, List<Incident>>
+        -calculateTrendAnalysis(incidentData: List<IncidentDataPoint>): TrendAnalysis
+    }
+    
+    class DriverAnalyticsService {
+        -trendAnalysisService: TrendAnalysisService
+        -driverPerformanceRepository: DriverPerformanceRepository
+        -analyticsCacheManager: AnalyticsCacheManager
+        -exportUtility: ExportUtility
+        
+        +getDriverPerformance(driverId: Long, dateRange: DateRange): DriverPerformanceResponse
+        +getTopDrivers(limit: Integer, metric: PerformanceMetric): List<DriverRankingResponse>
+        +getDriverTrends(driverId: Long, period: AnalyticsPeriod): DriverTrendsResponse
+        +getDriverIncidentStats(driverId: Long, dateRange: DateRange): DriverIncidentStatsResponse
+        +getAllDriversPerformance(dateRange: DateRange, pageable: Pageable): Page<DriverPerformanceResponse>
+        +calculateDriverScore(driverId: Long): Double
+        -analyzeDriverBehavior(driverId: Long, trips: List<Trip>): DriverBehaviorAnalysis
+        -compareDriverPerformance(drivers: List<Driver>): List<DriverComparison>
+    }
+    
+    class TemperatureAnalysisService {
+        -dataAggregationService: DataAggregationService
+        
+        +analyzeTemperatureData(tripId: Long): TemperatureAnalysis
+        +detectTemperatureAnomalies(readings: List<TemperatureReading>): List<TemperatureAnomaly>
+        +calculateTemperatureStatistics(readings: List<TemperatureReading>): TemperatureStatistics
+        +generateTemperatureReport(tripId: Long): TemperatureReport
+        +identifyTemperatureViolations(readings: List<TemperatureReading>, thresholds: TemperatureThresholds): List<TemperatureViolation>
+        -smoothTemperatureData(readings: List<TemperatureReading>): List<TemperatureReading>
+        -calculateMovingAverage(readings: List<TemperatureReading>, windowSize: Integer): List<Double>
+    }
+}
+
+package "Data Processing Services" {
+    class DataAggregationService {
+        -statisticsCalculationService: StatisticsCalculationService
+        
+        +aggregateDataByTimeInterval(data: List<DataPoint>, interval: TimeInterval): List<AggregatedData>
+        +groupDataByCategory(data: List<DataPoint>, categoryField: String): Map<String, List<DataPoint>>
+        +calculateSummaryStatistics(data: List<Double>): SummaryStatistics
+        +aggregateTemperatureReadings(readings: List<TemperatureReading>, interval: TimeInterval): List<TemperatureAggregate>
+        +aggregateTripData(trips: List<Trip>): TripAggregate
+        +aggregateIncidentData(incidents: List<Incident>): IncidentAggregate
+        -performDataCleaning(data: List<DataPoint>): List<DataPoint>
+        -validateDataQuality(data: List<DataPoint>): DataQualityReport
+    }
+    
+    class StatisticsCalculationService {
+        +calculateMean(values: List<Double>): Double
+        +calculateMedian(values: List<Double>): Double
+        +calculateStandardDeviation(values: List<Double>): Double
+        +calculatePercentile(values: List<Double>, percentile: Double): Double
+        +calculateCorrelation(x: List<Double>, y: List<Double>): Double
+        +performRegressionAnalysis(x: List<Double>, y: List<Double>): RegressionResult
+        +calculateConfidenceInterval(values: List<Double>, confidenceLevel: Double): ConfidenceInterval
+        +performHypothesisTest(sample1: List<Double>, sample2: List<Double>): HypothesisTestResult
+        -validateStatisticalData(values: List<Double>): boolean
+    }
+    
+    class TrendAnalysisService {
+        -statisticsCalculationService: StatisticsCalculationService
+        
+        +analyzeTrend(dataPoints: List<DataPoint>): TrendAnalysis
+        +detectSeasonality(dataPoints: List<DataPoint>): SeasonalityAnalysis
+        +forecastValues(dataPoints: List<DataPoint>, periods: Integer): ForecastResult
+        +identifyOutliers(dataPoints: List<DataPoint>): List<Outlier>
+        +calculateTrendStrength(dataPoints: List<DataPoint>): Double
+        +performTimeSeriesDecomposition(dataPoints: List<DataPoint>): TimeSeriesDecomposition
+        -smoothData(dataPoints: List<DataPoint>, method: SmoothingMethod): List<DataPoint>
+        -calculateTrendSlope(dataPoints: List<DataPoint>): Double
+    }
+}
+
+package "Repositories" {
+    interface TripRepository {
+        +findByDateRange(startDate: LocalDateTime, endDate: LocalDateTime): List<Trip>
+        +findWithIncidentsByDateRange(startDate: LocalDateTime, endDate: LocalDateTime): List<Trip>
+        +findByDriverIdAndDateRange(driverId: Long, startDate: LocalDateTime, endDate: LocalDateTime): List<Trip>
+        +countTripsByStatus(status: TripStatus): Long
+        +findTopPerformingTrips(limit: Integer): List<Trip>
+    }
+    
+    interface IncidentRepository {
+        +findByDateRange(startDate: LocalDateTime, endDate: LocalDateTime): List<Incident>
+        +findByType(incidentType: IncidentType): List<Incident>
+        +findBySeverity(severity: IncidentSeverity): List<Incident>
+        +countIncidentsByMonth(year: Integer): List<Object[]>
+        +findIncidentsWithTrends(period: AnalyticsPeriod): List<Incident>
+    }
+    
+    interface DriverRepository {
+        +findActiveDrivers(): List<Driver>
+        +findByPerformanceScore(minScore: Double): List<Driver>
+        +findTopDriversByMetric(metric: PerformanceMetric, limit: Integer): List<Driver>
+        +findDriversWithIncidents(dateRange: DateRange): List<Driver>
+    }
+    
+    interface TemperatureReadingRepository {
+        +findByTripId(tripId: Long): List<TemperatureReading>
+        +findByTripIdOrderByTimestamp(tripId: Long): List<TemperatureReading>
+        +findTemperatureViolations(tripId: Long, minTemp: Double, maxTemp: Double): List<TemperatureReading>
+        +findAverageTemperatureByTrip(tripId: Long): Double
+        +findTemperatureExtremes(tripId: Long): List<TemperatureReading>
+    }
+}
+
+package "Custom Query Repositories" {
+    interface TripAnalyticsRepository {
+        -tripRepository: TripRepository
+        
+        +getTripMetricsByDateRange(dateRange: DateRange): List<TripMetrics>
+        +getTripPerformanceStatistics(): TripPerformanceStatistics
+        +findTripsWithTemperatureIssues(): List<Trip>
+        +calculateAverageTripDuration(dateRange: DateRange): Duration
+        +getRoutePerformanceMetrics(): List<RouteMetrics>
+    }
+    
+    interface IncidentAnalyticsRepository {
+        -incidentRepository: IncidentRepository
+        
+        +getIncidentStatsByType(): Map<IncidentType, IncidentStatistics>
+        +getIncidentTrendData(period: AnalyticsPeriod): List<IncidentTrendDataPoint>
+        +calculateIncidentFrequency(dateRange: DateRange): IncidentFrequency
+        +getIncidentResolutionMetrics(): IncidentResolutionMetrics
+        +findRecurringIncidentPatterns(): List<IncidentPattern>
+    }
+    
+    interface DriverPerformanceRepository {
+        -driverRepository: DriverRepository
+        
+        +getDriverPerformanceMetrics(driverId: Long, dateRange: DateRange): DriverPerformanceMetrics
+        +calculateDriverRankings(metric: PerformanceMetric): List<DriverRanking>
+        +getDriverBehaviorPatterns(driverId: Long): DriverBehaviorPatterns
+        +findDriversNeedingTraining(): List<Driver>
+        +getDriverEfficiencyMetrics(): List<DriverEfficiencyMetrics>
+    }
+}
+
+package "Entities" {
+    class Trip {
+        -id: Long
+        -driverId: Long
+        -routeId: Long
+        -vehicleId: Long
+        -startTime: LocalDateTime
+        -endTime: LocalDateTime
+        -status: TripStatus
+        -distance: Double
+        -duration: Duration
+        -fuelConsumption: Double
+        -averageSpeed: Double
+        -maxSpeed: Double
+        -incidents: List<Incident>
+        -temperatureReadings: List<TemperatureReading>
+        
+        +getId(): Long
+        +getDuration(): Duration
+        +getAverageSpeed(): Double
+        +hasIncidents(): boolean
+        +getTemperatureViolations(): List<TemperatureReading>
+    }
+    
+    class Incident {
+        -id: Long
+        -tripId: Long
+        -type: IncidentType
+        -severity: IncidentSeverity
+        -description: String
+        -location: GeoLocation
+        -timestamp: LocalDateTime
+        -resolved: boolean
+        -resolutionTime: LocalDateTime
+        
+        +getId(): Long
+        +getType(): IncidentType
+        +getSeverity(): IncidentSeverity
+        +isResolved(): boolean
+        +getResolutionDuration(): Duration
+    }
+    
+    class Driver {
+        -id: Long
+        -employeeId: String
+        -firstName: String
+        -lastName: String
+        -licenseNumber: String
+        -licenseExpiryDate: LocalDate
+        -experience: Integer
+        -performanceScore: Double
+        -isActive: boolean
+        -trips: List<Trip>
+        
+        +getId(): Long
+        +getFullName(): String
+        +getExperience(): Integer
+        +getPerformanceScore(): Double
+        +isLicenseValid(): boolean
+    }
+    
+    class TemperatureReading {
+        -id: Long
+        -tripId: Long
+        -sensorId: String
+        -temperature: Double
+        -humidity: Double
+        -timestamp: LocalDateTime
+        -location: GeoLocation
+        
+        +getId(): Long
+        +getTemperature(): Double
+        +getTimestamp(): LocalDateTime
+        +isWithinThreshold(minTemp: Double, maxTemp: Double): boolean
+    }
+}
+
+package "Utility Components" {
+    class DateRangeProcessor {
+        +processDateRange(dateRange: DateRange): ProcessedDateRange
+        +validateDateRange(dateRange: DateRange): boolean
+        +splitDateRangeByInterval(dateRange: DateRange, interval: TimeInterval): List<DateRange>
+        +calculateDateRangeDuration(dateRange: DateRange): Duration
+        +adjustDateRangeToTimezone(dateRange: DateRange, timezone: ZoneId): DateRange
+        +isDateRangeValid(startDate: LocalDateTime, endDate: LocalDateTime): boolean
+        -normalizeDateRange(dateRange: DateRange): DateRange
+    }
+    
+    class ChartDataFormatter {
+        +formatForLineChart(data: List<DataPoint>): LineChartData
+        +formatForBarChart(data: Map<String, Double>): BarChartData
+        +formatForPieChart(data: Map<String, Double>): PieChartData
+        +formatTemperatureChartData(readings: List<TemperatureReading>): TemperatureChartData
+        +formatIncidentChartData(incidents: List<Incident>): IncidentChartData
+        +applyChartColors(chartData: ChartData, colorScheme: ColorScheme): ChartData
+        -normalizeChartData(data: List<Double>): List<Double>
+        -generateChartLabels(dataPoints: List<DataPoint>): List<String>
+    }
+    
+    class ExportUtility {
+        +exportToCsv(data: List<Object>, headers: List<String>): byte[]
+        +exportToPdf(data: List<Object>, reportTitle: String): byte[]
+        +exportToExcel(data: List<Object>, sheetName: String): byte[]
+        +generateAnalyticsReport(analyticsData: AnalyticsData): ReportDocument
+        +createChartImage(chartData: ChartData): byte[]
+        +compressExportData(data: byte[]): byte[]
+        -formatDataForExport(data: List<Object>): List<Map<String, Object>>
+        -validateExportData(data: List<Object>): boolean
+    }
+}
+
+package "Cache Management" {
+    class AnalyticsCacheManager {
+        -cacheManager: CacheManager
+        
+        +cacheAnalyticsResult(key: String, data: Object, ttl: Duration): void
+        +getFromCache(key: String, type: Class<T>): T
+        +invalidateCache(pattern: String): void
+        +clearAllAnalyticsCache(): void
+        +getCacheStatistics(): CacheStatistics
+        +isCacheHit(key: String): boolean
+        +updateCacheEntry(key: String, data: Object): void
+        -generateCacheKey(params: Object...): String
+        -shouldUseCache(operation: AnalyticsOperation): boolean
+    }
+}
+
+package "Exception Handling" {
+    class AnalyticsExceptionHandler {
+        +handleDataNotFoundException(ex: DataNotFoundException): ResponseEntity<ErrorResponse>
+        +handleInvalidDateRangeException(ex: InvalidDateRangeException): ResponseEntity<ErrorResponse>
+        +handleAnalyticsCalculationException(ex: AnalyticsCalculationException): ResponseEntity<ErrorResponse>
+        +handleCacheException(ex: CacheException): ResponseEntity<ErrorResponse>
+        +handleExportException(ex: ExportException): ResponseEntity<ErrorResponse>
+        +handleGenericAnalyticsException(ex: Exception): ResponseEntity<ErrorResponse>
+        -buildAnalyticsErrorResponse(message: String, status: HttpStatus): ErrorResponse
+        -logAnalyticsError(exception: Exception): void
+    }
+}
+
+' Relationships
+TripAnalyticsController --> TripAnalyticsService
+IncidentAnalyticsController --> IncidentAnalyticsService
+DriverAnalyticsController --> DriverAnalyticsService
+
+TripAnalyticsService --> TemperatureAnalysisService
+TripAnalyticsService --> DataAggregationService
+TripAnalyticsService --> TripAnalyticsRepository
+TripAnalyticsService --> TemperatureReadingRepository
+TripAnalyticsService --> AnalyticsCacheManager
+TripAnalyticsService --> DateRangeProcessor
+
+IncidentAnalyticsService --> StatisticsCalculationService
+IncidentAnalyticsService --> IncidentAnalyticsRepository
+IncidentAnalyticsService --> AnalyticsCacheManager
+IncidentAnalyticsService --> ChartDataFormatter
+
+DriverAnalyticsService --> TrendAnalysisService
+DriverAnalyticsService --> DriverPerformanceRepository
+DriverAnalyticsService --> AnalyticsCacheManager
+DriverAnalyticsService --> ExportUtility
+
+TemperatureAnalysisService --> DataAggregationService
+DataAggregationService --> StatisticsCalculationService
+TrendAnalysisService --> StatisticsCalculationService
+
+TripAnalyticsRepository --> TripRepository
+IncidentAnalyticsRepository --> IncidentRepository
+DriverPerformanceRepository --> DriverRepository
+
+TripRepository --> Trip
+IncidentRepository --> Incident
+DriverRepository --> Driver
+TemperatureReadingRepository --> TemperatureReading
+
+TripAnalyticsController --> AnalyticsExceptionHandler
+IncidentAnalyticsController --> AnalyticsExceptionHandler
+DriverAnalyticsController --> AnalyticsExceptionHandler
+
+@enduml
