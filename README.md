@@ -520,17 +520,17 @@ Entre sus principales productos destaca CargaSafe, una solución integral que pe
 <table width="100%">
   <tr>
     <td rowspan="4" align="center" width="25%">
-      <img src="assets/Alumno3.png" alt="Imagen del integrante" width="150" style="margin-bottom: 5px;"/>
+      <img src="assets/Foto_Edery.jpg" alt="Imagen del integrante" width="150" style="margin-bottom: 5px;"/>
     </td>
     <td align="left">
       <b>Nombre y Apellido:</b><br>
-      Inserte Nombre
+      Edery Renzo Abanto Vicente
     </td>
   </tr>
   <tr>
     <td align="left">
       <b>Código:</b><br>
-      Inserte Código
+      U201822832
     </td>
   </tr>
   <tr>
@@ -542,7 +542,7 @@ Entre sus principales productos destaca CargaSafe, una solución integral que pe
   <tr>
     <td align="left">
       <b>Acerca de:</b><br>
-      Inserte descripción
+      Experto en diseño de arquitecturas escalables con trayectoria probada liderando múltiples equipos de alto rendimiento hacia el éxito. Investigador activo de tecnologías de frontera y soluciones innovadoras.
     </td>
   </tr>
 </table>
