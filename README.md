@@ -38,8 +38,8 @@
         </thead>
         <tbody>
           <tr>
-            <td>u20</td>
-            <td>Nombre</td>
+            <td>u20191e562</td>
+            <td>Quincho Gamarra, Paulo Percy</td>
           </tr>
           <tr>
             <td>u202113324</td>
@@ -349,7 +349,7 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
         publico objetivo y plantear un producto que los satisfaga en el dia  <br />
         <br><span class="person">Paulo</span><br />
         <span class="entry-order">TB1:</span><br/>
-       Texto<br />
+       Se logro completar el Solution Software Design gracias a la buena comunicacion entre nuestro equipo para la definicion de cada bouden context a seguir de forma ordenada <br />
         <br><span class="person">Edery</span><br />
         <span class="entry-order">TB1:</span><br/>
         Texto<br /><br/>
@@ -392,17 +392,17 @@ Entre sus principales productos destaca CargaSafe, una solución integral que pe
 <table width="100%">
   <tr>
     <td rowspan="4" align="center" width="25%">
-      <img src="assets/Alumno1.png" alt="Imagen del integrante" width="150" style="margin-bottom: 5px;"/>
+      <img src="assets/PauloProfile.png" alt="Imagen del integrante" width="150" style="margin-bottom: 5px;"/>
     </td>
     <td align="left">
       <b>Nombre y Apellido:</b><br>
-      Escribir Nombre
+      Paulo Percy Quincho Gamarra
     </td>
   </tr>
   <tr>
     <td align="left">
       <b>Código:</b><br>
-      Escribir Código
+      U20191E562
     </td>
   </tr>
   <tr>
@@ -414,7 +414,7 @@ Entre sus principales productos destaca CargaSafe, una solución integral que pe
   <tr>
     <td align="left">
       <b>Acerca de:</b><br>
-      Descripción
+      Actualmente cursando el octavo ciclo con ganar de mejorar mis experiencias en proyectos
     </td>
   </tr>
 </table>
