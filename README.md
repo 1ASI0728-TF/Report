@@ -350,9 +350,9 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
         <br><span class="person">Paulo</span><br />
         <span class="entry-order">TB1:</span><br/>
        Se logro completar el Solution Software Design gracias a la buena comunicacion entre nuestro equipo para la definicion de cada bouden context a seguir de forma ordenada <br />
-        <br><span class="person">Edery</span><br />
+        <br><span class="person">Edery Renzo Abanto Vicente</span><br />
         <span class="entry-order">TB1:</span><br/>
-        Texto<br /><br/>
+        Lideré el diseño de la arquitectura técnica y el modelado de diagramas estructurales, integrando una investigación profunda sobre tecnologías de frontera para asegurar la escalabilidad del proyecto. Logré articular estas decisiones técnicas complejas en una hoja de ruta comprensible para el equipo y los stakeholders, garantizando una visión tecnológica unificada.<br /><br/>
         </td>
       <td class="conclusions-column">
       <span class="entry-order">TB1:</span><br/>
