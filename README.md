@@ -4525,12 +4525,46 @@ Se incluyen índices por merchant_id, estado y rangos de fechas; claves foránea
 
 <div style="page-break-after: always;"></div>
  
-  
-   
-    
-     
-      
-       
-        
-         
-          
+# Conclusiones
+
+### Conclusiones y recomendaciones
+
+#### Conclusiones
+1.  **Sólida Arquitectura Orientada al Dominio (DDD):** Se ha logrado diseñar un sistema robusto mediante la aplicación de *Domain-Driven Design*, permitiendo que la lógica de negocio de **CargaSafe** se mantenga aislada y escalable. La identificación de 8 *Bounded Contexts* (IAM, Merchant, Trip Management, etc.) garantiza que cada módulo evolucione de forma independiente sin generar un monolito difícil de mantener.
+2.  **Seguridad y Monitoreo en Tiempo Real:** El diseño táctico asegura que los puntos críticos de la cadena de frío estén cubiertos. Gracias a la integración de servicios de IoT y alertas en tiempo real, la solución propuesta mitiga significativamente los riesgos de pérdida de carga, cumpliendo con la propuesta de valor principal de la startup.
+3.  **Experiencia de Usuario e Interoperabilidad:** La arquitectura de contenedores y el uso de diagramas C4 demuestran una visión clara de cómo interactúan las aplicaciones móviles (Merchant) y web con el backend. La implementación de un API Gateway y la gestión centralizada de identidades (IAM) aseguran una experiencia fluida y segura para los diferentes segmentos objetivo.
+4.  **Validación Continua:** El proceso Lean UX, sumado a las entrevistas y el EventStorming, ha permitido que el diseño de software no sea solo un ejercicio técnico, sino una respuesta directa a las necesidades reales de las empresas de transporte y clientes finales.
+
+#### Recomendaciones
+1.  **Adopción Progresiva de Microservicios:** Se recomienda iniciar la implementación siguiendo los límites definidos en el *Context Mapping*, utilizando una arquitectura de microservicios para permitir el escalamiento independiente de los módulos de "Real-Time Monitoring" y "Alerts & Resolution".
+2.  **Automatización de Pruebas en el Dominio:** Dada la complejidad de las reglas de negocio en la capa de dominio (*Domain Layer*), se sugiere implementar un esquema de pruebas unitarias exhaustivo para proteger los agregados y entidades de efectos secundarios imprevistos.
+3.  **Monitoreo de Latencia en IoT:** Para las futuras fases de implementación, se recomienda evaluar el uso de protocolos ligeros como MQTT para la comunicación con sensores de temperatura, asegurando que la latencia no afecte la toma de decisiones en tiempo real.
+
+---
+
+### Video About-the-Team
+El video de presentación del equipo, donde se detallan los roles, las competencias de cada integrante y la metodología de trabajo colaborativo utilizada durante el desarrollo del proyecto CargaSafe, puede ser visualizado en el siguiente enlace:
+* **Enlace al video:** Aun está pendiente este video profe 😢👌
+
+---
+
+# Bibliografía
+* Evans, E. (2003). *Domain-Driven Design: Tackling Complexity in the Heart of Software*. Addison-Wesley Professional.
+* Brown, S. (2018). *The C4 model for visualizing software architecture*. leanpub.com.
+* Gothelf, J., & Seiden, J. (2016). *Lean UX: Designing Great Products with Agile Teams*. O'Reilly Media.
+
+---
+
+# Anexos
+
+### Anexo A: Enlaces de Trabajo Colaborativo
+Para una revisión detallada de los diagramas y flujos de trabajo, se utilizaron las herramientas gratuitas de diseño:
+* **Tablero de Miro (EventStorming y DDD):**
+* **Repositorio de GitHub (Source Code):**
+* **Prototipo en Figma (UX/UI Design):**
+
+### Anexo B: Diccionario de Datos Global
+Como se detalla en el Capítulo 4.2.9.6.2, el sistema utiliza una base de datos relacional optimizada con índices en campos clave como `merchant_id`, `status` y `issued_at` para garantizar reportes de análisis de datos rápidos y trazabilidad total de pagos mediante webhooks.
+
+### Anexo C: Guía de Estilos de Código
+Se han seguido las convenciones de *Clean Code* y los estándares de Google para el desarrollo en Java/Spring Boot (Backend) y los lineamientos de Material Design para las interfaces móviles.  
