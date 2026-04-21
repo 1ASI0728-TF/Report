@@ -356,7 +356,7 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
         </td>
       <td class="conclusions-column">
       <span class="entry-order">TB1:</span><br/>
-        Texto<br/><br/>
+        El equipo ha logrado consolidar una base estratégica sólida para el proyecto CargaSafe. Mediante la integración de los análisis de competencia, la validación directa con usuarios y una arquitectura técnica de vanguardia, hemos definido un ecosistema digital escalable y centrado en el cliente. La sinergia entre la investigación de tecnologías de frontera y el diseño orientado a dominios (Bounded Contexts) garantiza un desarrollo fluido y alineado con los objetivos de negocio.<br/><br/>
       <span class="entry-order">TP1:</span><br/>
         Texto<br/><br/>
       <span class="entry-order">TB2:</span><br/>
