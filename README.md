@@ -4524,3 +4524,4 @@ El diseño de base de datos de Merchant está orientado a datos transaccionales 
 Se incluyen índices por merchant_id, estado y rangos de fechas; claves foráneas para integridad; y idempotencia en WEBHOOK_EVENTS para procesar de forma segura los webhooks del proveedor de pagos.
 
 <div style="page-break-after: always;"></div>
+ 
