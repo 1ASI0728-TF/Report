@@ -4921,12 +4921,18 @@ El sistema prioriza la visualización inmediata de datos críticos mediante card
 ![Web Prototype Presentation](assets/WebPrototypePresentation.png)
 
 **Enlace al video de presentación del prototipo:**
-[Ver presentación del prototipo web](https://upcedupe-my.sharepoint.com/:v:/g/personal/u202113640_upc_edu_pe/EX4I9LxC-aVKgb9GKfRVWbUB7z2IzhL6d3ee8BtbquIA-A?e=T6vAgj&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
+[Ver presentación del prototipo web](https://drive.google.com/file/d/1xNm8b1VVskcCL12MMQYT7jIw4-_QGw1e/view?usp=sharing)
+
+**Enlace al prototipo interactivo en Figma (Web):**
+[Ver prototipo web en Figma](https://www.figma.com/proto/yJB6meI9ytbZJlVHmDXbqV/App-Web?node-id=57-265&p=f&t=YfLZPXtkjo5iZgAZ-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=57%3A265)
 
 ![Mobile Prototype Presentation](assets/MobilePrototypePresentation.png)
 
 **Enlace al video de presentación del prototipo móvil:**
-[Ver presentación del prototipo móvil](https://upcedupe-my.sharepoint.com/:v:/g/personal/u202113640_upc_edu_pe/ERF7JZVmawlPp3fFV_7827IBCw3QrlwAwYaJYLmz60olnw?e=QCSuuS&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
+[Ver presentación del prototipo móvil](https://drive.google.com/file/d/1PuLcconrZ6ETtVU8PtQaYOWIMEhSV5-e/view?usp=sharing)
+
+**Enlace al prototipo interactivo en Figma (Mobile):**
+[Ver prototipo móvil en Figma](https://www.figma.com/proto/rHPICavCttYoZqv0nnf5Xg/Mobile-app?node-id=56-271&p=f&t=ACRzMys3FStab7UA-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=56%3A271&show-proto-sidebar=1)
 
 # Capítulo VI: Product Implementation, Validation & Deployment
 
