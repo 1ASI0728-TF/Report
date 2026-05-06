@@ -3,7 +3,231 @@
 
 ## 4.1. Strategic-Level Domain-Driven Design
 
-### 4.1.1. Design-Level EventStorming
+### 4.1.1. Attribute-Driven Design Inputs & Backlog
+ 
+El proceso de Attribute-Driven Design (ADD) parte de la recolección sistemática de los insumos de diseño que condicionarán las decisiones arquitectónicas de CargaSafe. Estos insumos se organizan en tres categorías: restricciones del sistema, requerimientos funcionales arquitectónicamente significativos y escenarios de atributos de calidad. A partir de ellos se construye el Architectural Drivers Backlog, que prioriza los elementos que mayor impacto tienen sobre la arquitectura.
+ 
+---
+ 
+### 4.1.1.1. Constraints
+ 
+Las restricciones son condiciones no negociables que acotan el espacio de decisiones de diseño, independientemente de los deseos del equipo.
+ 
+| ID | Tipo | Restricción |
+|----|------|-------------|
+| CON-01 | Técnica | El sistema debe desplegarse en infraestructura cloud. Los bounded contexts se exponen como microservicios independientes. |
+| CON-02 | Técnica | La comunicación entre bounded contexts se realiza mediante eventos asincrónicos (mensajería) o contratos REST/HTTP, sin llamadas directas a bases de datos entre contextos. |
+| CON-03 | Técnica | Los dispositivos IoT envían telemetría mediante protocolos ligeros (MQTT / HTTP). El sistema debe poder ingestar lecturas continuas de sensores sin pérdida de datos. |
+| CON-04 | Técnica | La autenticación y autorización se gestiona mediante JWT, centralizada en el bounded context de Identity and Access Management. |
+| CON-05 | Negocio | El modelo de monetización es SaaS por suscripción. El acceso a funcionalidades está condicionado al estado de la suscripción activa del operador. |
+| CON-06 | Negocio | Los pagos se procesan exclusivamente a través de Stripe. No se implementa pasarela de pago propia. |
+| CON-07 | Regulatoria | Los datos de telemetría de carga (temperatura, ubicación, condición) deben ser trazables y auditables para cumplir con SLA contractuales con aseguradoras y clientes. |
+| CON-08 | Equipo | El equipo de desarrollo es reducido (5 personas), por lo que la arquitectura debe evitar overhead operativo excesivo y favorecer la separación de responsabilidades por bounded context. |
+ 
+---
+ 
+### 4.1.1.2. Functional Requirements
+ 
+Se identifican los casos de uso con mayor peso arquitectónico, es decir, aquellos cuya implementación obliga a tomar decisiones de diseño que afectan transversalmente al sistema.
+ 
+| ID | Caso de uso | Bounded Context principal | Impacto arquitectónico |
+|----|-------------|--------------------------|----------------------|
+| FR-01 | Ingesta y procesamiento de telemetría IoT en tiempo real (temperatura, GPS, vibración, humedad) | Real-Time Monitoring | Requiere pipeline de alta frecuencia; exige desacoplamiento entre ingesta y procesamiento. |
+| FR-02 | Detección automática de condiciones fuera de rango y generación de alertas | Alerts & Resolution | Exige procesamiento de eventos con baja latencia; integra con canal de notificaciones externo. |
+| FR-03 | Gestión del ciclo de vida de un viaje: creación, inicio, monitoreo activo y cierre | Trip Management | Coordina con Fleet Management, Real-Time Monitoring y Alerts mediante eventos de dominio. |
+| FR-04 | Control de acceso y habilitación de funcionalidades según estado de suscripción | Identity & Access Mgmt + Subscriptions & Billing | Requiere comunicación entre IAM y Billing para aplicar restricciones en tiempo real. |
+| FR-05 | Generación de reportes y métricas de cumplimiento de cadena de frío | Visualization Analytics | Consume datos de múltiples contextos; exige consistencia eventual y agregación periódica. |
+| FR-06 | Registro y asignación de vehículos y dispositivos IoT a viajes | Fleet Management | Gestiona el inventario de activos físicos y su disponibilidad; fuente de verdad para Trip Management. |
+ 
+---
+ 
+### 4.1.1.3. Quality Attribute Scenarios
+ 
+Los escenarios de atributos de calidad describen situaciones concretas mediante las cuales se puede evaluar si la arquitectura satisface los requisitos no funcionales del sistema. Se utiliza el formato estándar: Fuente de estímulo → Estímulo → Artefacto → Entorno → Respuesta → Medida de respuesta.
+ 
+#### QAS-01 — Disponibilidad
+ 
+| Campo | Descripción |
+|-------|-------------|
+| **Fuente** | Dispositivo IoT en campo |
+| **Estímulo** | Falla en el servicio de ingesta de telemetría (caída de instancia) |
+| **Artefacto** | Pipeline de Real-Time Monitoring |
+| **Entorno** | Operación normal con múltiples viajes activos |
+| **Respuesta** | El sistema redirige el tráfico a una instancia de respaldo sin pérdida de lecturas |
+| **Medida** | Disponibilidad ≥ 99.5 %; tiempo de recuperación < 30 segundos |
+ 
+#### QAS-02 — Rendimiento
+ 
+| Campo | Descripción |
+|-------|-------------|
+| **Fuente** | Sensores IoT de múltiples vehículos en operación simultánea |
+| **Estímulo** | Llegada concurrente de hasta 500 lecturas de telemetría por segundo |
+| **Artefacto** | Servicio de ingesta de Real-Time Monitoring |
+| **Entorno** | Hora punta con alta densidad de viajes activos |
+| **Respuesta** | El sistema procesa y persiste cada lectura sin descarte ni degradación visible |
+| **Medida** | Latencia de procesamiento ≤ 2 segundos desde ingesta hasta disponibilidad en dashboard |
+ 
+#### QAS-03 — Seguridad
+ 
+| Campo | Descripción |
+|-------|-------------|
+| **Fuente** | Usuario no autenticado o con suscripción vencida |
+| **Estímulo** | Intento de acceso a funcionalidades de monitoreo o reporte |
+| **Artefacto** | API Gateway + IAM Bounded Context |
+| **Entorno** | Cualquier entorno (producción o staging) |
+| **Respuesta** | El sistema rechaza la solicitud con código HTTP 401/403 y registra el intento |
+| **Medida** | 100 % de solicitudes no autorizadas bloqueadas; log de auditoría generado en < 1 segundo |
+ 
+#### QAS-04 — Modificabilidad
+ 
+| Campo | Descripción |
+|-------|-------------|
+| **Fuente** | Equipo de desarrollo |
+| **Estímulo** | Incorporación de un nuevo tipo de sensor IoT (ej. sensor de CO₂) |
+| **Artefacto** | Real-Time Monitoring Bounded Context |
+| **Entorno** | Ciclo de desarrollo activo |
+| **Respuesta** | El nuevo tipo de telemetría se integra modificando únicamente el dominio de monitoreo, sin afectar otros contextos |
+| **Medida** | Cambio implementado y desplegado en ≤ 3 días de desarrollo sin afectar otros bounded contexts |
+ 
+#### QAS-05 — Testeabilidad
+ 
+| Campo | Descripción |
+|-------|-------------|
+| **Fuente** | Equipo de QA |
+| **Estímulo** | Ejecución de suite de pruebas automatizadas sobre un bounded context |
+| **Artefacto** | Cualquier bounded context (ej. Alerts & Resolution) |
+| **Entorno** | Pipeline de integración continua |
+| **Respuesta** | Cada bounded context puede ejecutarse y probarse de forma aislada, con mocks de sus dependencias externas |
+| **Medida** | Cobertura de pruebas unitarias ≥ 70 % por bounded context; tiempo de ejecución del suite < 5 minutos |
+ 
+---
+ 
+### 4.1.1.4. Architectural Drivers Backlog
+ 
+El backlog consolida todos los drivers identificados y los prioriza según dos dimensiones: impacto en los stakeholders (alto / medio / bajo) e impacto en la complejidad arquitectónica (alto / medio / bajo). Los drivers de mayor prioridad guiarán las decisiones del proceso ADD.
+ 
+| ID | Driver | Tipo | Impacto en Stakeholders | Complejidad Arquitectónica | Prioridad |
+|----|--------|------|------------------------|---------------------------|-----------|
+| FR-01 | Ingesta de telemetría IoT en tiempo real | Funcional | Alto | Alto | Alta |
+| QAS-02 | Rendimiento: procesamiento de 500 lecturas/seg | Calidad | Alto | Alto | Alta |
+| QAS-01 | Disponibilidad: 99.5 % con recuperación < 30 s | Calidad | Alto | Alto | Alta |
+| FR-02 | Detección y notificación automática de alertas | Funcional | Alto | Medio | Alta |
+| QAS-03 | Seguridad: control de acceso y auditoría | Calidad | Alto | Medio | Alta |
+| FR-03 | Ciclo de vida del viaje con coordinación entre contextos | Funcional | Alto | Medio | Media-Alta |
+| FR-04 | Acceso condicional por estado de suscripción | Funcional | Medio | Medio | Media-Alta |
+| CON-01 | Despliegue en AWS con microservicios independientes | Restricción | Medio | Alto | Media-Alta |
+| CON-02 | Comunicación inter-contexto asincrónica (eventos) | Restricción | Medio | Alto | Media-Alta |
+| QAS-04 | Modificabilidad: nuevo sensor sin impacto transversal | Calidad | Medio | Medio | Media |
+| FR-05 | Generación de reportes y métricas | Funcional | Medio | Medio | Media |
+| QAS-05 | Testeabilidad por bounded context aislado | Calidad | Bajo | Medio | Media |
+| FR-06 | Gestión de flota y asignación de dispositivos | Funcional | Medio | Bajo | Media |
+| CON-05 | Modelo SaaS con restricción por suscripción | Restricción | Medio | Bajo | Baja |
+| CON-06 | Pagos exclusivamente vía Stripe | Restricción | Bajo | Bajo | Baja |
+| CON-07 | Trazabilidad auditable de telemetría | Restricción | Medio | Bajo | Baja |
+ 
+---
+ 
+### 4.1.2. Attribute-Driven Design Decisions & Refinement
+ 
+Esta sección documenta el proceso de toma de decisiones arquitectónicas de CargaSafe, llevado a cabo mediante la técnica del Quality-Attribute Workshop (QAW). El objetivo fue transformar los drivers identificados en la sección anterior en decisiones concretas de diseño, iterando sobre la arquitectura hasta alcanzar una solución que satisfaga los atributos de calidad priorizados.
+ 
+---
+ 
+### Quality-Attribute Workshop (QAW)
+ 
+El QAW se realizó como una sesión estructurada en la que los integrantes del equipo, asumiendo los roles de arquitectos y stakeholders del sistema, evaluaron los escenarios de calidad definidos y discutieron las tácticas y patrones más adecuados para cada uno. El proceso siguió los pasos del método QAW propuesto por el SEI (Software Engineering Institute):
+ 
+**1. Presentación del negocio y misión del sistema**
+ 
+CargaSafe es una plataforma SaaS de monitoreo de cadena de frío y trazabilidad logística. Su misión central es garantizar visibilidad continua sobre las condiciones de la carga durante el transporte, habilitando alertas en tiempo real y generación de evidencia auditable. Los stakeholders clave son operadores de empresas logísticas, conductores y clientes finales.
+ 
+**2. Presentación de la arquitectura base**
+ 
+Como punto de partida se tomó la arquitectura orientada a microservicios, con bounded contexts derivados del proceso de EventStorming. Cada contexto gestiona su propia base de datos y se comunica mediante eventos de dominio publicados en un message broker.
+ 
+**3. Identificación de los drivers de mayor riesgo**
+ 
+El equipo priorizó los siguientes drivers como los de mayor riesgo para la viabilidad del sistema:
+ 
+- **Disponibilidad** del pipeline de ingesta de telemetría IoT (QAS-01)
+- **Rendimiento** ante alta concurrencia de lecturas de sensores (QAS-02)
+- **Seguridad** en el control de acceso y la habilitación por suscripción (QAS-03)
+- **Modificabilidad** ante la incorporación de nuevos tipos de sensores (QAS-04)
+---
+ 
+### Decisiones Arquitectónicas
+ 
+A continuación se documentan las decisiones tomadas para cada driver prioritario, incluyendo la táctica aplicada, la alternativa descartada y la justificación.
+ 
+#### DA-01 — Disponibilidad del pipeline IoT
+ 
+| Campo | Decisión |
+|-------|----------|
+| **Driver** | QAS-01 |
+| **Decisión** | Desplegar el servicio de ingesta de telemetría (Real-Time Monitoring) con múltiples instancias detrás de un load balancer, con health checks activos y reinicio automático ante fallas. |
+| **Táctica ADD** | Redundancia activa + detección y recuperación de fallas |
+| **Alternativa descartada** | Instancia única con reinicio manual ante caídas |
+| **Justificación** | La pérdida de lecturas durante un viaje activo compromete la trazabilidad del producto y puede derivar en disputas contractuales. La redundancia activa garantiza continuidad sin intervención humana. |
+| **Impacto en bounded contexts** | Real-Time Monitoring; sin cambios en otros contextos. |
+ 
+#### DA-02 — Rendimiento ante alta concurrencia de telemetría
+ 
+| Campo | Decisión |
+|-------|----------|
+| **Driver** | QAS-02 |
+| **Decisión** | Desacoplar la ingesta de la persistencia mediante una cola de mensajes (message broker). El servicio de ingesta publica eventos de telemetría; un consumidor asincrónico los persiste y los propaga a los contextos interesados. |
+| **Táctica ADD** | Gestión de la demanda + procesamiento asincrónico |
+| **Alternativa descartada** | Escritura sincrónica directa a base de datos desde el endpoint de ingesta |
+| **Justificación** | La escritura sincrónica introduce latencia y puntos de saturación bajo carga. El desacoplamiento mediante cola permite absorber picos de demanda sin degradar la respuesta al dispositivo IoT ni bloquear otros servicios. |
+| **Impacto en bounded contexts** | Real-Time Monitoring (productor), Alerts & Resolution y Visualization Analytics (consumidores). |
+ 
+#### DA-03 — Seguridad: control de acceso y habilitación por suscripción
+ 
+| Campo | Decisión |
+|-------|----------|
+| **Driver** | QAS-03 + FR-04 |
+| **Decisión** | Centralizar la emisión y validación de tokens JWT en el bounded context de Identity and Access Management. El estado de suscripción activa se codifica como un claim dentro del token. Los demás bounded contexts validan el token localmente sin consultar IAM en cada request. |
+| **Táctica ADD** | Autenticación + autorización basada en tokens con claims |
+| **Alternativa descartada** | Validación centralizada en IAM en cada request (introspección remota) |
+| **Justificación** | La validación remota en cada request introduce latencia y genera un punto único de falla. La validación local de JWT es stateless, escalable y resiliente. La suscripción como claim permite al API Gateway tomar decisiones de acceso sin round-trips adicionales. |
+| **Impacto en bounded contexts** | IAM (emisor), Subscriptions & Billing (actualiza claims al renovar suscripción), todos los demás (validación local). |
+ 
+#### DA-04 — Modificabilidad: incorporación de nuevos sensores
+ 
+| Campo | Decisión |
+|-------|----------|
+| **Driver** | QAS-04 + CON-02 |
+| **Decisión** | Modelar los mensajes de telemetría con un esquema extensible basado en tipo de sensor y payload genérico. El dominio de Real-Time Monitoring define una interfaz de procesador de telemetría; cada tipo de sensor implementa su propio procesador, registrado por configuración. |
+| **Táctica ADD** | Uso de interfaces + registro por configuración (plugin pattern) |
+| **Alternativa descartada** | Lógica de procesamiento condicional (if/switch) por tipo de sensor en el núcleo del servicio |
+| **Justificación** | El enfoque condicional requiere modificar el core del servicio ante cada nuevo sensor, rompiendo el principio de abierto/cerrado. El patrón de plugins permite incorporar nuevos tipos sin tocar la lógica central ni afectar otros bounded contexts. |
+| **Impacto en bounded contexts** | Real-Time Monitoring exclusivamente. |
+ 
+---
+ 
+### Refinamiento Iterativo
+ 
+Luego de definir las decisiones iniciales, el equipo realizó una iteración de refinamiento evaluando los trade-offs generados:
+ 
+| Trade-off identificado | Decisión de refinamiento |
+|------------------------|--------------------------|
+| El desacoplamiento asincrónico (DA-02) introduce consistencia eventual entre Real-Time Monitoring y Alerts & Resolution, lo que podría retrasar la generación de alertas críticas. | Se define un canal de alta prioridad en el message broker exclusivo para eventos de condición fuera de rango, garantizando procesamiento preferencial con latencia máxima de 2 s. |
+| La codificación del estado de suscripción en el JWT (DA-03) implica que un cambio de plan no se refleja hasta el vencimiento del token. | Se establece un TTL (tiempo de vida) máximo de 15 minutos para los tokens de acceso, reduciendo la ventana de inconsistencia a un margen aceptable para el negocio. |
+| La redundancia activa de Real-Time Monitoring (DA-01) incrementa los costos de infraestructura en AWS. | Se configura auto-scaling reactivo en lugar de mantener instancias permanentes duplicadas, balanceando costo y disponibilidad. |
+ 
+---
+ 
+### Resumen de Decisiones Arquitectónicas
+ 
+| ID | Driver atendido | Táctica principal | Bounded context afectado |
+|----|----------------|-------------------|--------------------------|
+| DA-01 | QAS-01 (Disponibilidad) | Redundancia activa + auto-recovery | Real-Time Monitoring |
+| DA-02 | QAS-02 (Rendimiento) | Procesamiento asincrónico con message broker | Real-Time Monitoring, Alerts, Analytics |
+| DA-03 | QAS-03 (Seguridad) | JWT con claims + validación local | IAM, Subscriptions & Billing, todos |
+| DA-04 | QAS-04 (Modificabilidad) | Plugin pattern para procesadores de telemetría | Real-Time Monitoring |
+
+
+### 4.1.3. Design-Level EventStorming
 
 En esta sección se realizó un Event Storming detallado para modelar y analizar el dominio del sistema CargaSafe. Se llevó a cabo en varias sesiones colaborativas donde se identificaron eventos, comandos, agregados y políticas clave del negocio. Este ejercicio permitió descubrir los bounded contexts candidatos y mapear los flujos de mensajes entre ellos, sentando las bases para el diseño de la arquitectura del sistema.
 
@@ -43,7 +267,7 @@ Se identificaron los servicios externos integrados, como APIs, pasarelas de pago
 Se agruparon comandos y eventos bajo agregados que aseguran la coherencia en cada bounded context.  
 ![Step 9](./assets/event-storming/Carga%20Safe%20Event%20Storming%20-%20Marco%209.jpg)
 
-#### 4.1.1.1 Candidate Context Discovery
+#### 4.1.3.1 Candidate Context Discovery
 
 Para esta etapa se llevó a cabo una sesión, la sesión tuvo una duración aproximada de 90 minutos y permitió identificar los bounded contexts del sistema CargaSafe. Durante el proceso se aplicaron las técnicas start-with-value, start-with-simple y look-for-pivotal-events, que facilitaron la agrupación de eventos y entidades según su afinidad y valor para el negocio.
 
@@ -74,7 +298,7 @@ Con esta estructura, el EventStorming permitió organizar y simplificar el domin
 
 [Ver gráfico en Miro](https://miro.com/app/board/uXjVJMskjeA=/?share_link_id=697373503273)
 
-#### 4.1.1.2. Domain Message Flows Modeling
+#### 4.1.3.2. Domain Message Flows Modeling
 
 En esta etapa se desarrolló el **modelado de flujos de mensajes de dominio (Domain Message Flows)** con el objetivo de visualizar cómo colaboran los bounded contexts identificados en el Candidate Context Discovery para resolver los principales casos de negocio del sistema CargaSafe.
 
@@ -123,7 +347,7 @@ Los flujos de mensajes de dominio evidencian la cooperación entre los ocho boun
 
 Este ejercicio permitió comprender cómo un evento local en un contexto puede impactar en otros, asegurando la trazabilidad del negocio y la correcta interacción entre los distintos módulos de la solución.
 
-#### 4.1.1.3. Bounded Context Canvases
+#### 4.1.3.3. Bounded Context Canvases
 
 En esta sección se elaboraron los Bounded Context Canvases de CargaSafe para los ocho contextos identificados. El objetivo fue delimitar con precisión responsabilidades, lenguaje ubicuo y decisiones de negocio, además de explicitar las comunicaciones (Queries, Commands y Events) y colaboradores (otros BC, sistemas externos y frontend). Cada canvas documenta: Descripción, Clasificación estratégica (core/supporting/generic), Rol de dominio (draft/execution/analysis/gateway), Inbound/Outbound communication, Ubiquitous Language, Business Decisions y Collaborators. Esta definición fija ownership de datos, reduce ambigüedades y prepara los contratos de integración que se implementarán en APIs y mensajería.
 
@@ -147,7 +371,7 @@ En esta sección se elaboraron los Bounded Context Canvases de CargaSafe para lo
 
 [Ver gráfico en Miro](https://miro.com/app/board/uXjVJ8W56f8=/?share_link_id=323586946145)
 
-### 4.1.2. Context Mapping
+### 4.1.4. Context Mapping
 
 En esta etapa se construyó el **Context Map** de CargaSafe con los ocho bounded contexts identificados. El objetivo fue representar las **relaciones estructurales** entre ellos aplicando patrones de Domain-Driven Design como Customer/Supplier, Conformist y Anti-Corruption Layer (ACL).
 
@@ -166,9 +390,9 @@ De esta manera, el Context Mapping consolida una visión global del sistema, mos
 
 ![EventStorming – Context Mapping](assets/Context_Mapping.png)
 
-### 4.1.3. Software Architecture
+### 4.1.5. Software Architecture
 
-#### 4.1.3.1. Software Architecture System Landscape Diagram
+#### 4.1.5.1. Software Architecture System Landscape Diagram
 
 El **System Landscape Diagram** ofrece una visión de alto nivel del **ecosistema empresarial** en el que se integra CargaSafe. Este diagrama no se centra únicamente en un sistema, sino que representa **todas las personas y sistemas de software relevantes**, tanto internos como externos, que participan en la operación logística.
 
@@ -209,7 +433,7 @@ El objetivo de este diagrama es:
 
 El diagrama muestra a CargaSafe (SaaS) como el núcleo de integración entre operaciones (Company Operator, Driver, Logistics Planning), telemetría IoT (sensores en campo) y servicios externos (ruteo, notificaciones y pagos), además de su aporte a la inteligencia de negocio mediante Power BI Data. Esta representación proporciona una visión clara e integral de las dependencias y colaboraciones que sustentan la operación logística y la gestión de la cadena de frío.
 
-#### 4.1.3.2. Software Architecture Context Level Diagrams
+#### 4.1.5.2. Software Architecture Context Level Diagrams
 
 El **Context Diagram** de CargaSafe muestra una visión de alto nivel del sistema y de cómo se relaciona con los actores humanos y los sistemas externos que lo rodean.
 
@@ -231,7 +455,7 @@ Asimismo, se destacan las interacciones con sistemas externos que complementan l
 - _SendGrid_: se utiliza para el envío de correos electrónicos transaccionales, reportes automáticos y notificaciones.
 - _CargaSafe Monitoring Device_: dispositivos físicos instalados en vehículos que capturan datos ambientales (temperatura, humedad, vibración, GPS) y los transmiten hacia el ecosistema CargaSafe mediante las aplicaciones embebidas y edge.
 
-#### 4.1.3.2. Software Architecture Container Level Diagrams
+#### 4.1.5.3. Software Architecture Container Level Diagrams
 
 En esta parte expandimos el sistema **CargaSafe (SaaS)** para mostrar sus contenedores internos, las tecnologías que utilizamos y cómo se comunican entre sí y con los sistemas externos.
 
@@ -297,7 +521,7 @@ Además, CargaSafe se integra con varios sistemas externos:
 
 
 
-#### 4.1.3.3. Software Architecture Deployment Diagrams
+#### 4.1.5.4. Software Architecture Deployment Diagrams
 
 El Deployment Diagram de CargaSafe muestra cómo se despliega la solución en un entorno de producción real, representando los nodos de infraestructura, los contenedores de software y las interacciones entre ellos.
 
