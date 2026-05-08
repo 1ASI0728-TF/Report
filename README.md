@@ -4873,28 +4873,28 @@ Registro de Usuario e Inicio de Sesión:
 - User Goal: Como usuario, quiero registrarme en la plataforma, para acceder a mi cuenta y funcionalidades personalizadas.
 - Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos y ya podrá iniciar sesión en su cuenta registrada.
 
-<img src="assets/UserFlow/userflow1.png"/>
+<img src="assets/userflow1.png"/>
 
 Alertas por incumplimiento de la temperatura:
 
 - User Goal: Como cliente final, quiero recibir alertas cuando la temperatura sobrepasa los límites definidos, para tomar acciones correctivas.
 - Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos y ya podrá iniciar sesión en su cuenta registrada.
 
-<img src="assets/UserFlow/userflow3.png"/>
+<img src="assets/userflow3.png"/>
 
 Detalles de un viaje:
 
 - User Goal: Como cliente final, quiero consultar el detalle de un viaje, para verificar información específica como ruta, estado y temperatura.
 - Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos y ya podrá iniciar sesión en su cuenta registrada.
 
-<img src="assets/UserFlow/userflow5.png"/>
+<img src="assets/userflow5.png"/>
 
 Descarga de los reportes de viajes:
 
 - User Goal: Como cliente final, quiero descargar un reporte en PDF de un viaje con su información y gráficos, para archivarlo o compartirlo.
 - Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos y ya podrá iniciar sesión en su cuenta registrada.
 
-<img src="assets/UserFlow/userflow6.png"/>
+<img src="assets/userflow6.png"/>
 
 
 **Web Application - Empresa**
@@ -4904,14 +4904,14 @@ Registro de Usuario e Inicio de Sesión:
 - User Goal: Como usuario, quiero registrarme en la plataforma, para acceder a mi cuenta y funcionalidades personalizadas.
 - Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos. Si es una empresa, se deberá seleccionar la opción "Shipping Company" y llenar todos los datos de la empresa.
 
-<img src="assets/UserFlow/userflow2.png"/>
+<img src="assets/userflow2.png"/>
 
 Monitoreo de temperatura en tiempo real:
 
 - User Goal: Como empresa, quiero recibir la temperatura en tiempo real de mis dispositivos IoT, para supervisar la cadena de frío de los viajes.
 - Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos. Si es una empresa, se deberá seleccionar la opción "Shipping Company" y llenar todos los datos de la empresa.
 
-<img src="assets/UserFlow/userflow4.png"/>
+<img src="assets/userflow4.png"/>
 
 ## 5.5. Applications Prototyping.
 
