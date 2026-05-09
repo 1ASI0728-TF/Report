@@ -342,6 +342,8 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
     	<br><span class="person">George Arturo Aliaga Pimentel</span><br />
         <span class="entry-order">TB1:</span><br/>
         Se logró definir y estructurar el perfil de la startup Los Emergentes, así como el planteamiento del problema y el enfoque de solución para CargaSafe. Además, se desarrolló el Lean UX Process, permitiendo identificar claramente los segmentos objetivo, sus necesidades y las oportunidades del mercado, sentando las bases para el diseño de una solución tecnológica alineada a los requerimientos reales del sector logístico.  <br />
+  <span class="entry-order">TP:</span><br/>
+        Se consolidó la infraestructura tecnológica mediante la implementación de microservicios independientes para las áreas de Alertas y Analíticas, optimizando la escalabilidad y el mantenimiento de la plataforma CargaSafe. Este enfoque arquitectónico permitió desacoplar las responsabilidades críticas del sistema, asegurando un procesamiento eficiente de eventos en tiempo real y una gestión robusta de los datos logísticos. <br />
         <br><span class="person">Jose Luis</span><br />
         <span class="entry-order">TB1:</span><br/>
         Se logro realizar un Analisis de Competencia del Proyecto CargaSafe. Asimismo, se entrevisto a potenciales usuarios de
