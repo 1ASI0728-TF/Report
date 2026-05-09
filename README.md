@@ -352,6 +352,8 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
         Se logro realizar un Analisis de Competencia del Proyecto CargaSafe. Asimismo, se entrevisto a potenciales usuarios de
         nuestra plataforma para tener una mejor vision de lo que ellos necesitan del producto. Gracias a se logro comprender a nuestro 
         publico objetivo y plantear un producto que los satisfaga en el dia  <br />
+  <span class="entry-order">TP:</span><br/>
+  Se logró realizar la conversión de monolotico a microservicio de los bounded contexts, lo cual permitió realizar un proceso de aplicación de tecnologías emergentes las cuales permiten procesos de mejora continua y permiten apertura y facilidad a cambios futuros <br/>
         <br><span class="person">Paulo</span><br />
         <span class="entry-order">TB1:</span><br/>
        Se logro completar el Solution Software Design gracias a la buena comunicacion entre nuestro equipo para la definicion de cada bouden context a seguir de forma ordenada <br />
