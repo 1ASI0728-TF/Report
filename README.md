@@ -72,9 +72,10 @@
 
 # Registro de Versiones del Informe
 
-| Versión | Fecha      | Autor            | Descripción de modificación                                                                                                                                                                                                                                                                                                                              |
-| ------- | ---------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.0     | 15/04/2026 | George, Jefrey, Jose Luis, Paulo, Edery           | Se entregó una primera entrega del informe con los siguientes apartados: Carátula, Registro de Versiones, Project Report Collaboration Insights, Contenido, Student Outcome, Capítulo I: Introducción, Capítulo II: Requirements Elicitation & Analysis, Capítulo III: Requirements Specification, Capítulo IV: Solution Software Design y Bibliografía. |
+| Versión | Fecha      | Autor                                  | Descripción de modificación                                                                                                                                                                                                                                                                                                                                 |
+| ------- | ---------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0     | 15/04/2026 | George, Jefrey, Jose Luis, Paulo, Edery | Se entregó una primera entrega del informe con los siguientes apartados: Carátula, Registro de Versiones, Project Report Collaboration Insights, Contenido, Student Outcome, Capítulo I: Introducción, Capítulo II: Requirements Elicitation & Analysis, Capítulo III: Requirements Specification, Capítulo IV: Solution Software Design y Bibliografía. |
+| 2.0     | 10/05/2026 | George, Jefrey, Jose Luis, Paulo, Edery | Se realizó la incorporación del Capítulo V: Tactical-Level Software Design y del Capítulo VI: Solution UX Design, incluyendo el diseño táctico del software, arquitectura de componentes, diagramas de interacción, prototipos de interfaz y lineamientos de experiencia de usuario del sistema. |
 
 ---
 
@@ -352,6 +353,8 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
         <br><span class="person">Paulo</span><br />
         <span class="entry-order">TB1:</span><br/>
        Se logro completar el Solution Software Design gracias a la buena comunicacion entre nuestro equipo para la definicion de cada bouden context a seguir de forma ordenada <br />
+       <span class="entry-order">TP1:</span><br/>
+Se logró desarrollar el Capítulo VI: Solution UX Design mediante una comunicación constante y efectiva entre los integrantes del equipo, permitiendo definir de manera organizada los flujos de navegación, prototipos y lineamientos de experiencia de usuario orientados a mejorar la interacción y usabilidad de la plataforma CargaSafe. <br />
         <br><span class="person">Edery Renzo Abanto Vicente</span><br />
         <span class="entry-order">TB1:</span><br/>
         Lideré el diseño de la arquitectura técnica y el modelado de diagramas estructurales, integrando una investigación profunda sobre tecnologías de frontera para asegurar la escalabilidad del proyecto. Logré articular estas decisiones técnicas complejas en una hoja de ruta comprensible para el equipo y los stakeholders, garantizando una visión tecnológica unificada.<br /><br/>
