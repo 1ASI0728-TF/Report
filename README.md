@@ -362,12 +362,14 @@ Se logró desarrollar el Capítulo VI: Solution UX Design mediante una comunicac
         <br><span class="person">Edery Renzo Abanto Vicente</span><br />
         <span class="entry-order">TB1:</span><br/>
         Lideré el diseño de la arquitectura técnica y el modelado de diagramas estructurales, integrando una investigación profunda sobre tecnologías de frontera para asegurar la escalabilidad del proyecto. Logré articular estas decisiones técnicas complejas en una hoja de ruta comprensible para el equipo y los stakeholders, garantizando una visión tecnológica unificada.<br /><br/>
+        <span class="entry-order">TP:</span><br/>
+        Comuniqué y documenté de manera efectiva las directrices técnicas para la transición arquitectónica hacia microservicios. Facilité la comprensión del nuevo modelo de Bounded Contexts al resto del equipo, asegurando que todos los desarrolladores estuvieran alineados con la nueva infraestructura y resolviendo dudas técnicas para mantener la coherencia y calidad del proyecto CargaSafe.<br/><br/>
         </td>
       <td class="conclusions-column">
       <span class="entry-order">TB1:</span><br/>
         El equipo ha logrado consolidar una base estratégica sólida para el proyecto CargaSafe. Mediante la integración de los análisis de competencia, la validación directa con usuarios y una arquitectura técnica de vanguardia, hemos definido un ecosistema digital escalable y centrado en el cliente. La sinergia entre la investigación de tecnologías de frontera y el diseño orientado a dominios (Bounded Contexts) garantiza un desarrollo fluido y alineado con los objetivos de negocio.<br/><br/>
       <span class="entry-order">TP1:</span><br/>
-        Texto<br/><br/>
+        A través de una comunicación constante y asertiva, el equipo logró sincronizar exitosamente la transición de una arquitectura monolítica a microservicios. La correcta articulación de los diseños de experiencia de usuario (UX) con las nuevas especificaciones arquitectónicas y de infraestructura permitió estandarizar el desarrollo de la plataforma, demostrando nuestra capacidad para explicar, documentar y aplicar conceptos técnicos complejos de forma colaborativa.<br/>
       <span class="entry-order">TB2:</span><br/>
         Texto<br/><br/>
       </td>
