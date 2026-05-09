@@ -336,9 +336,11 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
       <td>Capacidad de comunicarse efectivamente con un rango de audiencias</td>
       <td>
         <span class="person">Jefrey Martin Sanchez Ignacio</span><br />
-        <span class="entry-order">TB1:</span><br/>
+        <br /><span class="entry-order">TB1:</span><br/>
        Soy capaz de comunicar de forma clara y efectiva el funcionamiento, la arquitectura y los resultados del proyecto CargaSafe, adaptando la explicación técnica según la audiencia, ya sea académica, técnica o usuarios finales, mediante presentaciones, documentación y demostraciones del sistema.
-        </span>
+        </span><br />
+  <span class="entry-order">TP1:</span><br/>
+       Durante esta etapa asumí un rol más activo en la coordinación del equipo. Ayudé a tomar decisiones sobre la estructura de cada microservicio. También estuve pendiente del avance en general, dando sugerencias y asegurándome de que todos sigamos las mismas pautas tanto del informe y la aplicación final
         <br/>
     	<br><span class="person">George Arturo Aliaga Pimentel</span><br />
         <span class="entry-order">TB1:</span><br/>
