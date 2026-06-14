@@ -1,4 +1,4 @@
-<div style="text-align: center">
+<img width="1018" height="754" alt="image" src="https://github.com/user-attachments/assets/b0bd21f7-ebf0-49f9-b296-da91f6f7c59d" /><div style="text-align: center">
   <p align="center">
     <br />
     <img
@@ -6601,8 +6601,7 @@ Requisitos:
 
 - **CARRERA**: Ingeniería de Software  
 - **CURSO**: 1acc0238 Aplicaciones para dispositivos móviles  
-- **SECCIÓN**: —  
-- **PROFESORES**: —  
+- **SECCIÓN**: 1ACC0238-2610-3667
 - **AUDITOR**: Grupo de Evaluación UX – CARGA-TROM  
 - **CLIENTES**: Gestor de transporte (Ofertimaq) / Cliente final  
 
