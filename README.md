@@ -7627,7 +7627,7 @@ Sin embargo, requiere mejoras en:
 
 ### Video About-the-Team
 El video de presentación del equipo, donde se detallan los roles, las competencias de cada integrante y la metodología de trabajo colaborativo utilizada durante el desarrollo del proyecto CargaSafe, puede ser visualizado en el siguiente enlace:
-* **Enlace al video:** Aun está pendiente este video profe 😢👌
+* **Enlace al video:** [link video About-the-Team](https://www.youtube.com/watch?v=NNiuc2A7QyY&source_ve_path=MTc4NDI0)
 
 ---
 
