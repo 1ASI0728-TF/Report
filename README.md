@@ -71,9 +71,10 @@
 
 # Registro de Versiones del Informe
 
-| Versión | Fecha      | Autor            | Descripción de modificación                                                                                                                                                                                                                                                                                                                              |
-| ------- | ---------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.0     | 15/04/2026 | George, Jefrey, Jose Luis, Paulo, Edery           | Se entregó una primera entrega del informe con los siguientes apartados: Carátula, Registro de Versiones, Project Report Collaboration Insights, Contenido, Student Outcome, Capítulo I: Introducción, Capítulo II: Requirements Elicitation & Analysis, Capítulo III: Requirements Specification, Capítulo IV: Solution Software Design y Bibliografía. |
+| Versión | Fecha      | Autor                                  | Descripción de modificación                                                                                                                                                                                                                                                                                                                                 |
+| ------- | ---------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0     | 15/04/2026 | George, Jefrey, Jose Luis, Paulo, Edery | Se entregó una primera entrega del informe con los siguientes apartados: Carátula, Registro de Versiones, Project Report Collaboration Insights, Contenido, Student Outcome, Capítulo I: Introducción, Capítulo II: Requirements Elicitation & Analysis, Capítulo III: Requirements Specification, Capítulo IV: Solution Software Design y Bibliografía. |
+| 2.0     | 10/05/2026 | George, Jefrey, Jose Luis, Paulo, Edery | Se realizó la incorporación del Capítulo V: Tactical-Level Software Design y del Capítulo VI: Solution UX Design, incluyendo el diseño táctico del software, arquitectura de componentes, diagramas de interacción, prototipos de interfaz y lineamientos de experiencia de usuario del sistema. |
 
 ---
 
@@ -334,30 +335,40 @@ Criterio: La capacidad de funcionar efectivamente en un equipo cuyos miembros ju
       <td>Capacidad de comunicarse efectivamente con un rango de audiencias</td>
       <td>
         <span class="person">Jefrey Martin Sanchez Ignacio</span><br />
-        <span class="entry-order">TB1:</span><br/>
+        <br /><span class="entry-order">TB1:</span><br/>
        Soy capaz de comunicar de forma clara y efectiva el funcionamiento, la arquitectura y los resultados del proyecto CargaSafe, adaptando la explicación técnica según la audiencia, ya sea académica, técnica o usuarios finales, mediante presentaciones, documentación y demostraciones del sistema.
-        </span>
+        </span><br />
+  <span class="entry-order">TP1:</span><br/>
+       Durante esta etapa asumí un rol más activo en la coordinación del equipo. Ayudé a tomar decisiones sobre la estructura de cada microservicio. También estuve pendiente del avance en general, dando sugerencias y asegurándome de que todos sigamos las mismas pautas tanto del informe y la aplicación final
         <br/>
     	<br><span class="person">George Arturo Aliaga Pimentel</span><br />
         <span class="entry-order">TB1:</span><br/>
         Se logró definir y estructurar el perfil de la startup Los Emergentes, así como el planteamiento del problema y el enfoque de solución para CargaSafe. Además, se desarrolló el Lean UX Process, permitiendo identificar claramente los segmentos objetivo, sus necesidades y las oportunidades del mercado, sentando las bases para el diseño de una solución tecnológica alineada a los requerimientos reales del sector logístico.  <br />
+  <span class="entry-order">TP:</span><br/>
+        Se consolidó la infraestructura tecnológica mediante la implementación de microservicios independientes para las áreas de Alertas y Analíticas, optimizando la escalabilidad y el mantenimiento de la plataforma CargaSafe. Este enfoque arquitectónico permitió desacoplar las responsabilidades críticas del sistema, asegurando un procesamiento eficiente de eventos en tiempo real y una gestión robusta de los datos logísticos. <br />
         <br><span class="person">Jose Luis</span><br />
         <span class="entry-order">TB1:</span><br/>
         Se logro realizar un Analisis de Competencia del Proyecto CargaSafe. Asimismo, se entrevisto a potenciales usuarios de
         nuestra plataforma para tener una mejor vision de lo que ellos necesitan del producto. Gracias a se logro comprender a nuestro 
         publico objetivo y plantear un producto que los satisfaga en el dia  <br />
+  <span class="entry-order">TP:</span><br/>
+  Se logró realizar la conversión de monolotico a microservicio de los bounded contexts, lo cual permitió realizar un proceso de aplicación de tecnologías emergentes las cuales permiten procesos de mejora continua y permiten apertura y facilidad a cambios futuros <br/>
         <br><span class="person">Paulo</span><br />
         <span class="entry-order">TB1:</span><br/>
        Se logro completar el Solution Software Design gracias a la buena comunicacion entre nuestro equipo para la definicion de cada bouden context a seguir de forma ordenada <br />
+       <span class="entry-order">TP1:</span><br/>
+Se logró desarrollar el Capítulo VI: Solution UX Design mediante una comunicación constante y efectiva entre los integrantes del equipo, permitiendo definir de manera organizada los flujos de navegación, prototipos y lineamientos de experiencia de usuario orientados a mejorar la interacción y usabilidad de la plataforma CargaSafe. <br />
         <br><span class="person">Edery Renzo Abanto Vicente</span><br />
         <span class="entry-order">TB1:</span><br/>
         Lideré el diseño de la arquitectura técnica y el modelado de diagramas estructurales, integrando una investigación profunda sobre tecnologías de frontera para asegurar la escalabilidad del proyecto. Logré articular estas decisiones técnicas complejas en una hoja de ruta comprensible para el equipo y los stakeholders, garantizando una visión tecnológica unificada.<br /><br/>
+        <span class="entry-order">TP:</span><br/>
+        Comuniqué y documenté de manera efectiva las directrices técnicas para la transición arquitectónica hacia microservicios. Facilité la comprensión del nuevo modelo de Bounded Contexts al resto del equipo, asegurando que todos los desarrolladores estuvieran alineados con la nueva infraestructura y resolviendo dudas técnicas para mantener la coherencia y calidad del proyecto CargaSafe.<br/><br/>
         </td>
       <td class="conclusions-column">
       <span class="entry-order">TB1:</span><br/>
         El equipo ha logrado consolidar una base estratégica sólida para el proyecto CargaSafe. Mediante la integración de los análisis de competencia, la validación directa con usuarios y una arquitectura técnica de vanguardia, hemos definido un ecosistema digital escalable y centrado en el cliente. La sinergia entre la investigación de tecnologías de frontera y el diseño orientado a dominios (Bounded Contexts) garantiza un desarrollo fluido y alineado con los objetivos de negocio.<br/><br/>
       <span class="entry-order">TP1:</span><br/>
-        Texto<br/><br/>
+        A través de una comunicación constante y asertiva, el equipo logró sincronizar exitosamente la transición de una arquitectura monolítica a microservicios. La correcta articulación de los diseños de experiencia de usuario (UX) con las nuevas especificaciones arquitectónicas y de infraestructura permitió estandarizar el desarrollo de la plataforma, demostrando nuestra capacidad para explicar, documentar y aplicar conceptos técnicos complejos de forma colaborativa.<br/>
       <span class="entry-order">TB2:</span><br/>
         Texto<br/><br/>
       </td>
@@ -6805,6 +6816,414 @@ El material también presenta las principales funcionalidades de la aplicación 
 **Video en Youtube:** https://youtu.be/v0NPYFrI8V4 
 
 <div style="page-break-after: always;"></div>
+
+# Capítulo V: Solution UI/UX Design
+
+## 5.1. Style Guidelines.
+
+### 5.1.1. General Style Guidelines.
+
+El diseño visual del proyecto CargaSafe se basa en un sistema de estilos que prioriza la claridad, la coherencia y la accesibilidad. La identidad visual se sustenta en una paleta de colores cálidos y confiables, encabezada por el color naranja (#F5821F) como tono primario, que transmite energía, dinamismo y cercanía con el usuario. El color azul (#183D5C) se emplea como secundario, reforzando la percepción de confianza y profesionalismo. Se complementan colores de estado (verde para éxito, amarillo para advertencia y rojo para error), junto con una gama de grises para lograr jerarquía visual y contraste equilibrado.<br>
+
+La tipografía principal utilizada es Source Sans 3, seleccionada por su legibilidad y estilo moderno. Se aplica en distintas jerarquías tipográficas que van desde los títulos (Heading 1 – 56px) hasta los textos pequeños (Small Text – 14px), garantizando consistencia en todos los tamaños de pantalla.<br>
+
+El lenguaje visual del proyecto combina un tono formal y profesional, pero con una interfaz accesible y amigable. Se emplean botones con esquinas suavemente redondeadas, íconos derivados de la librería Material Design, y espaciados definidos en múltiplos de 4px para mantener uniformidad y ritmo visual en cada componente.
+En cuanto a componentes interactivos, se establecen directrices claras para botones, selectores, campos de texto e iconografía, priorizando la usabilidad y el reconocimiento inmediato de acciones. Los botones principales mantienen un color sólido naranja para llamadas a la acción (CTA), mientras que los secundarios y estados hover o active usan variantes más claras u opacas del mismo tono.<br>
+
+
+![Visualization Style Guideline](assets/style1.png)
+
+### 5.1.2. Web, Mobile and IoT Style Guidelines.
+
+El diseño adaptable del ecosistema CargaSafe se rige por un enfoque responsive, garantizando que la experiencia de usuario sea fluida y consistente en dispositivos web, móviles y entornos IoT.<br>
+
+En la versión web, se prioriza la disposición horizontal de los elementos, con paneles y tarjetas informativas que aprovechan el espacio y mantienen una jerarquía visual clara. Los márgenes, paddings y tamaños tipográficos se ajustan automáticamente para conservar legibilidad en pantallas amplias.<br> 
+
+Para la versión mobile, la interfaz mantiene los mismos principios visuales, pero reestructura los componentes en una distribución vertical optimizada para la interacción táctil. Se emplean botones de mayor tamaño, espaciados más amplios y textos ajustados a resoluciones menores, conservando la armonía visual del sistema.<br>
+
+En el contexto IoT, la guía se orienta a la presentación de datos de monitoreo, paneles de control y visualización de alertas. Se mantiene la misma paleta de colores y tipografía, asegurando que los gráficos, indicadores y notificaciones se perciban con claridad en pantallas de control o dispositivos conectados.<br>
+
+Estas directrices en conjunto garantizan que CargaSafe mantenga una identidad visual sólida, coherente y escalable a través de todos sus entornos digitales, reforzando la percepción de una plataforma tecnológica moderna, confiable y centrada en el usuario.<br>
+
+
+![Visualization Style Guideline2](assets/style2.png)
+
+
+## 5.2. Information Architecture.
+
+### 5.2.1. Organization Systems.
+
+En esta sección se define cómo se estructura la información en CargaSafe según el tipo de contenido, la tarea y la audiencia. Se combinan sistemas visuales (jerárquica, secuencial, matricial) y esquemas de categorización (alfabético, cronológico, por tópicos y por audiencia).
+
+
+**Sistemas visuales**
+
+- **Jerárquica (visual hierarchy)**
+
+  - Dónde: Dashboard; Fleet → Vehicles/Devices (listas); Alerts (lista).
+
+  - Regla: lo crítico y reciente arriba; metadatos en segundo plano.
+
+  - Patrones: H1/H2/H3 consistentes; KPI cards; chips/badges de severidad; sort por criticidad por defecto.
+
+- **Secuencial (step-by-step to accomplish)**
+
+  - Dónde: Vincular dispositivo↔vehículo; Crear viaje (Trip); Onboarding.
+
+  - Patrones: MatStepper; validación por paso; CTA único; resumen final.
+
+- **Matricial (cruce de variables)**
+
+  - Dónde: Operación (Estado×Severidad); Analítica (Vehículo×Regla); Reportes (Tiempo×KPI).
+
+  - Patrones: tabla/board con filtros persistentes (chips); heatmap/badges.
+
+**Esquemas de categorización**
+
+- **Alfabético:** Vehicles por Plate (A–Z); Devices por Serial (A–Z); Rules por nombre.
+
+  - Secundario si hay incidentes; criticidad manda.
+
+- **Cronológico:** Alerts (`timestamp DESC`); Trips (Upcoming/In Progress/Completed); Telemetry (series temporales).
+
+- **Por tópicos:** Help/Docs (Setup, Fleet, Trips, Monitoring, Alerts, Billing); Settings/Admin.
+
+- **Según audiencia:** Fleet Manager, Dispatcher, Driver, Customer (visibilidad, lenguaje y CTA por rol/scope).
+
+
+**Matriz guía**
+
+| Grupo                 | Organización visual                       | Categorización                       |
+| --------------------- | ----------------------------------------- | ------------------------------------ |
+| Dashboard             | Jerárquica                                | Por audiencia + por tópicos          |
+| Fleet → Vehicles      | Jerárquica + Matricial (Status×Severity)  | Alfabético (Plate) + por estado      |
+| Fleet → Devices       | Jerárquica + Matricial                    | Alfabético (Serial) + disponibilidad |
+| Trips                 | Secuencial (creación) + Jerárquica (list) | Cronológico                          |
+| Alerts                | Jerárquica                                | Cronológico + severidad              |
+| Monitoring/Telemetry  | Matricial (Tiempo×KPI)                    | Cronológico                          |
+| Settings/Rules        | Jerárquica                                | Por tópicos (+ A–Z en listados)      |
+| Billing/Subscriptions | Secuencial + Jerárquica                   | Por audiencia (admin) + cronológico  |
+
+
+
+
+### 5.2.2. Labeling Systems.
+
+En esta sección se establecen los criterios de rotulado para representar los datos con simplicidad y consistencia, definiendo etiquetas mínimas, CTAs, filtros y mensajes de estado, junto con pautas de accesibilidad.
+
+**Convenciones de nombres y UI**
+
+- **Entidades:** Vehicle, Device, Trip, Alert, Rule, Customer, User.
+
+- **Campos clave (listas):**
+
+  - Vehicles: Plate, Type, Capabilities, Status (Available/Busy/Out of Service).
+
+  - Devices: Serial, Model, Health, Attached To, Status.
+
+  - Alerts: Severity (Critical/Major/Minor), Rule, Vehicle, Timestamp, State (Open/Acknowledged/Resolved).
+
+- **Acciones (CTA)**: Add Vehicle, Edit, Delete, Attach Device, Set Available, Set Out of Service, Acknowledge, Export.
+
+- **Filtros comunes:** Status, Severity, Type, Date Range, Assigned/Unassigned.
+
+- **Mensajes de estado:** No vehicles found, No alerts in the selected range, Vehicle created successfully, Failed to attach device.
+
+
+**Asociaciones**
+
+| Etiqueta / CTA    | ¿Qué representa?                       | Asociación mental del usuario               |
+| ----------------- | -------------------------------------- | ------------------------------------------- |
+| **Contact**       | Ir a información de contacto (Landing) | “Aquí encuentro email/teléfono/redes”       |
+| **Attach Device** | Vincular un dispositivo a un vehículo  | “Emparejar Serial con Plate”                |
+| **Acknowledge**   | Marcar una alerta atendida             | “Se registró responsable; cambia el estado” |
+| **Export**        | Descargar tabla filtrada               | “Obtener CSV/Excel de lo que veo”           |
+
+
+
+**Accesibilidad**
+
+- `aria-label` específico en botones (“Acknowledge alert #123”).
+
+- Imágenes decorativas con `alt=""` y `aria-hidden="true"`.
+
+- Notificaciones con `aria-live="polite"`.
+
+**Estilo**
+
+- Inglés; Title Case en títulos, Sentence case en descripciones.
+
+- Unidades explícitas (°C, km/h).
+
+- Chips de severidad con texto + color (no solo color).
+
+
+
+
+### 5.2.3. SEO Tags and Meta Tags
+
+En esta sección se documentan las SEO Tags y Meta Tags de la Landing Page y la WebApp —Title, Description, Keywords y Author— además de Open Graph y Twitter, mostrando los valores como código para su inclusión en los archivos HTML.
+
+**Landing Page**
+
+| Tag            | Ejemplo (inline) |
+| -------------- | ---------------- |
+| Title          | &lt;title&gt;CargaSafe &#124; Smart Monitoring for Reliable Transportation&lt;/title&gt; |
+| Description    | &lt;meta name="description" content="Real-time telemetry, smart alerts, and fleet visibility."&gt; |
+| Keywords       | &lt;meta name="keywords" content="fleet monitoring, cold chain, IoT telemetry, logistics alerts, geofencing, temperature monitoring"&gt; |
+| Author         | &lt;meta name="author" content="CargaSafe Team"&gt; |
+| OG Title       | &lt;meta property="og:title" content="CargaSafe – Smart Monitoring for Reliable Transportation"&gt; |
+| OG Description | &lt;meta property="og:description" content="Monitor your fleet in real-time with alerts, telemetry and reports."&gt; |
+| Twitter Card   | &lt;meta name="twitter:card" content="summary_large_image"&gt; |
+| Favicon        | &lt;link rel="icon" href="assets/logo.png" type="image/png"&gt; |
+
+**WebApp – Fleet → Vehicles**
+
+| Tag         | Ejemplo (inline) |
+| ----------- | ---------------- |
+| Title       | &lt;title&gt;Fleet – Vehicles &#124; CargaSafe&lt;/title&gt; |
+| Description | &lt;meta name="description" content="Manage vehicles: status, assignments and device attachments."&gt; |
+| Keywords    | &lt;meta name="keywords" content="fleet vehicles, status, device attachment, maintenance, logistics"&gt; |
+| Author      | &lt;meta name="author" content="CargaSafe Team"&gt; |
+
+
+
+### 5.2.4. Searching Systems.
+
+En esta sección se especifican los sistemas de búsqueda que habilitan la localización rápida de información: búsqueda global y por módulo, filtros y ordenamientos, operadores mínimos, criterios de rendimiento y métricas de éxito.
+
+**Patrones**
+
+- Búsqueda global (header): por Plate, Serial, Trip ID, Rule (typeahead + “recent searches”).
+
+- Búsqueda local (por módulo): caja de búsqueda sobre la tabla (incremental).
+
+- Filtros (facetas): Status, Severity, Type, Assigned, Date Range.
+
+- Ordenamiento: por defecto criticidad/reciente; alternativo A–Z, Health, Last Seen.
+
+**Operadores mínimos**
+
+- Texto exacto: "ABC-123"
+
+- Prefijo/propiedad: plate:ABC, serial:SN-
+
+- Rango de fechas: date:2025-10-01..2025-10-09
+
+**Rendimiento y UX**
+
+- Debounce ~300 ms; indicador de carga; vacíos explicativos.
+
+- Paginación con contador; sticky filters; accesible por teclado; aria-live para resultados.
+
+**Métricas**
+
+- Tiempo a primer resultado local < 500 ms.
+
+- Éxito en primera búsqueda > 85% (pruebas moderadas).
+
+
+### 5.2.5. Navigation Systems.
+
+En esta sección se describen los sistemas de navegación que guían a los usuarios por la Landing Page y la WebApp, abarcando navegación global, local y contextual, comportamientos responsivos, flujos guiados, guardas y criterios de aceptación.
+
+**Estructura**
+
+- Global: Dashboard, Fleet (Vehicles, Devices), Trips, Alerts, Monitoring, Settings, Billing. (Visibilidad por rol/scope)
+
+- Local: tabs por estado (e.g., Trips: Upcoming / In Progress / Completed).
+
+- Contextual: acciones en fila/detalle (Edit, Attach Device, Acknowledge, Export).
+
+- Breadcrumbs (opcional): Fleet / Vehicles / ABC-123.
+
+**Comportamientos**
+
+- Responsive:
+
+    - Móvil → menú hamburguesa; tablas → cards con CTAs visibles.
+
+    - Desktop → sidebar fija; tablas con sort/paginator.
+
+    - LandingPage → navbar.
+
+- Flujos guiados (secuencial): steppers con validación por paso (Create Trip, Attach Device).
+
+- Guardas: canActivate (auth/rol) y canDeactivate (evitar pérdida de datos).
+
+- Estado de UI: preservar filtros/scroll al volver; estados vacíos con CTA.
+
+**Criterios de aceptación**
+
+- Llegar de Dashboard a Vehicle Detail ≤ 2 clics.
+
+- Completar Create Trip ≤ 60 s (usuario entrenado).
+
+- Sin 404 visibles; Not Found con enlace de retorno.
+
+
+
+## 5.3. Landing Page UI Design.
+
+La propuesta de interfaz de usuario (UI) para el Landing Page de CargaSafe se fundamenta en una arquitectura de información clara y jerárquica, que guía al usuario desde la comprensión del servicio hasta la conversión final. Se priorizó una navegación intuitiva mediante un menú superior fijo que agrupa secciones clave (Features, Benefits, Testimonials, Plans y Contact), permitiendo un flujo de lectura progresivo y coherente. El uso de espacios amplios, tipografía legible y un contraste cromático basado en tonos naranjas y grises traduce las decisiones de diseño hacia una experiencia confiable, moderna y alineada con la identidad de marca de CargaSafe. Cada bloque de contenido responde a un objetivo informativo o de conversión, aplicando principios de jerarquía visual, consistencia, alineación y accesibilidad para asegurar una comunicación efectiva con usuarios de distintos perfiles.
+
+### 5.3.1. Landing Page Wireframe.
+
+![Wireframe Landing Page](assets/WireframeLandingPage.png)
+
+Los wireframes desarrollados para la versión de escritorio y móvil representan la estructura base del Landing Page, evidenciando la aplicación de principios de diseño como equilibrio, proximidad y alineación, además de una arquitectura de información secuencial que facilita la comprensión del servicio. En la versión desktop, se distribuyen los elementos en una cuadrícula de tres columnas para destacar los beneficios y planes de suscripción, mientras que en la versión mobile se adoptó una disposición vertical con prioridad en la legibilidad y accesibilidad táctil. El diseño inclusivo se garantiza mediante textos descriptivos, botones amplios y contrastes adecuados, favoreciendo la interacción de usuarios con distintas capacidades visuales o motoras. Asimismo, se emplearon convenciones reconocibles (íconos, etiquetas claras y jerarquías tipográficas) que mejoran la usabilidad y reducen la carga cognitiva del usuario. Ambas versiones se diseñaron bajo criterios responsive, garantizando una experiencia consistente y fluida independientemente del tamaño de pantalla o dispositivo utilizado.
+
+### 5.3.2. Landing Page Mock-up.
+
+![Mockup Landing Page](assets/MockupLandingPage.png)
+
+Los mock-ups finales traducen la estructura del wireframe en una experiencia visual completa, implementando el Design System definido para los productos digitales de CargaSafe, el cual contempla una paleta cromática corporativa (naranja, negro y blanco), tipografía moderna y componentes reutilizables (botones, cards, formularios y secciones de testimonios). En la versión de escritorio, se refuerza la identidad visual mediante imágenes contextuales del transporte de carga y un llamado a la acción destacado con alto contraste. En la versión móvil, los componentes se reestructuran de manera responsive, adaptando el tamaño, espaciado y jerarquía visual para mantener legibilidad y accesibilidad sin sacrificar estética. La coherencia en íconos, tipografía y color refuerza la unidad del sistema, mientras que la disposición progresiva del contenido sigue la arquitectura de información planteada, conduciendo al usuario de la exploración del servicio hacia la conversión final de contacto o suscripción.
+
+## 5.4. Applications UX/UI Design.
+
+### 5.4.1. Applications Wireframes.
+
+Para la aplicación de Cargasafe, se d los bocetos de las pantallas que luego serán diseñadas más a detalle. A continuación, se presentan los wireframes de las pantallas de las aplicaciones web y móvil.
+
+**Web Application**<br>
+
+*Authentication*<br>
+
+![Wireframe Authentication Web application](assets/WireframesAuthentication.png) <br>
+
+*Subscriptions*<br>
+
+![Wireframe Subscriptions Web application](assets/wireframeAppwebSubscriptions.png) <br>
+
+*Alerts*<br>
+
+<img src="assets/alerts3.png"/>
+
+<img src="assets/alerts4.png"/>
+
+
+**Mobile Application** 
+
+*Authentication*<br>
+
+![Wireframe Authentication Mobile application](assets/WireframeMobileAuthentication.png) <br>
+
+*Subscriptions*<br>
+
+![Wireframe Subscriptions Mobile Application](assets/wireframeMobileSubscriptions.png) <br>
+
+*Alerts*<br>
+
+<img src="assets/alerts7.png"/>
+
+<img src="assets/alerts8.png"/>
+
+### 5.4.2. Applications Wireflow Diagrams.
+
+
+
+### 5.4.2. Applications Mock-ups.
+
+**Web Application** 
+
+*Authentication*<br>
+
+![Mockups Authentication Web application](assets/MockupAuthentication.png) <br>
+
+*Subscriptions*<br>
+
+![Mockups Subscriptions Web application](assets/mockupsAppwebSubscriptions.png) <br>
+
+*Alerts*<br>
+
+<img src="assets/alert1.png"/>
+
+<img src="assets/alert2.png"/>
+
+**Mobile Application** 
+
+*Authentication*<br>
+
+![Mockups Authentication Mobile application](assets/MockupMobileAuthentication.png) <br>
+
+*Subscriptions*<br>
+
+![Mockups Subscriptions Mobile Application](assets/mockupsMobileSubscriptions.png) <br>
+
+*Alerts*<br>
+
+<img src="assets/alerts5.png"/>
+
+<img src="assets/alerts6.png"/>
+
+### 5.4.3. Applications User Flow Diagrams.
+
+**Web Application - Cliente Final**
+
+Registro de Usuario e Inicio de Sesión:
+
+- User Goal: Como usuario, quiero registrarme en la plataforma, para acceder a mi cuenta y funcionalidades personalizadas.
+- Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos y ya podrá iniciar sesión en su cuenta registrada.
+
+<img src="assets/userflow1.png"/>
+
+Alertas por incumplimiento de la temperatura:
+
+- User Goal: Como cliente final, quiero recibir alertas cuando la temperatura sobrepasa los límites definidos, para tomar acciones correctivas.
+- Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos y ya podrá iniciar sesión en su cuenta registrada.
+
+<img src="assets/userflow3.png"/>
+
+Detalles de un viaje:
+
+- User Goal: Como cliente final, quiero consultar el detalle de un viaje, para verificar información específica como ruta, estado y temperatura.
+- Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos y ya podrá iniciar sesión en su cuenta registrada.
+
+<img src="assets/userflow5.png"/>
+
+Descarga de los reportes de viajes:
+
+- User Goal: Como cliente final, quiero descargar un reporte en PDF de un viaje con su información y gráficos, para archivarlo o compartirlo.
+- Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos y ya podrá iniciar sesión en su cuenta registrada.
+
+<img src="assets/userflow6.png"/>
+
+
+**Web Application - Empresa**
+
+Registro de Usuario e Inicio de Sesión:
+
+- User Goal: Como usuario, quiero registrarme en la plataforma, para acceder a mi cuenta y funcionalidades personalizadas.
+- Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos. Si es una empresa, se deberá seleccionar la opción "Shipping Company" y llenar todos los datos de la empresa.
+
+<img src="assets/userflow2.png"/>
+
+Monitoreo de temperatura en tiempo real:
+
+- User Goal: Como empresa, quiero recibir la temperatura en tiempo real de mis dispositivos IoT, para supervisar la cadena de frío de los viajes.
+- Descripción: El usuario se encuentra en la pantalla de inicio de sesión y no tiene una cuenta registrada, deberá dar click en "Sign up here". Deberá llenar sus datos completos. Si es una empresa, se deberá seleccionar la opción "Shipping Company" y llenar todos los datos de la empresa.
+
+<img src="assets/userflow4.png"/>
+
+## 5.5. Applications Prototyping.
+
+El sistema prioriza la visualización inmediata de datos críticos mediante cards estadísticas y gráficos interactivos (dashboard con métricas en tiempo real, charts con tooltips hover, y tablas filtradas). La navegación está centralizada en un sidebar persistente con iconografía Material Design que facilita el cambio rápido entre contextos. Las acciones de usuario siguen un patrón de feedback visual claro: estados de loading explícitos, filtros reactivos (búsqueda, fecha, tipo) que actualizan tablas en vivo, y cards clickeables que navegan a detalles sin recarga de página. La arquitectura de interacción refleja el dominio operacional: el dashboard como hub central de monitoreo, detalles de viajes con gráficos de sensores (temperatura/movimiento) para análisis profundo, y gestión de alertas con estados visuales (active/resolved) para triage rápido. Los formularios son minimalistas usando Material UI (outline appearance, dropdowns, checkboxes) optimizados para captura eficiente de datos IoT como IMEI, firmware y asociación de dispositivos.
+
+![Web Prototype Presentation](assets/WebPrototypePresentation.png)
+
+**Enlace al video de presentación del prototipo:**
+[Ver presentación del prototipo web](https://drive.google.com/file/d/1xNm8b1VVskcCL12MMQYT7jIw4-_QGw1e/view?usp=sharing)
+
+**Enlace al prototipo interactivo en Figma (Web):**
+[Ver prototipo web en Figma](https://www.figma.com/proto/yJB6meI9ytbZJlVHmDXbqV/App-Web?node-id=57-265&p=f&t=YfLZPXtkjo5iZgAZ-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=57%3A265)
+
+![Mobile Prototype Presentation](assets/MobilePrototypePresentation.png)
+
+**Enlace al video de presentación del prototipo móvil:**
+[Ver presentación del prototipo móvil](https://drive.google.com/file/d/1PuLcconrZ6ETtVU8PtQaYOWIMEhSV5-e/view?usp=sharing)
+
+**Enlace al prototipo interactivo en Figma (Mobile):**
+[Ver prototipo móvil en Figma](https://www.figma.com/proto/rHPICavCttYoZqv0nnf5Xg/Mobile-app?node-id=56-271&p=f&t=ACRzMys3FStab7UA-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=56%3A271&show-proto-sidebar=1)
  
 # Conclusiones
 
