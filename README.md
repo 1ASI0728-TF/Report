@@ -7224,6 +7224,391 @@ El sistema prioriza la visualización inmediata de datos críticos mediante card
 
 **Enlace al prototipo interactivo en Figma (Mobile):**
 [Ver prototipo móvil en Figma](https://www.figma.com/proto/rHPICavCttYoZqv0nnf5Xg/Mobile-app?node-id=56-271&p=f&t=ACRzMys3FStab7UA-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=56%3A271&show-proto-sidebar=1)
+
+### 6.3.2. Registro de Entrevistas.
+
+### Segmento 1: Empresa
+
+- **Nombre**: Victor
+- **Edad**: 23
+- **Ocupación**: Gestor de transportes - linea de frio
+- **Empresa**: Ofertimaq - Distribuidora
+- **Enlace**: https://upcedupe-my.sharepoint.com/:v:/g/personal/u202213989_upc_edu_pe/IQDWC2OfG5wMSYT0F4AycHHUATkAVJwXCvi_DWFwOGEfLMI?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=imQt0o
+  
+- **Fecha de entrevista**: 14/06/2026
+- **Tiempo inicio - tiempo fin**:  0:00 - 3:30
+  <img src="assets/Validation1.png"><br/>
+  <br/>
+
+**Resumen** <br/>
+ - El usuario es un gestor de transporte en una empresa distribuidora que utiliza una aplicación para monitoreo en tiempo
+real de condiciones de carga (especialmente cadena de frío). Percibe la herramienta como clara, rápida y útil, destacando especialmente las alertas en tiempo real. Valora la centralización de información y considera que el sistema mejora significativamente el control operativo. Sin embargo, identifica oportunidades relacionadas con reportes automatizados, análisis histórico y métricas adicionales como consumo de combustible y estado de sistemas de refrigeración.
+
+**Rasgos objetivos** <br/>
+
+- _Herramientas_:
+  - Plataforma de monitoreo de transporte en tiempo real
+  - Sistemas de gestión logística (posiblemente múltiples herramientas previas)
+  - Excel (deseado para exportación de datos)
+- _Canales_:
+  - Aplicación web o software de monitoreo
+  - Notificaciones dentro del sistema
+  - Interés en WhatsApp para alertas críticas  
+- _Dispositivos_:
+  - Computadora (principal interfaz de gestión)
+  - Posible uso complementario de móvil para alertas
+- _Reportes_:
+  - Actualmente limitados o manuales
+  - Necesidad de reportes automáticos descargables
+  - Interés en análisis comparativo histórico 
+
+**Rasgos subjetivos** <br/>
+- Valora la claridad, rapidez y simplicidad en las interfaces
+- Tiene una orientación operativa y preventiva (reaccionar a problemas rápidamente)
+- Prioriza la información crítica visible sin saturación
+- Busca control y visibilidad centralizada en tiempo real
+
+**Dolores y oportunidades** <br/>
+- Pain:
+  - Falta de reportes automáticos
+  - Limitado análisis histórico de datos
+  - Ausencia de métricas clave como combustible o estado del sistema de refrigeración
+  - Dependencia de múltiples herramientas externas para complementar información
+  - Falta de alertas en canales externos (ej. WhatsApp)
+
+- Need:
+  - Automatización de reportes y exportación de datos
+  - Comparación de métricas entre viajes
+  - Incorporación de nuevas variables operativas (ETA, combustible, estado técnico)
+  - Alertas multicanal para respuesta rápida
+  - Mayor capacidad analítica (no solo monitoreo en tiempo real)
+
+**Implicancias para CARGA-TROM** <br/>
+- Requisitos:
+  - Implementar reportes automáticos descargables (PDF/Excel)
+  - Añadir dashboard histórico con comparación de viajes
+  - Integrar métricas adicionales:
+    - Consumo de combustible
+    - Estado del sistema de refrigeración
+    - Tiempo estimado de llegada (ETA)
+
+
+  - Habilitar notificaciones externas (WhatsApp, SMS) para eventos críticos
+  - Mantener enfoque en usabilidad clara y no saturada
+  - Priorizar visualización destacada de variables críticas (especialmente temperatura)
+  - Asegurar rendimiento rápido y fluido de la interfaz 
+
+
+## <br/>
+
+---
+
+ <br/>
+
+### Segmento 2: Clientes Finales (Consumidores finales)
+
+- **Nombre**: Sebastian Montalvo
+- **Edad**: 21
+- **Enlace**: https://upcedupe-my.sharepoint.com/:v:/g/personal/u202213989_upc_edu_pe/IQCMYkKFFDtKR5hLTpr-kam-AfcRuX2rVEw1nFyVar-BSYc?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=XAyFC7
+- **Fecha de entrevista**: 14/06/2026
+- **Tiempo inicio - tiempo fin**: 0:00 - 5:40
+  <br/>
+  <img src="assets/Validation2.png">
+  <br/>
+
+**Resumen** <br/>
+- El usuario es un cliente final que utiliza la aplicación para verificar el estado de sus pedidos durante el transporte. Percibe la herramienta como simple, intuitiva y confiable. Valora especialmente el seguimiento en tiempo real, ya que le brinda seguridad sobre la integridad de los productos. Sus principales necesidades se centran en mayor transparencia, evidencia visual y acceso a historial detallado de las condiciones del envío.
+
+**Rasgos objetivos**
+- Herramientas:
+  - Aplicación de seguimiento de pedidos
+  - Plataforma digital (web o móvil)
+
+- Canales:
+  - Notificaciones dentro de la app
+  - Interés en notificaciones más detalladas (posible expansión a push o SMS)
+
+- Dispositivos:
+  - Smartphone (principal)
+  - Posible uso de computadora
+- Reportes:
+  - Actualmente limitados o inexistentes para el usuario final
+  - Necesidad de historial completo de entregas
+  - Interés en visualización gráfica (ej. temperatura)
+
+
+
+
+**Rasgos subjetivos**
+- Busca simplicidad y facilidad de uso
+- Prioriza la confianza y transparencia en el servicio
+- Tiene una mentalidad de validación del estado del producto
+- Valora la información clara, puntual y relevante
+- Se siente más seguro con evidencia verificable (datos + pruebas visuales)
+
+
+**Dolores y oportunidades**
+- Pain:
+  - Falta de historial completo de entregas
+  - Notificaciones poco detalladas
+  - Ausencia de evidencia visual (fotos de la carga)
+  - Información limitada sobre condiciones durante todo el trayecto
+  - Falta de alerts específicas ante eventos críticos
+
+- Need:
+  -Acceso a historial detallado por pedido
+  - Gráficos de temperatura durante el viaje
+  - Fotografías del estado de la carga
+  - Alertas inmediatas más descriptivas (temperatura, retrasos, fallas)
+  - Mayor transparencia en toda la cadena de transporte
+
+
+**Implicancias para CargaSafe** <br/>
+Requisitos:
+  - Implementar historial completo por entrega accesible al cliente
+  - Incluir visualización gráfica de temperatura (timeline)
+  - Integrar evidencia visual (fotos durante el transporte o entrega)
+  - Mejorar el sistema de alertas con mayor detalle y contexto
+  - Añadir alertas críticas para:
+    - Cambios bruscos de temperatura
+    - Retrasos significativos
+    - Interrupciones en la cadena de frío
+
+  - Mantener una interfaz simple, clara y enfocada en lo esencial
+  - Reforzar elementos que generen confianza (transparencia + trazabilidad)
+
+---
+
+<br/>
+
+---
+
+
+---
+
+ <br/>
+
+
+  <br/>
+
+
+
+### 6.3.3. Evaluaciones según heurísticas
+
+## UX Heuristics & Principles Evaluation  
+**Usability - Inclusive Design - Information Architecture**
+
+- **CARRERA**: Ingeniería de Software  
+- **CURSO**: 1acc0238 Aplicaciones para dispositivos móviles  
+- **SECCIÓN**: —  
+- **PROFESORES**: —  
+- **AUDITOR**: Grupo de Evaluación UX – CARGA-TROM  
+- **CLIENTES**: Gestor de transporte (Ofertimaq) / Cliente final  
+
+---
+
+## SITE o APP A EVALUAR:
+**CARGA-TROM (App de monitoreo de transporte en cadena de frío)**
+
+---
+
+## TAREAS A EVALUAR:
+
+1. Monitorear estado de vehículos y carga en tiempo real  
+2. Visualizar variables (temperatura, humedad, ubicación)  
+3. Recibir e interpretar alertas de incidentes  
+4. Consultar estado de pedido (cliente final)  
+5. Navegar entre pantallas del sistema  
+6. Revisar historial de transporte (limitado actualmente)  
+
+---
+
+## TAREAS NO INCLUIDAS:
+
+1. Integraciones externas (WhatsApp, SMS)  
+2. Generación/exportación de reportes automáticos  
+3. Comparación histórica avanzada  
+4. Subida de evidencia visual (fotos)  
+
+---
+
+## ESCALA DE SEVERIDAD
+
+| Nivel | Descripción |
+|------|-----------|
+| 1 | Problema superficial |
+| 2 | Problema menor |
+| 3 | Problema mayor |
+| 4 | Problema muy grave |
+
+---
+
+## TABLA RESUMEN
+
+| # | Problema | Severidad | Heurística/Principio violado |
+|--|----------|----------|------------------------------|
+| 1 | No existe acceso a reportes automáticos descargables | 3 | Usabilidad: Flexibilidad y eficiencia |
+| 2 | Falta de historial completo de viajes/pedidos | 3 | Information Architecture: Findability |
+| 3 | Falta de métricas clave (combustible, estado refrigeración, ETA) | 2 | Usabilidad: Correspondencia con el mundo real |
+| 4 | Alertas limitadas a la app (sin multicanal) | 3 | Usabilidad: Visibilidad del estado del sistema |
+| 5 | Notificaciones poco detalladas para clientes finales | 2 | Usabilidad: Calidad del feedback |
+| 6 | Ausencia de evidencia visual (fotos de carga) | 2 | Inclusive Design: Experiencias comparables |
+| 7 | No hay visualización gráfica de variables (ej. temperatura) | 2 | Information Architecture: Usabilidad de la información |
+| 8 | Falta de comparación entre viajes | 2 | Usabilidad: Flexibilidad y eficiencia |
+| 9 | No personalización de alertas según criticidad | 2 | Usabilidad: Control y libertad del usuario |
+| 10 | Dependencia de monitoreo en tiempo real sin soporte analítico | 3 | Information Architecture: Valor y utilidad |
+
+---
+
+## DESCRIPCIÓN DE PROBLEMAS
+
+### PROBLEMA #1: Falta de reportes automáticos descargables
+- **Severidad**: 3  
+- **Heurística violada**: Usabilidad – Flexibilidad y eficiencia  
+
+**Problema:**  
+El sistema no permite generar reportes automáticos ni exportar datos (Excel/PDF), lo que obliga a procesos manuales y limita el análisis operativo del gestor.
+
+**Recomendación:**  
+Implementar generación automática de reportes programables con exportación en Excel y PDF.
+
+---
+
+### PROBLEMA #2: Falta de historial completo
+- **Severidad**: 3  
+- **Heurística violada**: Information Architecture – Findability  
+
+**Problema:**  
+Los usuarios no pueden acceder fácilmente a un historial detallado de entregas o viajes.
+
+**Recomendación:**  
+Agregar una sección de historial por pedido/viaje con filtros y búsqueda.
+
+---
+
+### PROBLEMA #3: Métricas insuficientes
+- **Severidad**: 2  
+- **Heurística violada**: Correspondencia con el mundo real  
+
+**Problema:**  
+Faltan variables relevantes como consumo de combustible, estado del sistema de refrigeración y ETA.
+
+**Recomendación:**  
+Incorporar estas métricas para mejorar la toma de decisiones operativas.
+
+---
+
+### PROBLEMA #4: Alertas solo dentro de la app
+- **Severidad**: 3  
+- **Heurística violada**: Visibilidad del estado del sistema  
+
+**Problema:**  
+Las alertas no son enviadas por canales externos, lo que puede retrasar la respuesta ante incidentes críticos.
+
+**Recomendación:**  
+Integrar notificaciones multicanal (WhatsApp, SMS, push notifications).
+
+---
+
+### PROBLEMA #5: Notificaciones poco detalladas
+- **Severidad**: 2  
+- **Heurística violada**: Calidad del feedback  
+
+**Problema:**  
+Las alertas no brindan suficiente contexto (causas, impacto, acciones sugeridas).
+
+**Recomendación:**  
+Mejorar el contenido de alertas con información más específica y accionable.
+
+---
+
+### PROBLEMA #6: Falta de evidencia visual
+- **Severidad**: 2  
+- **Heurística violada**: Inclusive Design – Experiencias comparables  
+
+**Problema:**  
+Los clientes no tienen acceso a evidencia visual del estado de la carga.
+
+**Recomendación:**  
+Permitir carga y visualización de fotos durante transporte y entrega.
+
+---
+
+### PROBLEMA #7: Ausencia de gráficos
+- **Severidad**: 2  
+- **Heurística violada**: Information Architecture – Usabilidad de la información  
+
+**Problema:**  
+Los datos (ej. temperatura) no se presentan de forma visual o gráfica.
+
+**Recomendación:**  
+Agregar gráficos temporales (timeline) para facilitar interpretación.
+
+---
+
+### PROBLEMA #8: Sin comparación entre viajes
+- **Severidad**: 2  
+- **Heurística violada**: Flexibilidad y eficiencia  
+
+**Problema:**  
+El usuario no puede comparar métricas entre diferentes transportes.
+
+**Recomendación:**  
+Incluir dashboard comparativo con filtros por fechas y rutas.
+
+---
+
+### PROBLEMA #9: Falta de personalización de alertas
+- **Severidad**: 2  
+- **Heurística violada**: Control y libertad del usuario  
+
+**Problema:**  
+Los usuarios no pueden configurar tipos o niveles de alerta.
+
+**Recomendación:**  
+Permitir configuración personalizada de alertas (umbrales, canales, frecuencia).
+
+---
+
+### PROBLEMA #10: Falta de capacidades analíticas
+- **Severidad**: 3  
+- **Heurística violada**: Information Architecture – Valor y utilidad  
+
+**Problema:**  
+El sistema se enfoca en monitoreo en tiempo real pero carece de análisis histórico o predictivo.
+
+**Recomendación:**  
+Añadir módulos analíticos (tendencias, predicción de fallas, KPIs logísticos).
+
+---
+
+## CONCLUSIÓN GENERAL
+
+La aplicación presenta una base sólida en términos de:
+
+- Claridad  
+- Facilidad de uso  
+- Velocidad  
+- Enfoque en información crítica  
+
+Sin embargo, requiere mejoras en:
+
+- Analítica y reportes  
+- Profundidad de información  
+- Multicanalidad  
+- Transparencia hacia el cliente final  
+
+**Prioridad alta:**
+- Reportes automáticos  
+- Historial  
+- Alertas externas  
+
+**Prioridad media:**
+- Visualizaciones  
+- Métricas adicionales  
+- Personalización  
+
+
  
 # Conclusiones
 
